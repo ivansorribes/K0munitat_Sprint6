@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\autonomousCommunities;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -10,13 +12,17 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
+    public function run()
     {
-        // \App\Models\User::factory(10)->create();
-
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call(autonomousCommunitiesSeeder::class);
+        $this->call(usersSeeder::class);
+        $this->call(regionsSeeder::class);
+        $this->call(communitiesSeeder::class);
+        $this->call(postsSeeder::class);
+        $this->call(commentsSeeder::class);
+        $this->call(commentsPostsSeeder::class);
+        $this->call(communitiesUsersSeeder::class);
+        $this->call(imagePostSeeder::class);
+        $this->call(likesPostsSeeder::class);
     }
 }

@@ -17,6 +17,10 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/hola123', function () {
+    return view('prova');
+});
+
 Route::get('/prova', function () {
     return view ('app');
 })

@@ -10,16 +10,16 @@ class CreatePostsTable extends Migration
     {
         Schema::create('posts', function (Blueprint $table) {
 
-		$table->integer('id_post',);
-		$table->integer('id_community',);
-		$table->integer('id_user',);
+        $table->id();
+		$table->integer('id_community')->constrained('communities');
+		$table->integer('id_user')->constrained('users');
 		$table->string('title',50);
 		$table->string('description',1000);
 		$table->string('category',35);
-		$table->datetime('date_published')->default('(');
 		$table->boolean('isActive')->default('1');
 		$table->enum('type',['advertisement','post']);
-		$table->foreign('id_community')->references('id_community')->on('communities');		$table->foreign('id_user')->references('id_user')->on('users');
+		$table->datetime('created_at')->nullable();
+        $table->datetime('updated_at')->nullable();
         });
     }
 
