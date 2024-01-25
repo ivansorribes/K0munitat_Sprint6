@@ -1,5 +1,4 @@
+// resources/js/app.js
 import './bootstrap';
 
-import './App.jsx'
-
-
+import './Codea.jsx'

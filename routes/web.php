@@ -25,3 +25,7 @@ Route::get('/prova', function () {
     return view ('app');
 })
 ->name('application');
+
+Route::get('/react', function () {
+    return view('react');
+});
