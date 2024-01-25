@@ -1,10 +1,13 @@
 // resources/js/Codea.jsx
 import React from 'react';
 import { createRoot } from 'react-dom/client'
+import MapaComponent from './components/Map';
 
 export default function HomePage() {
     return (
-        <div>HOMEPAGE</div>
+        <>
+            <MapaComponent />
+        </>
     );
 }
 
