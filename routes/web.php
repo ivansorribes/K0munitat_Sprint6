@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('homepage');
 });
 
 Route::get('/hola123', function () {
@@ -22,9 +22,9 @@ Route::get('/hola123', function () {
 });
 
 Route::get('/prova', function () {
-    return view ('app');
+    return view('app');
 })
-->name('application');
+    ->name('application');
 
 Route::get('/react', function () {
     return view('react');
