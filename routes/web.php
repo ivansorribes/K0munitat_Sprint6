@@ -21,3 +21,7 @@ Route::get('/', [UserController::class, 'LoginView'])->name('LoginView')->middle
 Route::get('/login', function () {
     return view('login');
 });
+
+Route::get('/about-us', function () {
+    return view('about-us');
+});
