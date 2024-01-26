@@ -7,6 +7,7 @@
     <title>Laravel 10 - REACT 18</title>
     @viteReactRefresh
     @vite('resources/js/app.js')
+    @vite('resources/css/app.css')
 </head>
 
 <body>

@@ -3,4 +3,4 @@ import './bootstrap';
 
 import './Codea.jsx';
 
-import './HomePage.jsx';
+import './components/Map.jsx'
