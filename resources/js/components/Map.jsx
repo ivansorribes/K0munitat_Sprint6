@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import MapSvg from './map.min.svg'; // Suponiendo que este es tu archivo SVG
+// import MapSvg from './map.min.svg'; // Suponiendo que este es tu archivo SVG
 import arbol from './arbol.json';
+import SvgComponent from './MapSVGComponent';
 
 const Map = () => {
     useEffect(() => {
@@ -21,7 +22,7 @@ const Map = () => {
 
     return (
         <div>
-            <img src={MapSvg} alt="Map" onClick={handleSvgClick} />
+            <SvgComponent onClick={handleSvgClick} />
         </div>
     );
 };
