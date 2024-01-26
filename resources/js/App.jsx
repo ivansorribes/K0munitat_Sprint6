@@ -4,7 +4,17 @@ import { createRoot } from 'react-dom/client'
 import { DashboardLayout } from './layout'
 export default function App(){
     return(
-        <h1 className='font-bold'>How To Install React in Laravel 9 with Vite</h1>
+        <>
+        <Routes>
+            <Route
+             path="/dashboard/*"
+             element={
+                <DashboardLayout>
+                    
+                </DashboardLayout>
+             }/>
+        </Routes>
+        </>
     );
 }
 
