@@ -29,3 +29,8 @@ Route::get('/prova', function () {
 Route::get('/react', function () {
     return view('react');
 });
+
+Route::get('/personalProfile', function () {
+    return view('/personalProfile');
+});
+
