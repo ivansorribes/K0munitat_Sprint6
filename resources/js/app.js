@@ -2,3 +2,5 @@
 import './bootstrap';
 
 import './Codea.jsx'
+
+import './CommunitiesFormCreate.jsx';

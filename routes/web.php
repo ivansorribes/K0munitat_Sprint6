@@ -29,3 +29,7 @@ Route::get('/prova', function () {
 Route::get('/react', function () {
     return view('react');
 });
+
+Route::get('/communitiesForm', function () {
+    return view('communitiesFormCreate');
+});
