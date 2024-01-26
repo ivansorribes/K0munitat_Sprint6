@@ -3,6 +3,7 @@ import { createRoot } from 'react-dom/client';
 // import MapSvg from './map.min.svg'; // Suponiendo que este es tu archivo SVG
 import arbol from './arbol.json';
 import SvgComponent from './MapSVGComponent';
+import Modal from './Modal';
 
 const Map = () => {
     useEffect(() => {
