@@ -15,8 +15,8 @@ const Map = () => {
     const handleSvgClick = async (event) => {
         const path = event.target.closest("path");
         if (path) {
-            const pathId = path.getAttribute("id");
-            console.log(`Clic en path con id: ${pathId}`);
+            const label = path.getAttribute("label");
+            console.log(`Clic en path con id: ${label}`);
             // Implementa tu lógica aquí
         }
     };
