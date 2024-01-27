@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,21 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('homepage');
-});
+Route::get('/', [UserController::class, 'LoginView'])->name('LoginView')->middleware('guest');
 
-Route::get('/hola123', function () {
-    return view('prova');
-});
 
-Route::get('/prova', function () {
-    return view('app');
-})
-    ->name('application');
 
-Route::get('/react', function () {
-    return view('react');
+Route::get('/login', function () {
+    return view('login');
 });
 
 Route::get('/map', function () {

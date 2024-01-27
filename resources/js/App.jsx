@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client'
 
 export default function App(){
     return(
-        <h1>How To Install React in Laravel 9 with Vite</h1>
+        <h1 className='font-bold'>How To Install React in Laravel 9 with Vite</h1>
     );
 }
 
