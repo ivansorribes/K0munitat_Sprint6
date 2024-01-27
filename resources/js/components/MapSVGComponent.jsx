@@ -1,15 +1,34 @@
 import React from "react"
-import { useState } from 'react';
-import Modal from "./Modal";
+import { useState, useEffect } from 'react';
+import arbol from './arbol.json';
 
 const SvgComponent = (props) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const handleCloseModal = () => {
-        setIsModalOpen(false);
-    };
 
-    const handleClick = () => {
-        setIsModalOpen(true);
+    const [dropdownState, setDropdownState] = useState({ show: false, x: 0, y: 0 });
+    const [associatedProvinces, setAssociatedProvinces] = useState([]);
+    const [selectedItem, setSelectedItem] = useState(null);
+
+
+    const handleClick = (event) => {
+        const newX = event.pageX;
+        const newY = event.pageY;
+        setDropdownState({ show: !dropdownState.show, x: newX, y: newY });
+
+        const path = event.target.closest("path");
+        if (path) {
+            const pathId = path.getAttribute("id");
+            const correspondingItem = arbol.find(item => item.code === pathId);
+            if (correspondingItem) {
+                console.log('Item seleccionado:', correspondingItem);
+                setSelectedItem(correspondingItem);
+
+                if (correspondingItem.provinces) {
+                    setAssociatedProvinces(correspondingItem.provinces);
+                }
+            } else {
+                console.log('No se encontraron provincias para:', pathId);
+            }
+        }
     };
     const [activePathId, setActivePathId] = useState(null);
 
@@ -22,7 +41,7 @@ const SvgComponent = (props) => {
 
     return (
         <>
-            <svg
+            <svg onClick={handleClick}
                 xmlns="http://www.w3.org/2000/svg"
                 width={909.759}
                 height={643.66}
@@ -41,6 +60,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("04")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
                     strokeWidth={0.7}
@@ -60,6 +80,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("05")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -80,6 +101,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("17")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -100,6 +122,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("16")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -120,6 +143,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("06")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -140,6 +164,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("12")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -160,6 +185,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("X")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -179,6 +205,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("11")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -199,6 +226,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("01")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -219,6 +247,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("02")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -234,11 +263,12 @@ const SvgComponent = (props) => {
                     transform="matrix(.9873 0 0 1 109.166 -.303)"
                 />
                 <path
-                    id="YY"
-                    fill={getFillColor("YY")}
-                    onMouseEnter={() => handleMouseEnter("YY")}
+                    id="08"
+                    fill={getFillColor("08")}
+                    onMouseEnter={() => handleMouseEnter("08")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -258,6 +288,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("10")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -278,6 +309,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("14")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -298,6 +330,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("03")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -318,6 +351,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("15")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -338,6 +372,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("13")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -358,6 +393,7 @@ const SvgComponent = (props) => {
                     onMouseEnter={() => handleMouseEnter("07")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -384,11 +420,12 @@ const SvgComponent = (props) => {
                     transform="translate(-131.154) scale(.9767)"
                 />
                 <path
-                    id="08"
-                    fill={getFillColor("08")}
-                    onMouseEnter={() => handleMouseEnter("08")}
+                    id="09"
+                    fill={getFillColor("09")}
+                    onMouseEnter={() => handleMouseEnter("09")}
                     onMouseLeave={handleMouseLeave}
                     onClick={handleClick}
+                    cursor='pointer'
                     stroke="#000"
                     strokeLinecap="square"
                     strokeLinejoin="bevel"
@@ -404,7 +441,21 @@ const SvgComponent = (props) => {
                     transform="matrix(.9873 0 0 1 109.166 -.303)"
                 />
             </svg>
-            {isModalOpen && <Modal onClose={handleCloseModal} />}
+            {dropdownState.show && (
+                <div className="absolute bg-white shadow-lg"
+                    style={{ left: dropdownState.x, top: dropdownState.y, position: 'absolute', zIndex: 1000 }}>
+                    {selectedItem && (
+                        <a href="#" className="block px-4 py-2 text-sm font-bold text-gray-700 hover:bg-gray-100 cursor-default">
+                            {selectedItem.label}
+                        </a>
+                    )}
+                    {associatedProvinces.map(province => (
+                        <a key={province.code} href="#" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                            {province.label}
+                        </a>
+                    ))}
+                </div>
+            )}
         </>
     )
 }
