@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\users;
+use App\Models\User;
 use App\Models\autonomousCommunities;
 use App\Models\regions;
 
@@ -20,14 +20,14 @@ class communitiesFactory extends Factory
     public function definition(): array
     {
         
-        $id_user= users::all()->pluck('id_user')->toArray();
+        $id_user= User::all()->pluck('id_user')->toArray();
         $id_autonomousCommunity= autonomousCommunities::all()->pluck('id_autonomousCommunity')->toArray();
         $id_region= regions::all()->pluck('id_region')->toArray();
 
 
 
         return [
-            'id_admin' => $this->faker->randomElement($id_user) ?? users::factory()->create()->id_user,
+            'id_admin' => $this->faker->randomElement($id_user) ?? User::factory()->create()->id_user,
             'name' => $this->faker->name(),
             'description' => fake()->description(),            
             'id_autonomousCommunity' => $this->faker->randomElement($id_autonomousCommunity),
