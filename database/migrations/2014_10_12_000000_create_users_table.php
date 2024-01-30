@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
         $table->integer('postcode',);
         $table->string('telephone');
         $table->string('profile_image')->nullable();
-        $table->string('profile_description');
+        $table->string('profile_description')->nullable();
         $table->enum('role',['superAdmin','communityAdmin','communityMod','user'])->default('user');
         $table->rememberToken();
         $table->timestamps();

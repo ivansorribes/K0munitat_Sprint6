@@ -4,7 +4,7 @@ namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\posts;
-use App\Models\users;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
@@ -19,7 +19,7 @@ class likesPostsFactory extends Factory
     public function definition(): array
     {
         $id_post = posts::all()->pluck('id_post')->toArray();
-        $id_user = users::all()->pluck('id_user')->toArray();
+        $id_user = User::all()->pluck('id_user')->toArray();
 
 
         return [

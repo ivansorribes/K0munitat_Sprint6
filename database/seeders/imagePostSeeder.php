@@ -13,6 +13,26 @@ class imagePostSeeder extends Seeder
      */
     public function run(): void
     {
-        imagePost::factory(10)->create();
+        imagePost::create([
+            'id_post' => 1,
+            'name' => 'Mandarinas',
+            'front_page' => 1, 
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        imagePost::create([
+            'id_post' => 2,
+            'name' => 'Manzanas',
+            'front_page' => 1, 
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+        imagePost::create([
+            'id_post' => 3,
+            'name' => 'Coliflor',
+            'front_page' => 1, 
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
     }
 }

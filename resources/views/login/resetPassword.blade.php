@@ -18,40 +18,49 @@
             <!-- Logo -->
             <img src="{{ asset('img/Logo_K0munitat-removebg-preview.png') }}" alt="K0munitat Logo" class="mx-auto mb-10" style="max-width: 250px;">
 
-            <form method="POST" action="{{ route('inicia-sesion') }}">
+            <!-- Forgot Password Content -->
+            <div class="mb-8 text-gray-900">
+                <p class="text-lg font-semibold mb-4">Forgot your Password?</p>
+                <p class="text-sm">No problem, please provide your email address associated with your account, and we will send you a link to reset your password.</p>
+            </div>
+
+            <!-- Forgot Password Form -->
+            <form method="POST" action="{{route('forgot.password.link')}}" autocomplete="off">
+                @if (Session::get('fail'))
+                    <div class="alert alert-danger">
+                        {{Session::get('fail')}}
+                    </div>
+                @endif
+
+                @if (Session::get('success'))
+                    <div class="alert alert-success">
+                        {{Session::get('success')}}
+                    </div>
+                @endif
+
                 @csrf
                 <div class="mb-4 relative">
                     <input autocomplete="off" id="email" name="email" type="text"
                         class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                        placeholder="Email address" required />
+                        placeholder="Email address" value="{{old('email')}}" />
+                        <span class="text-danger">@error('email') {{ $message }} @enderror</span>
                     <label for="email"
                         class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Email
                         Address</label>
                 </div>
-                <div class="mb-4 relative">
-                    <input autocomplete="off" id="password" name="password" type="password"
-                        class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                        placeholder="Password" required />
-                    <label for="password"
-                        class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Password</label>
-                </div>
-                <div class="mb-4 flex items-center">
-                    <input type="checkbox" id="rememberCheck" name="remember" class="mr-2">
-                    <label for="rememberCheck" class="text-gray-600 text-sm">Remember me</label>
-                </div>
-                <div class="mb-4">
-                    <a href="{{route('resetPasswordView')}}" class="text-yellow-500 text-sm hover:underline">Forgot your password?</a>
-                </div>
                 <div class="relative mb-4">
-                    <button type="submit" class="w-full bg-yellow-500 text-white rounded-md px-2 py-1">Submit</button>
+                    <button type="submit" class="w-full bg-yellow-500 text-white rounded-md px-2 py-1">Send Reset Link.</button>
                 </div>
             </form>
+
+            <!-- Back to Login Link -->
             <p class="text-gray-600 text-sm mt-4">
-                Don't have an account? <a href="{{ route('RegisterView') }}" class="text-yellow-500 hover:underline">Create a new one</a>
+                Remember your password? <a href="{{ route('LoginView') }}" class="text-yellow-500 hover:underline">Log In</a>
             </p>
         </div>
     </div>
 </body>
+
 
 
 
