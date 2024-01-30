@@ -15,6 +15,7 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', [UserController::class, 'LoginView'])->name('LoginView')->middleware('guest');
+Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
 
 
 
@@ -22,7 +23,4 @@ Route::get('/login', function () {
     return view('login');
 });
 
-Route::get('/personalProfile', function () {
-    return view('/personalProfile');
-});
 

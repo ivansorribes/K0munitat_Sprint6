@@ -11,4 +11,9 @@ class UserController extends Controller
         return view('login.login');
     }
 
+    public function ProfileView()
+    {
+        return view('profile.personalProfile');
+    }
+
 }

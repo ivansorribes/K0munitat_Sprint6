@@ -4,10 +4,7 @@ module.exports = {
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
     "./resources/js/*.jsx",
-<<<<<<< HEAD
-=======
 
->>>>>>> main
   ],
   theme: {
     extend: {},
