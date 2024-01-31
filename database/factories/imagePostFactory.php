@@ -17,7 +17,7 @@ class imagePostFactory extends Factory
      */
     public function definition(): array
     {
-        $id_post = posts::all()->pluck('id_post')->toArray();
+        $id_post = posts::all()->pluck('id')->toArray();
 
         return [
             'id_post' => $this->faker->randomElement($id_post),

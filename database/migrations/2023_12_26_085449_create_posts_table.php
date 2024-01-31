@@ -11,13 +11,13 @@ class CreatePostsTable extends Migration
         Schema::create('posts', function (Blueprint $table) {
 
         $table->id();
-		$table->integer('id_community')->constrained('communities');
-		$table->integer('id_user')->constrained('users');
+		$table->foreignId('id_community')->references('id')->on('communities');
+		$table->foreignId('id_user')->references('id')->on('users');
 		$table->string('title',50);
 		$table->string('description',1000);
 		$table->string('category',35);
 		$table->boolean('isActive')->default('1');
-		$table->enum('type',['advertisement','post']);
+        $table->string('type', 50); 
 		$table->datetime('created_at')->nullable();
         $table->datetime('updated_at')->nullable();
         });
