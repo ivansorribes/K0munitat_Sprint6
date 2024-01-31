@@ -19,7 +19,7 @@ class communitiesUsersFactory extends Factory
     public function definition(): array
     {
         $id_user = User::all()->pluck('id')->toArray();
-        $id_community = Communities::all()->pluck('id')->toArray();
+        $id_community = communities::all()->pluck('id')->toArray();
 
 
 

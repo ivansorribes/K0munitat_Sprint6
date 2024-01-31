@@ -51,7 +51,6 @@ class AuthController extends Controller
         $user->city = $request->city;
         $user->postcode = $request->postcode;
         $user->telephone = $request->telephone;
-        $user->profile_description = $request->profile_description;
 
 
         $user->save();

@@ -11,8 +11,8 @@ class CreateLikesPostsTable extends Migration
         Schema::create('likesPosts', function (Blueprint $table) {
 
         $table->id();
-        $table->integer('id_user')->constrained('users');;
-		$table->integer('id_post')->constrained('posts');
+        $table->foreignId('id_user')->references('id')->on('users');
+		$table->foreignId('id_post')->references('id')->on('posts');
         $table->timestamps();
 
         });

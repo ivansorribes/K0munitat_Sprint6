@@ -18,8 +18,8 @@ class likesPostsFactory extends Factory
      */
     public function definition(): array
     {
-        $id_post = posts::all()->pluck('id_post')->toArray();
-        $id_user = User::all()->pluck('id_user')->toArray();
+        $id_post = posts::all()->pluck('id')->toArray();
+        $id_user = User::all()->pluck('id')->toArray();
 
 
         return [
