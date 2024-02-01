@@ -34,10 +34,6 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
 
-Route::get('/login', function () {
-    return view('login');
-});
-
 Route::get('/map', function () {
     return view('map');
 });
