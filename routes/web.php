@@ -30,6 +30,14 @@ Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-se
 Route::post('/validate-register', [AuthController::class, 'register'])->name('validate-register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::get('/login', function () {
+    return view('login');
+});
+
+Route::get('/about-us', function () {
+    return view('about-us');
+});
+
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
