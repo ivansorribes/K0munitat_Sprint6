@@ -3,8 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use app\Models\communities;
 use app\Models\users;
+use app\Models\categories;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Posts>
@@ -18,16 +18,17 @@ class postsFactory extends Factory
      */
     public function definition(): array
     {
-        $id_community = communities::all()->pluck('id_community')->toArray();
-        $id_user = users::all()->pluck('id_user')->toArray();
+        $id_user = User::all()->pluck('id')->toArray();
+        $id_category = categories::all()->pluck('id')->toArray(); 
+
 
         return [
-            'id_community' => $this->faker->randomElement($id_community),
             'id_user' => $this->faker->randomElement($id_user),
+            'id_category' => $this->faker->randomElement($id_category),
             'title' => fake()->title(),
-            'description' => fake()->description(),
-            'category' => fake()->category(),
-            'isActive' => fake()->isActive(),
+            'description' => $this->faker->text(),
+            'isActive' => $this->faker->boolean,
+            'private' => $this->faker->boolean,
             'type' =>fake()->randomElement(['advertisment', 'post'])
 
         ];

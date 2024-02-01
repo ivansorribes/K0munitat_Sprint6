@@ -12,23 +12,24 @@ class posts extends Model
     protected $table = 'posts';
 
     protected $fillable = [
-        'id_community',
         'id_user',
+        'id_category',
         'title',
         'description',
         'category',
         'isactive',
+        'private',
         'type'        
     ];
-
-    public function community(): BelongsTo
-    {
-        return $this->belongsTo(communities::class);
-    }
 
     public function user(): BelongsTo
     {
         return $this->belongsTo(users::class);
+    }
+
+    public function categories(): BelongsTo
+    {
+        return $this->belongsTo(categories::class);
     }
 
 
