@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use App\Models\User;
 use Carbon\Carbon;
 
+
 class AuthController extends Controller
 {
     //Retornar la vista del Login
@@ -39,48 +40,63 @@ class AuthController extends Controller
     //Funcio per a registrar un usuari
     function register(Request $request)
     {
-        //Validació de les dades introduïdes en el formulari
+        // Validación de las datos introducidos en el formulario
+        $request->validate([
+            'firstname' => 'required',
+            'lastname' => 'required',
+            'username' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|min:6',
+            'password_confirm' => 'required|same:password',
+        ]);
 
+        // Creación de un nuevo usuario
         $user = new User();
 
+        // Asignación de los valores del formulario al usuario
         $user->firstname = $request->firstname;
         $user->lastname = $request->lastname;
         $user->username = $request->username;
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
-        $user->city = $request->city;
-        $user->postcode = $request->postcode;
-        $user->telephone = $request->telephone;
-        $user->profile_description = $request->profile_description;
 
-
+        // Guardar el usuario en la base de datos
         $user->save();
 
-        return redirect(route('LoginView'));
-
+        // Redireccionar al formulario de inicio de sesión con los valores anteriores
+        return redirect(route('LoginView'))->withInput($request->except('password', 'password_confirm'));
     }
 
-    function login(Request $request) 
-    {
-        //Validació de les dades
 
+
+    //Funció per fer login
+    function login(Request $request)
+    {
+        //Validem que les dades introduïdes siguin correctes
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required',
+        ]);
+        //Creem un array amb les credencials del usuari introduïdes al formulari
         $credentials = [
             "email" => $request->email,
-            "password" => $request->password,   
+            "password" => $request->password,
         ];
-
-        $remember = ($request->has('remember') ? true : false);
-        
-        if(Auth::attempt($credentials,$remember)){
-
+        //Determina si la casella de remember esta marcada. Si està marcada serà true, sinó false
+        $remember = $request->has('remember');
+        //Intenta autenticar a l'usuari amb les credencials, si son correctes executara el bloc if
+        if (Auth::attempt($credentials, $remember)) {
+            //Regenerem la sessió per a evitar el risc de sesions secunadries
             $request->session()->regenerate();
-
+            //Després d'iniciar sessió, redirigim a l'usuari a la ruta que volia entrar si existeix, sinó a la ruta proporcionada
             return redirect()->intended(route('privada'));
-
-        }else{
-            return redirect('/login');
+        } else {
+            //Si no són correctes torna a l'usuari  a la pàgina de login i mostra una notificació
+            return redirect('/login')->with(['fail' => 'Invalid email or password.'])->withInput();
         }
     }
+
+
 
     function logout(Request $request) 
     {

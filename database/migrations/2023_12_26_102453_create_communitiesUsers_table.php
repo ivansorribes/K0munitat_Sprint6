@@ -11,8 +11,8 @@ class CreateCommunitiesUsersTable extends Migration
         Schema::create('communitiesUsers', function (Blueprint $table) {
 
         $table->id();
-        $table->integer('id_community')->constrained('communities');
-		$table->integer('id_user')->constrained('users');
+        $table->foreignId('id_community')->references('id')->on('communities');
+		$table->foreignId('id_user')->references('id')->on('users');
         $table->timestamps();
 
         });

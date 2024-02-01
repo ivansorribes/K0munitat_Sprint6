@@ -11,7 +11,7 @@ class CreateRegionsTable extends Migration
         Schema::create('regions', function (Blueprint $table) {
 
         $table->id();
-        $table->integer('id_autonomousCommunity')->constrained('autonomousCommunities')->nullable();
+        $table->foreignId('id_autonomousCommunity')->references('id')->on('autonomousCommunities');
 		$table->string('name');
         $table->timestamps();
 
