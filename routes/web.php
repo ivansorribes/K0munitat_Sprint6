@@ -22,20 +22,6 @@ Route::get('/login', function () {
     return view('login');
 });
 
-<<<<<<< HEAD
-Route::get('/dashboard', function () {
-    return view('header/header');
-});
-
 Route::get('/about-us', function () {
     return view('about-us');
 });
-
-// Rutas para el olvido y restablecimiento de contraseña
-Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
-Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
-=======
-Route::get('/about-us', function () {
-    return view('about-us');
-});
->>>>>>> d1347a9 (AboutUs Funcionando)
