@@ -26,3 +26,10 @@ Route::get('/dashboard', function () {
     return view('header/header');
 });
 
+Route::get('/about-us', function () {
+    return view('about-us');
+});
+
+// Rutas para el olvido y restablecimiento de contraseña
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
+Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
