@@ -39,5 +39,5 @@ Route::get('/map', function () {
 });
 
 Route::get('/homepage', function () {
-    return view('homepage');
+    return view('home-page');
 });
