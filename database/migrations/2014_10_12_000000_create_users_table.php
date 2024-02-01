@@ -17,11 +17,11 @@ class CreateUsersTable extends Migration
         $table->string('username');
         $table->string('firstname');
         $table->string('lastname');
-        $table->string('city');
-        $table->integer('postcode',);
-        $table->string('telephone');
+        $table->string('city')->nullable();
+        $table->integer('postcode',)->nullable();
+        $table->string('telephone')->nullable();
         $table->string('profile_image')->nullable();
-        $table->string('profile_description');
+        $table->string('profile_description')->nullable();
         $table->enum('role',['superAdmin','communityAdmin','communityMod','user'])->default('user');
         $table->rememberToken();
         $table->timestamps();

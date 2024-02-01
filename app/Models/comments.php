@@ -20,6 +20,6 @@ class comments extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(users::class);
+        return $this->belongsTo(User::class);
     }
 }
