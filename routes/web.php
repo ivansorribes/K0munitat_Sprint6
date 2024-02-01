@@ -18,6 +18,8 @@ use App\Http\Controllers\AuthController;
 |
 */
 
+Route::get('/', [UserController::class, 'LoginView'])->name('LoginView')->middleware('guest');
+Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
 // Rutas para mostrar vistas
 Route::get('/login', [AuthController::class, 'LoginView'])->name('LoginView');
 Route::get('/register', [AuthController::class, 'RegisterView'])->name('RegisterView');
@@ -37,3 +39,5 @@ Route::get('/about-us', function () {
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
+
+Route::post('/updateProfileDescription', [UserController::class, 'updateProfileDescription'])->name('updateProfileDescription')->middleware('auth');
