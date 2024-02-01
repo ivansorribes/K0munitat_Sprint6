@@ -2,6 +2,10 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Password;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,8 +19,6 @@ use App\Http\Controllers\UserController;
 */
 
 Route::get('/', [UserController::class, 'LoginView'])->name('LoginView')->middleware('guest');
-<<<<<<< HEAD
-=======
 Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
 // Rutas para mostrar vistas
 Route::get('/login', [AuthController::class, 'LoginView'])->name('LoginView');
@@ -24,7 +26,6 @@ Route::get('/register', [AuthController::class, 'RegisterView'])->name('Register
 Route::view('/privada', 'login.secret')->middleware('auth')->name('privada');
 Route::get('/resetPassword', [AuthController::class, 'resetPasswordView'])->name('resetPasswordView');
 Route::get('passwordReset/{token}', [AuthController::class, 'resetFormView'])->name('resetFormView');
->>>>>>> main
 
 
 
@@ -35,13 +36,18 @@ Route::get('/login', function () {
 Route::get('/about-us', function () {
     return view('about-us');
 });
-<<<<<<< HEAD
-=======
 
+// Rutas para el proceso de autenticación
+Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-sesion');
+Route::post('/validate-register', [AuthController::class, 'register'])->name('validate-register');
+Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/about-us', function () {
+    return view('about-us');
+});
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
 
 Route::post('/updateProfileDescription', [UserController::class, 'updateProfileDescription'])->name('updateProfileDescription')->middleware('auth');
->>>>>>> main
