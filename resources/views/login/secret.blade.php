@@ -11,11 +11,16 @@
 
 </head>
 
+<<<<<<< Updated upstream:resources/views/login/secret.blade.php
 <body class="min-h-screen flex items-center justify-center bg-green-500">
     <h1>Pagina privada</h1>
     <div>
         <a href="{{ route('logout') }}"><button type="button" class="btn btn-outline-primary me-2">Salir</button></a>
     </div>
+=======
+<body>
+    <div id="slider"></div>
+>>>>>>> Stashed changes:resources/views/homepage.blade.php
 </body>
 
 </html>
