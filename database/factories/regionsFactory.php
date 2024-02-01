@@ -17,7 +17,7 @@ class regionsFactory extends Factory
      */
     public function definition(): array
     {
-        $id_autonomousCommunity = autonomousCommunities::all()->pluck('id_autonomousCommunity')->toArray();
+        $id_autonomousCommunity = autonomousCommunities::all()->pluck('id')->toArray();
 
         return [
             'id_autonomousCommunity' => $this->faker->randomElement($id_autonomousCommunity),

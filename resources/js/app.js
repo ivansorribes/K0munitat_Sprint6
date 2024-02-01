@@ -6,3 +6,4 @@ import './Codea.jsx'
 import './login.jsx'
 
 import './communities/communitiesFormCreate.jsx';
+import './about-us.jsx'

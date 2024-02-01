@@ -11,11 +11,11 @@ class CreateCommunitiesTable extends Migration
         Schema::create('communities', function (Blueprint $table) {
 
         $table->id();
-        $table->foreignId('id_admin')->constrained('users');
+        $table->foreignId('id_admin')->references('id')->on('users');
 		$table->string('name');
 		$table->string('description');
-		$table->foreignId('id_autonomousCommunity')->constrained('autonomousCommunities');
-		$table->foreignId('id_region')->constrained('regions');
+		$table->foreignId('id_autonomousCommunity')->references('id')->on('autonomousCommunities');
+		$table->foreignId('id_region')->references('id')->on('regions');
 		$table->datetime('created_at')->nullable();
         $table->datetime('updated_at')->nullable();
 		$table->boolean('isActive')->default('1');
