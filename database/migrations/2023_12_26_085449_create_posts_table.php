@@ -15,7 +15,6 @@ class CreatePostsTable extends Migration
         $table->foreignId('id_category')->references('id')->on('categories');
 		$table->string('title',50);
 		$table->string('description',1000);
-		$table->string('category',35);
 		$table->boolean('isActive')->default('1');
         $table->boolean('private')->default('1');
         $table->string('type', 50); 
