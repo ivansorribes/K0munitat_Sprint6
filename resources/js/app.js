@@ -6,7 +6,4 @@ import './Codea.jsx'
 import './login.jsx'
 import './login.jsx'
 
-import './components/Map.jsx'
-
-import './components/Modal.jsx'
 import './components/Slider.jsx'
