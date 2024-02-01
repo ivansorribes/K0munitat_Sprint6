@@ -20,7 +20,8 @@ class posts extends Model
         'category',
         'isactive',
         'private',
-        'type'        
+        'type',
+        'post_blog'        
     ];
 
     public function user(): BelongsTo

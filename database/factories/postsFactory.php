@@ -33,7 +33,8 @@ class postsFactory extends Factory
             'description' => $this->faker->text(),
             'isActive' => $this->faker->boolean,
             'private' => $this->faker->boolean,
-            'type' =>fake()->randomElement(['advertisment', 'post'])
+            'type' =>fake()->randomElement(['advertisment', 'post']),
+            'post_blog' => 0, 
 
         ];
     }

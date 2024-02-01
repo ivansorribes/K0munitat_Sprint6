@@ -19,6 +19,7 @@ class CreatePostsTable extends Migration
 		$table->boolean('isActive')->default('1');
         $table->boolean('private')->default('1');
         $table->string('type', 50); 
+        $table->boolean('post_blog')->default('0'); 
 		$table->datetime('created_at')->nullable();
         $table->datetime('updated_at')->nullable();
         });
