@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StorePostsRequest;
 use App\Http\Requests\UpdatePostsRequest;
-use App\Models\Post;
+use App\Models\posts;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -38,7 +38,7 @@ class PostsController extends Controller
         ]);
 
         // Creación de una nueva instancia del modelo Post y asignación de los datos
-        $post = new Post([
+        $post = new posts([
             'id_community' => 3, // Este valor debería ser dinámico según tu lógica de aplicación
             'id_user' => 1, // Este valor también debería ser dinámico, por ejemplo, usando Auth::id() si estás autenticando usuarios
             'title' => $request->title,
@@ -59,7 +59,7 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Post $posts)
+    public function show(posts $posts)
     {
         //
     }
@@ -67,7 +67,7 @@ class PostsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $posts)
+    public function edit(posts $posts)
     {
         //
     }
@@ -75,7 +75,7 @@ class PostsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdatePostsRequest $request, Post $posts)
+    public function update(UpdatePostsRequest $request, posts $posts)
     {
         //
     }
@@ -83,7 +83,7 @@ class PostsController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $posts)
+    public function destroy(posts $posts)
     {
         //
     }
