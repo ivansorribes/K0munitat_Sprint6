@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class posts extends Model
+class Post extends Model
 {
     use HasFactory;
     protected $table = 'posts';
@@ -18,7 +18,7 @@ class posts extends Model
         'description',
         'category',
         'isactive',
-        'type'        
+        'type'
     ];
 
     public function community(): BelongsTo
@@ -30,6 +30,4 @@ class posts extends Model
     {
         return $this->belongsTo(User::class);
     }
-
-
 }

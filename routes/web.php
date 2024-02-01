@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -41,3 +42,6 @@ Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name(
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
 
 Route::post('/updateProfileDescription', [UserController::class, 'updateProfileDescription'])->name('updateProfileDescription')->middleware('auth');
+
+Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
+Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
