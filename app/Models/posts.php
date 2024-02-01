@@ -14,12 +14,14 @@ class posts extends Model
     protected $fillable = [
         'id_user',
         'id_category',
+        'id_community',
         'title',
         'description',
         'category',
         'isactive',
         'private',
-        'type'        
+        'type',
+        'post_blog'        
     ];
 
     public function user(): BelongsTo
@@ -30,6 +32,11 @@ class posts extends Model
     public function categories(): BelongsTo
     {
         return $this->belongsTo(categories::class);
+    }
+
+    public function community(): BelongsTo
+    {
+        return $this->belongsTo(communities::class);
     }
 
 
