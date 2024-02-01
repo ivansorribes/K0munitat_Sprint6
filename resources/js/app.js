@@ -8,5 +8,3 @@ import './login.jsx'
 import './about-us.jsx'
 
 import './components/Map.jsx'
-
-import './components/Modal.jsx'
