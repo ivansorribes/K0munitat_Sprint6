@@ -1,39 +1,47 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import snoopyImage from '../views/profile/image/snoopy17.jpg';
 import vegetablePatch from '../views/profile/image/huerto2.jpg';
 import vegetablePatchImage from '../views/profile/image/huerto.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes, faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
 
 export default function PersonalProfile() {
-    const [user, setUser] = useState({
-        profile_image: snoopyImage,
-        username: 'Tivik17',
-        firstname: 'Tatiana',
-        lastname: 'Valentiny',
-        city: 'Ciudad',
-        description: 'Esta es mi descripción',
-    });
-
+    const [user, setUser] = useState(JSON.parse(document.getElementById('personalProfile').getAttribute('data-user')));
     const [editingDescription, setEditingDescription] = useState(false);
     const [newDescription, setNewDescription] = useState(user.description);
+    const [modalImage, setModalImage] = useState(null);
 
     const startEditingDescription = () => {
         setNewDescription(user.description);
         setEditingDescription(true);
     };
 
-    const saveDescription = () => {
-        setUser({ ...user, description: newDescription });
-        setEditingDescription(false);
-    };
+    const saveDescription = async () => {
+    try {
+        const response = await fetch('/updateProfileDescription', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': window.csrf_token,
+            },
+            body: JSON.stringify({ description: newDescription }),
+        });
+
+        if (response.ok) {
+            setUser({ ...user, profile_description: newDescription });
+            setEditingDescription(false);
+        } else {
+            console.error('Error al guardar la descripción');
+        }
+    } catch (error) {
+        console.error('Error inesperado', error);
+    }
+};
+
 
     const cancelEditingDescription = () => {
         setEditingDescription(false);
     };
-
-    const [modalImage, setModalImage] = useState(null);
 
     const openModal = (imageSrc, likes, comments, description) => {
         setModalImage({ imageSrc, likes, comments, description });
@@ -43,66 +51,61 @@ export default function PersonalProfile() {
         setModalImage(null);
     };
 
+
     return (
         <div className="container mx-auto mt-8">
             <div className="bg-white shadow-md rounded p-8 mb-4">
-                <h1 className="text-3xl font-bold mb-4">My Profile</h1>
+                <div className="flex items-center justify-between mb-4">
+                    <h1 className="text-3xl font-bold">{user.username}</h1>
+                    <button className="bg-green-500 text-white px-2 py-1 rounded">Create</button>
+                </div>
+
 
                 <div className="flex items-center">
                     <div className="w-1/4 text-center">
                         <div className="flex flex-col items-center">
                             <img
                                 className="w-32 h-32 rounded-full mb-4 cursor-pointer"
-                                src={user.profile_image}
+                                src={`/profile/images/${user.profile_image}`}
                                 alt="Imagen de Usuario"
                                 id="userImage"
                             />
-                            <p className="font-bold">{user.username}</p>
+                            <p className="font-bold">{`${user.firstname} ${user.lastname}`}</p>
                         </div>
                     </div>
-                    <div className="w-3/4 pl-8">
-                        <div className="mb-4">
-                            <table className="table-auto">
-                                <tbody>
-                                    <tr>
-                                        <td>{`${user.firstname} ${user.lastname}`}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div className="flex items-center relative">
-                            <p className="font-bold mb-2">Description:</p>
-                            {editingDescription ? (
-                                <div className="relative">
+                    <div className="flex items-center relative">
+                        <p className="font-bold mb-2 ">Description:</p>
+                        {editingDescription ? (
+                            <div className="relative">
+                                <div className="w-full h-48 border rounded p-2 mb-4" style={{ width: '800px', height: '120px', marginBottom: '10px' }}>
                                     <textarea
-                                        className="w-full border rounded p-2 mb-4"
+                                        className="w-full h-full outline-none"
                                         value={newDescription}
                                         onChange={(e) => setNewDescription(e.target.value)}
                                     />
-                                    <div className="flex items-center justify-end absolute bottom-0 right-0 mb-2 mr-2">
-                                        <button className="bg-green-500 text-white px-2 py-1 rounded mb-2" onClick={saveDescription}>
-                                            <FontAwesomeIcon icon={faSave} size="xs" />
-                                        </button>
-                                        <button className="ml-2 bg-red-500 text-white px-2 py-1 rounded mb-2" onClick={cancelEditingDescription}>
-                                            <FontAwesomeIcon icon={faTimes} size="xs" />
-                                        </button>
-                                    </div>
                                 </div>
-                            ) : (
-                                <div className="border rounded p-2 flex items-center justify-between">
-                                    <div>{user.description}</div>
-                                    <button className="bg-blue-500 text-white px-2 py-1 rounded" onClick={startEditingDescription}>
-                                        <FontAwesomeIcon icon={faEdit} size="xs" />
+                                <div className="flex items-end justify-end absolute bottom-0 right-0 mb-2 mr-2">
+                                    <button className="bg-green-500 text-white px-2 py-1 rounded mr-2" onClick={saveDescription} style={{ marginBottom: '15px' }}>
+                                        <FontAwesomeIcon icon={faSave} size="xs" />
+                                    </button>
+                                    <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={cancelEditingDescription} style={{ marginBottom: '15px' }}>
+                                        <FontAwesomeIcon icon={faTimes} size="xs" />
                                     </button>
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        ) : (
+                            <div className="border rounded p-2 relative" style={{ width: '800px', height: '120px', marginBottom: '10px' }}>
+                                {user.profile_description}
+                                <button className="bg-blue-500 text-white px-2 py-1 rounded absolute bottom-0 right-0 mb-2 mr-2" onClick={startEditingDescription}>
+                                    <FontAwesomeIcon icon={faEdit} size="xs" />
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
 
                 <div className="mt-6">
-                    <h2 className="text-2xl font-bold mb-4">Publications</h2>
+                    <h2 className="text-2xl text-center font-bold mb-4">Publications</h2>
                     <div className="grid grid-cols-2 gap-4">
                         {/* Publicación 1 */}
                         <div
