@@ -23,5 +23,5 @@ Route::get('/login', function () {
 });
 
 Route::get('/communitiesForm', function () {
-    return view('communitiesFormCreate');
+    return view('communities.communitiesFormCreate');
 });
