@@ -18,8 +18,8 @@ class commentsPostsFactory extends Factory
      */
     public function definition(): array
     {
-        $id_post= posts::all()->pluck('id_post')->toArray();
-        $id_comment= comments::all()->pluck('id_comment')->toArray();
+        $id_post= posts::all()->pluck('id')->toArray();
+        $id_comment= comments::all()->pluck('id')->toArray();
 
 
         return [

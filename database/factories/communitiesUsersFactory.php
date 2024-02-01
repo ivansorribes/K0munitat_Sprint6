@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\users;
+use App\Models\User;
 use App\Models\communities;
 
 /**
@@ -18,8 +18,8 @@ class communitiesUsersFactory extends Factory
      */
     public function definition(): array
     {
-        $id_user = users::all()->pluck('id')->toArray();
-        $id_community = Communities::all()->pluck('id')->toArray();
+        $id_user = User::all()->pluck('id')->toArray();
+        $id_community = communities::all()->pluck('id')->toArray();
 
 
 
