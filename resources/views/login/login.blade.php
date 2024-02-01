@@ -26,23 +26,35 @@
             <!-- Logo -->
             <img src="{{ asset('img/Logo_K0munitat-removebg-preview.png') }}" alt="K0munitat Logo" class="mx-auto mb-10" style="max-width: 250px;">
             <form method="POST" action="{{ route('inicia-sesion') }}">
+                @if (Session::get('fail'))
+                    <div class="alert alert-danger mb-5" style="color: red;">
+                        {{ Session::get('fail') }}
+                    </div>
+                @endif
+            
                 @csrf
                 <!-- Campo de email -->
                 <div class="mb-4 relative">
                     <input autocomplete="off" id="email" name="email" type="text"
                         class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                        placeholder="Email address" required />
+                        placeholder="Email address" />
                     <label for="email"
                         class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Email
                         Address</label>
+                    @error('email')
+                    <div class="alert alert-danger mt-3" style="color: red;">{{ $message }}</div>
+                    @enderror
                 </div>
                 <!-- Campo de contraseña -->
                 <div class="mb-4 relative">
                     <input autocomplete="off" id="password" name="password" type="password"
                         class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                        placeholder="Password" required />
+                        placeholder="Password" />
                     <label for="password"
                         class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Password</label>
+                    @error('password')
+                    <div class="alert alert-danger mt-3" style="color: red;">{{ $message }}</div>
+                    @enderror
                     <!-- Icono de ojo -->
                     <div class="absolute inset-y-0 right-0 flex items-center pr-3 eye-icon" id="togglePassword">
                         <i class="far fa-eye text-gray-600"></i>
@@ -55,13 +67,16 @@
                 </div>
                 <!-- Olvidaste tu contraseña -->
                 <div class="mb-4">
-                    <a href="{{route('resetPasswordView')}}" class="text-yellow-500 text-sm hover:underline">Forgot your password?</a>
+                    <a href="{{ route('resetPasswordView') }}" class="text-yellow-500 text-sm hover:underline">Forgot your
+                        password?</a>
                 </div>
                 <!-- Botón de enviar -->
                 <div class="relative mb-4">
                     <button type="submit" class="w-full bg-yellow-500 text-white rounded-md px-2 py-1">Submit</button>
                 </div>
             </form>
+            
+            
             <!-- Enlace para registrarse -->
             <p class="text-gray-600 text-sm mt-4">
                 Don't have an account? <a href="{{ route('RegisterView') }}" class="text-yellow-500 hover:underline">Create a new one</a>
