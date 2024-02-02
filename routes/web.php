@@ -27,7 +27,9 @@ Route::view('/privada', 'login.secret')->middleware('auth')->name('privada');
 Route::get('/resetPassword', [AuthController::class, 'resetPasswordView'])->name('resetPasswordView');
 Route::get('passwordReset/{token}', [AuthController::class, 'resetFormView'])->name('resetFormView');
 
-
+Route::get('/dashboard', function () {
+    return view('dashboard');
+});
 
 Route::get('/login', function () {
     return view('login');
@@ -44,10 +46,14 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/about-us', function () {
     return view('about-us');
-});
+})->name('about-us');
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
 
 Route::post('/updateProfileDescription', [UserController::class, 'updateProfileDescription'])->name('updateProfileDescription')->middleware('auth');
+
+
+//Route::get('/', HomeController::class)->name('home');
+
