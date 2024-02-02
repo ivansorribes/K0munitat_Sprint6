@@ -18,7 +18,6 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', [UserController::class, 'LoginView'])->name('LoginView')->middleware('guest');
 Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
 
 // Rutas para mostrar vistas
