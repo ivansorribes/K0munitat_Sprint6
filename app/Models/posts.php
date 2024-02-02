@@ -21,7 +21,6 @@ class posts extends Model
         'isactive',
         'private',
         'type',
-        'post_blog'        
     ];
 
     public function user(): BelongsTo
