@@ -11,7 +11,10 @@
 </head>
 
 <body>
-    <div id="map"></div>
+    <div class="flex justify-center">
+        <div id="map">
+        </div>
+    </div>
 </body>
 
 </html>
