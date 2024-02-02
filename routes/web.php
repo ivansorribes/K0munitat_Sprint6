@@ -45,3 +45,5 @@ Route::post('/updateProfileDescription', [UserController::class, 'updateProfileD
 
 Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
 Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
+
+Route::get('/community/advertisement-list', [PostsController::class, 'index'])->name('advertisement-list');
