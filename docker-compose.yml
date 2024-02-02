@@ -12,7 +12,7 @@ services:
             - 'host.docker.internal:host-gateway'
         ports:
             - '${APP_PORT:-80}:80'
-            - '${VITE_PORT:-5173}:${VITE_PORT:-5173}'
+            - '${VITE_PORT:-5174}:${VITE_PORT:-5174}'  # Cambiado a 5174
         environment:
             WWWUSER: '${WWWUSER}'
             LARAVEL_SAIL: 1
@@ -35,7 +35,7 @@ services:
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ROOT_HOST: "%"
-            MYSQL_DATABASE: '${DB_DATABASE}'
+            MYSQL_DATABASE: 'k0munitat_sprint4'
             MYSQL_USER: '${DB_USERNAME}'
             MYSQL_PASSWORD: '${DB_PASSWORD}'
             MYSQL_ALLOW_EMPTY_PASSWORD: 1
@@ -53,7 +53,7 @@ services:
         environment:
             PMA_HOST: mysql
             PMA_PORT: 3306
-            PMA_USER: '${DB_USERNAME}'
+            PMA_USER: 'root'
             PMA_PASSWORD: '${DB_PASSWORD}'
         ports:
             - '${FORWARD_PMA_PORT:-8080}:80'
