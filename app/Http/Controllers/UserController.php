@@ -42,4 +42,10 @@ class UserController extends Controller
     }
 }
 
+public function postUser()
+{
+    $user = auth()->user();
+    return view('profile.personalProfile', compact('user'));
+}
+
 }
