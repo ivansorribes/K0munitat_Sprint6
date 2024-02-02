@@ -19,7 +19,6 @@ use App\Http\Controllers\PostsController;
 |
 */
 
-Route::get('/', [UserController::class, 'LoginView'])->name('LoginView')->middleware('guest');
 Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
 // Rutas para mostrar vistas
 Route::get('/login', [AuthController::class, 'LoginView'])->name('LoginView');
@@ -36,6 +35,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/about-us', function () {
     return view('about-us');
 });
+
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
