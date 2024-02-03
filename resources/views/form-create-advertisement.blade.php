@@ -46,12 +46,12 @@
                 </div>
 
                 <div class="mb-4 relative">
-                    <label for="username" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
+                    <label for="category" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
                         Category
                     </label>
-                    <select id="username" name="username" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600">
-                        <option value="">Selecciona una opción</option>
-                        <!-- Opciones del select aquí -->
+                    <input type="text" name="category" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600">
+                    <!-- <option value="">Selecciona una opción</option> -->
+                    <!-- Opciones del select aquí -->
                     </select> @error('username')
                     <div class="alert alert-danger mb-5" style="color: red;">{{ $message }}</div>
                     @enderror
