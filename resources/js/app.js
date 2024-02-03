@@ -1,5 +1,4 @@
 import './bootstrap';
-import './personalProfile.jsx';
-
-import './about-us.jsx'
+import './PersonalProfile.jsx';
+import './AboutUs.jsx'
 import './AdvertisementList.jsx';
