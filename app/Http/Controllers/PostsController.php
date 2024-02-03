@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StorePostsRequest;
 use App\Http\Requests\UpdatePostsRequest;
 use App\Models\posts;
+use App\Models\imagePost;
+use App\Models\categories;
 use Illuminate\Http\Request;
 
 class PostsController extends Controller
@@ -22,7 +24,8 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('form-create-advertisement', []);
+        $categories = categories::all();
+        return view('form-create-advertisement', ['categories' => $categories]);
     }
 
     /**
@@ -34,27 +37,30 @@ class PostsController extends Controller
         $request->validate([
             'title' => 'required|max:50',
             'description' => 'required|max:1000',
-            'category' => 'required|max:1000',
+            'category_id' => 'required|exists:categories,id',
+            'private' => 'sometimes|boolean',
+            'image' => 'nullable|image|max:2048',
             // Agrega aquí otras reglas de validación según sea necesario
         ]);
 
         // Creación de una nueva instancia del modelo Post y asignación de los datos
         $post = new posts([
-            'id_community' => 3, // Este valor debería ser dinámico según tu lógica de aplicación
-            'id_user' => 1, // Este valor también debería ser dinámico, por ejemplo, usando Auth::id() si estás autenticando usuarios
+            'id_user' => 1, //$request->user()->id, // Asumiendo que quieres usar el ID del usuario autenticado
+            'id_category' => $request->category_id,
+            'id_community' => 1,
             'title' => $request->title,
             'description' => $request->description,
-            'category' => $request->category, // Deberías modificar esto según la lógica de tu aplicación
-            'isActive' => true,
-            'type' => 'default', // Modifica según sea necesario
+            'isActive' => true, // o $request->isActive si lo estás tomando del formulario
+            'private' => $request->has('private') ? true : false,
+            'type' => 'advert', // Asegúrate de que este campo se maneje correctamente en tu formulario
         ]);
-
         // Guardar el post en la base de datos
         $post->save();
 
+
         // Redireccionar al usuario a una página específica después de guardar los datos
         // Asegúrate de reemplazar 'ruta-destino' con la ruta a la que deseas redirigir al usuario
-        return redirect('/')->with('success', 'Post creado con éxito.');
+        return redirect('/map')->with('success', 'Post creado con éxito.');
     }
 
     /**

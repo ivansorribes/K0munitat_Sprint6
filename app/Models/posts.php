@@ -17,8 +17,9 @@ class posts extends Model
         'title',
         'description',
         'category',
-        'isactive',
-        'type'
+        'isActive',
+        'private',
+        'type',
     ];
 
     public function community(): BelongsTo

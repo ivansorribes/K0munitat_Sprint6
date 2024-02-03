@@ -25,7 +25,7 @@
             <form action="{{ route('form-create-advertisement-post') }}" method="post">
                 @csrf
 
-                <div class="mb-4 relative">
+                <div class=" mb-4 relative">
                     <label for="title" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
                         Title
                     </label>
@@ -46,12 +46,14 @@
                 </div>
 
                 <div class="mb-4 relative">
-                    <label for="category" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
-                        Category
+                    <label for="type" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
+                        type
                     </label>
-                    <input type="text" name="category" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600">
-                    <!-- <option value="">Selecciona una opción</option> -->
-                    <!-- Opciones del select aquí -->
+                    <select name="category_id" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600">
+                        <option value="">Select an option</option>
+                        @foreach ($categories as $category)
+                        <option value="{{ $category->id }}">{{ $category->name }}</option>
+                        @endforeach
                     </select> @error('username')
                     <div class="alert alert-danger mb-5" style="color: red;">{{ $message }}</div>
                     @enderror
@@ -172,33 +174,6 @@
         </div>
     </div>
 
-    <script>
-        const togglePassword = document.getElementById('togglePassword');
-        const password = document.getElementById('password');
-
-        togglePassword.addEventListener('click', function() {
-            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
-            password.setAttribute('type', type);
-            if (type === 'password') {
-                togglePassword.innerHTML = '<i class="far fa-eye"></i>';
-            } else {
-                togglePassword.innerHTML = '<i class="far fa-eye-slash"></i>';
-            }
-        });
-
-        const togglePasswordConfirm = document.getElementById('togglePasswordConfirm');
-        const passwordConfirm = document.getElementById('password_confirm');
-
-        togglePasswordConfirm.addEventListener('click', function() {
-            const type = passwordConfirm.getAttribute('type') === 'password' ? 'text' : 'password';
-            passwordConfirm.setAttribute('type', type);
-            if (type === 'password') {
-                togglePasswordConfirm.innerHTML = '<i class="far fa-eye"></i>';
-            } else {
-                togglePasswordConfirm.innerHTML = '<i class="far fa-eye-slash"></i>';
-            }
-        });
-    </script>
 </body>
 
 </html>
