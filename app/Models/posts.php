@@ -18,7 +18,7 @@ class posts extends Model
         'title',
         'description',
         'category',
-        'isactive',
+        'isActive',
         'private',
         'type',
     ];
