@@ -34,6 +34,7 @@ class PostsController extends Controller
         $request->validate([
             'title' => 'required|max:50',
             'description' => 'required|max:1000',
+            'category' => 'required|max:1000',
             // Agrega aquí otras reglas de validación según sea necesario
         ]);
 
@@ -43,7 +44,7 @@ class PostsController extends Controller
             'id_user' => 1, // Este valor también debería ser dinámico, por ejemplo, usando Auth::id() si estás autenticando usuarios
             'title' => $request->title,
             'description' => $request->description,
-            'category' => 'default', // Deberías modificar esto según la lógica de tu aplicación
+            'category' => $request->category, // Deberías modificar esto según la lógica de tu aplicación
             'isActive' => true,
             'type' => 'default', // Modifica según sea necesario
         ]);
