@@ -12,6 +12,9 @@
 
 <body>
     <div id="advertisementList"></div>
+    <script type="text/javascript">
+        window.postsData = @json($posts);
+    </script>
 </body>
 
 </html>

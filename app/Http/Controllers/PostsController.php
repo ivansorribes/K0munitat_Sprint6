@@ -17,7 +17,8 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return view('advertisement-list', []);
+        $posts = posts::where('type', 'advertisment')->get();
+        return view('advertisement-list', ['posts' => $posts]);
     }
 
     /**
