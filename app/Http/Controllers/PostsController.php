@@ -40,7 +40,7 @@ class PostsController extends Controller
                 'description' => 'required|max:1000',
                 'category_id' => 'required|exists:categories,id',
                 'private' => 'sometimes|boolean',
-                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             ]);
 
             $post = posts::create([
@@ -75,14 +75,9 @@ class PostsController extends Controller
                 ]);
             }
 
-            return back()->with('success', 'Post creado con éxito.');
+            return redirect('/map');
         } catch (\Exception $e) {
-            // Registrar el error
             Log::error('Error al crear el post: ' . $e->getMessage());
-
-            // Opcional: capturar y manejar tipos específicos de excepciones
-
-            // Redirigir al usuario a la página anterior con detalles del error
             return back()->withErrors('Ocurrió un error al crear el post. Por favor, intenta de nuevo.')->withInput();
         }
     }
