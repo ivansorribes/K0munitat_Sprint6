@@ -8,6 +8,7 @@ use App\Models\posts;
 use App\Models\imagePost;
 use App\Models\categories;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class PostsController extends Controller
 {
@@ -33,34 +34,57 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        // Validación de los datos enviados desde el formulario
-        $request->validate([
-            'title' => 'required|max:50',
-            'description' => 'required|max:1000',
-            'category_id' => 'required|exists:categories,id',
-            'private' => 'sometimes|boolean',
-            'image' => 'nullable|image|max:2048',
-            // Agrega aquí otras reglas de validación según sea necesario
-        ]);
+        try {
+            $validatedData = $request->validate([
+                'title' => 'required|max:50',
+                'description' => 'required|max:1000',
+                'category_id' => 'required|exists:categories,id',
+                'private' => 'sometimes|boolean',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            ]);
 
-        // Creación de una nueva instancia del modelo Post y asignación de los datos
-        $post = new posts([
-            'id_user' => 1, //$request->user()->id, // Asumiendo que quieres usar el ID del usuario autenticado
-            'id_category' => $request->category_id,
-            'id_community' => 1,
-            'title' => $request->title,
-            'description' => $request->description,
-            'isActive' => true, // o $request->isActive si lo estás tomando del formulario
-            'private' => $request->has('private') ? true : false,
-            'type' => 'advert', // Asegúrate de que este campo se maneje correctamente en tu formulario
-        ]);
-        // Guardar el post en la base de datos
-        $post->save();
+            $post = posts::create([
+                'id_user' => 1, // Asume un valor estático o ajusta según tu lógica de autenticación
+                'id_category' => $validatedData['category_id'],
+                'id_community' => 1, // Ajusta según necesites
+                'title' => $validatedData['title'],
+                'description' => $validatedData['description'],
+                'isActive' => true,
+                'private' => $request->has('private') ? true : false,
+                'type' => 'advert', // Ajusta según necesites
+            ]);
 
+            // Manejo de la carga de la imagen
+            if ($request->hasFile('image')) {
+                try {
+                    $file = $request->file('image');
+                    Log::info("Intentando guardar el archivo: " . $file->getClientOriginalName());
+                    $path = $file->store('posts', 'public');
+                    Log::info("Archivo guardado en: " . $path);
+                } catch (\Exception $e) {
+                    Log::error("Error al guardar el archivo: " . $e->getMessage());
+                    // Asegúrate de retornar o manejar el error aquí si es necesario
+                }
+                $imageName = basename($path);
 
-        // Redireccionar al usuario a una página específica después de guardar los datos
-        // Asegúrate de reemplazar 'ruta-destino' con la ruta a la que deseas redirigir al usuario
-        return redirect('/map')->with('success', 'Post creado con éxito.');
+                // Guardar referencia de la imagen en la base de datos
+                ImagePost::create([
+                    'id_post' => $post->id,
+                    'name' => $imageName,
+                    'front_page' => true,
+                ]);
+            }
+
+            return back()->with('success', 'Post creado con éxito.');
+        } catch (\Exception $e) {
+            // Registrar el error
+            Log::error('Error al crear el post: ' . $e->getMessage());
+
+            // Opcional: capturar y manejar tipos específicos de excepciones
+
+            // Redirigir al usuario a la página anterior con detalles del error
+            return back()->withErrors('Ocurrió un error al crear el post. Por favor, intenta de nuevo.')->withInput();
+        }
     }
 
     /**

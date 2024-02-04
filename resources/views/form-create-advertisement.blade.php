@@ -22,7 +22,7 @@
         <div class="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div class="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full max-w-md text-center">
             <h2 class="text-2xl font-semibold mb-6 text-center text-yellow-600">Create advertisement form</h2>
-            <form action="{{ route('form-create-advertisement-post') }}" method="post">
+            <form action="{{ route('form-create-advertisement-post') }}" method="post" enctype="multipart/form-data">
                 @csrf
 
                 <div class=" mb-4 relative">
@@ -46,7 +46,7 @@
                 </div>
 
                 <div class="mb-4 relative">
-                    <label for="type" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
+                    <label for="category_id" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
                         type
                     </label>
                     <select name="category_id" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600">
