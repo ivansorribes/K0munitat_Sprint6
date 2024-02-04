@@ -3,150 +3,95 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>ًApplication</title>
         @viteReactRefresh
         @vite('resources/js/app.js')
         @vite('resources/css/app.css')
-        <style>
-            .sticky-nav {
-                position: fixed;
-                top: 0;
-                width: 100%;
-                z-index: 1000;
-                border-bottom: 2px solid #3d3c3b;
-                background-color: #fffdf9;
-            }
-               /* Estilos para el menú de navegación en dispositivos móviles */
-            #mobileMenu {
-                position: fixed;
-                top: 0;
-                right: 0;
-                width: 70%;
-                height: 100vh;
-                background-color: #adce71; /* Color de fondo para el menú en dispositivos móviles */
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                z-index: 999; /* Asegura que el menú esté encima del contenido principal */
-                transform: translateX(100%);
-                transition: transform 0.3s ease-in-out;
-            }
-
-            #mobileMenu ul {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-                text-align: center;
-            }
-
-            #mobileMenu ul li {
-                margin-bottom: 1rem;
-            }
-
-            /* Icono de hamburguesa para abrir el menú en dispositivos móviles */
-            #menuToggle {
-                display: block;
-                cursor: pointer;
-            }
-             /* Icono de cruz para cerrar el menú en dispositivos móviles */
-            #closeIcon {
-                position: absolute;
-                top: 1rem;
-                right: 1rem;
-                cursor: pointer;
-            }
-        </style>
     </head>
     <body>
-        <nav class="bg-adce71 p-4 transition-all duration-300">
-            <div class="container mx-auto flex items-center justify-between">
-                <!-- Logo o imagen a la izquierda -->
-                <img src="{{ asset('img/Logo_K0munitat-removebg-preview.png') }}" alt="Logo" class="h-10">
-                
-                <!-- Botón de hamburguesa para pantallas pequeñas -->
-                <button id="menuToggle" class="lg:hidden">
-                    <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                        xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
+        <header class="bg-[#fffdf9] px-6 shadow">
+            <div class="flex h-16 max-w-6xl mx-auto items-center justify-between">
+                <button class="text-[#adce71] rounded p-1 -ml-1 transition-colors hover:bg-[#f4971e] hover:text-[#fffdf9] focus:ring-2">
+                    <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-8 w-8">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
+                      </svg>
                 </button>
-
-                <!-- Menú de navegación para pantallas grandes-->
-                <ul class="hidden lg:flex items-center space-x-4">
-                    <li><a href="#" class="text-3d3c3b">Home</a></li>
-                    <li><a href="#" class="text-3d3c3b">Communities</a></li>
-                    <li><a href="#" class="text-3d3c3b">Blog</a></li>
-                    <li><a href="{{ route('about-us') }}" class="text-3d3c3b">About Us</a></li>
-                </ul>
-        
-                <!-- Botones de navegación para pantallas grandes -->
-                <div class="hidden lg:flex space-x-4">
-                    <a href="{{ route('inicia-sesion') }}" class="text-3d3c3b hover:text-gray-300">Sign up</a>
-                    <a href="{{ route('validate-register') }}" class="text-3d3c3b hover:text-gray-300">Login</a>
+                <!--<a href="#">LOgo</a>-->
+                <div class="flex cursor-pointer -mr-4 ml-8">
+                    <a href="{{ route('LoginView') }}">
+                        <img src="{{ asset('img/Logo_K0munitat-removebg-preview.png') }}" alt="Logo Komunitat" class="hover:scale-110 h-10 mt-2">
+                    </a>
+                    <div class="space-y-1 space-x-8 ml-8 pb-3 border-t pt-2 hidden md:flex">
+                        <ul class="md:flex md:items-center z-[-1] md:z-auto md:static absolute bg-[#fffdf9] w-full md:w-auto md:py-0 py-4 md:pl-0 pl-7 left-0">
+                            <li class="mx-4 my-6 md:my-0">
+                                <a href="#" class="block px-3 py-2 text-[#f4971e] rounded-md">Home</a></li>
+                            <li class="mx-4 my-6 md:my-0">
+                                <a href="#" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">Communities</a></li>
+                            <li class="mx-4 my-6 md:my-0">
+                                <a href="#" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">Blog</a></li>
+                            <li class="mx-4 my-6 md:my-0">
+                                <a href="{{ route('about-us') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">About Us</a></li>
+                                <div class="lg:flex items-center gap-6 space-x-4 md:flex items-center md:z-auto md:static absolute w-auto ml-8">
+                                    <a href="{{ route('validate-register') }}" class="bg-[#155b2a] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Login</a>
+                                    <a href="{{ route('inicia-sesion') }}" class="bg-gradient-to-br from-[#155b2a] to-[#adce71] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Sign up</a>
+                                </div>
+                        </ul>
+                    </div>
+                    
                 </div>
+                <div>
+                    <button>
+                        <svg class="h-8 w-8 text-[#adce71] rounded-full transition-colors hover:bg-[#f4971e] hover:text-[#fffdf9] focus:ring-2" data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"></path>
+                          </svg>
+                    </button>
+                    <button>user</button>
+                </div>
+            </div>
+            <nav class="md:flex md:items-center md:justify-between">
+                    <!-- Logo o imagen a la izquierda
+                    <div class="cursor-pointer">
+                        <a href="{{ route('LoginView') }}">
+                            <img src="{{ asset('img/Logo_K0munitat-removebg-preview.png') }}" alt="Logo Komunitat" class="h-10">
+                        </a>
+                    </div>
+                -->
+                    <!-- Menú de pantalla de navegación -->
+                    <div class="space-y-1 pb-3 border-t pt-2 md:hidden ">
+                        <ul class="md:flex md:items-center z-[-1] md:z-auto md:static absolute bg-[#fffdf9] w-full md:w-auto md:py-0 py-4 md:pl-0 pl-7 left-0">
+                            <li class="mx-4 my-6 md:my-0">
+                                <a href="#" class="block px-3 py-2 text-[#fffdf9] bg-[#f4971e] rounded-md">Home</a></li>
+                            <li class="mx-4 my-6 md:my-0">
+                                <a href="#" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#fffdf9] hover:bg-[#f4971e] rounded-md duration-500">Communities</a></li>
+                            <li class="mx-4 my-6 md:my-0">
+                                <a href="#" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#fffdf9] hover:bg-[#f4971e] rounded-md duration-500">Blog</a></li>
+                            <li class="mx-4 my-6 md:my-0">
+                                <a href="{{ route('about-us') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#fffdf9] hover:bg-[#f4971e] rounded-md duration-500">About Us</a></li>
+                        </ul>
+                    </div>
 
-                <!-- Menú de hamburguesa para pantallas pequeñas 
-                <div id="mobileMenu" class="lg:hidden hidden">
-                    <button id="menuToggle" class="text-3d3c3b focus:outline-none">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    <!-- Botones de navegación -->
+                    <div class="md:hidden sm:flex items-end gap-6 space-x-4 sm:z-auto sm:static absolute w-auto">
+                        <a href="{{ route('validate-register') }}" class="bg-[#155b2a] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Login</a>
+                        <a href="{{ route('inicia-sesion') }}" class="bg-gradient-to-br from-[#155b2a] to-[#adce71] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Sign up</a>
+                    </div>
+
+
+                    <!-- Botón de hamburguesa para pantallas pequeñas
+                    <button class="hidden md:flex focus:outline-none cursor-pointer">
+                        <svg class="h-6 w-6 lg:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                             xmlns="http://www.w3.org/2000/svg">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M4 6h16M4 12h16m-7 6h7"></path>
                         </svg>
                     </button>
-                </div>
-                -->
-                <!-- Menú de navegación para pantallas pequeñas (inicialmente oculto) -->
-                <div id="mobileMenu" class="lg:hidden hidden">
-                    <ul class="flex flex-col items-center space-y-4">
-                        <li><a href="#" class="text-3d3c3b">Home</a></li>
-                        <li><a href="#" class="text-3d3c3b">Communities</a></li>
-                        <li><a href="#" class="text-3d3c3b">Blog</a></li>
-                        <li><a href="{{ route('about-us') }}" class="text-3d3c3b">About Us</a></li>
-                    </ul>
-                    <!-- Botones de acción para Login y Sign up -->
-                    <div class="flex flex-col items-center space-y-4 mt-4">
-                        <a href="{{ route('inicia-sesion') }}" class="text-3d3c3b hover:text-gray-300">Login</a>
-                        <a href="{{ route('validate-register') }}" class="text-3d3c3b hover:text-gray-300">Sign up</a>
-                    </div>
+                     -->
 
-                     <!-- Icono de cruz para cerrar el menú en dispositivos móviles -->
-                    <div id="closeIcon" class="text-3d3c3b">
-                        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </div>
-                </div>
-
-            </div>
-        </nav>
-        <script>
-             // JavaScript para agregar/quitar la clase "sticky-nav" al hacer scroll
-            window.addEventListener('scroll', function () {
-                const navbar = document.querySelector('nav');
-                navbar.classList.toggle('sticky-nav', window.scrollY > 0);
-            });
-            // JavaScript para mostrar/ocultar el menú de hamburguesa
-            const menuToggle = document.getElementById('menuToggle');
-            const mobileMenu = document.getElementById('mobileMenu');
-            const closeMenu = document.getElementById('closeIcon');
-
-            menuToggle.addEventListener('click', () => {
-                mobileMenu.style.transform = 'translateX(0)';
-            });
-            closeMenu.addEventListener('click', () => {
-                mobileMenu.style.transform = 'translateX(100%)';
-            });
-            // JavaScript para mostrar/ocultar el menú de navegación en dispositivos móviles
-            document.getElementById('menuToggle').addEventListener('click', function () {
-                const mobileMenu = document.getElementById('mobileMenu');
-                mobileMenu.classList.toggle('hidden', !mobileMenu.classList.contains('hidden'));
-            });
-        </script>
+                    
+                
+            </nav>
+        </header>
+    
+    
         
     </body>
 </html>
