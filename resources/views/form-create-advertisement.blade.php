@@ -24,7 +24,7 @@
             <h2 class="text-2xl font-semibold mb-6 text-center text-yellow-600">Create advertisement form</h2>
             <form action="{{ route('form-create-advertisement-post') }}" method="post" enctype="multipart/form-data">
                 @csrf
-
+                <input type="hidden" name="type" value="advertisement">
                 <div class=" mb-4 relative">
                     <label for="title" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
                         Title

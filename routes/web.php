@@ -50,4 +50,10 @@ Route::get('/map', function () {
 Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
 Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
 
-Route::get('/community/advertisement-list', [PostsController::class, 'index'])->name('advertisement-list');
+Route::get('/community/advertisement-list', function (Illuminate\Http\Request $request) {
+    return app(PostsController::class)->index($request, 'advertisement');
+})->name('advertisement-list');
+
+Route::get('/community/post-list', function (Illuminate\Http\Request $request) {
+    return app(PostsController::class)->index($request, 'post');
+})->name('post-list');
