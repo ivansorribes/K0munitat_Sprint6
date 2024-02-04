@@ -15,9 +15,9 @@ class PostsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request, $type = 'advertisement')
     {
-        $posts = posts::where('type', 'advertisment')->get();
+        $posts = posts::where('type', $type)->get();
         return view('advertisement-list', ['posts' => $posts]);
     }
 
@@ -42,6 +42,7 @@ class PostsController extends Controller
                 'category_id' => 'required|exists:categories,id',
                 'private' => 'sometimes|boolean',
                 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'type' => 'required|in:advertisement,post',
             ]);
 
             $post = posts::create([
@@ -52,7 +53,7 @@ class PostsController extends Controller
                 'description' => $validatedData['description'],
                 'isActive' => true,
                 'private' => $request->has('private') ? true : false,
-                'type' => 'advert', // Ajusta según necesites
+                'type' => $validatedData['type'],
             ]);
 
             // Manejo de la carga de la imagen
