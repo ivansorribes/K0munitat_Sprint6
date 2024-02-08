@@ -17,7 +17,7 @@
                 </button>
                 <!--<a href="#">LOgo</a>-->
                 <div class="flex cursor-pointer -mr-4 ml-8">
-                    <a href="{{ route('LoginView') }}">
+                    <a href="{{ route('inicia-sesion') }}">
                         <img src="{{ asset('img/Logo_K0munitat-removebg-preview.png') }}" alt="Logo Komunitat" class="hover:scale-110 h-10 mt-2">
                     </a>
                     <div class="space-y-1 space-x-8 ml-8 pb-3 border-t pt-2 hidden md:flex">
@@ -48,13 +48,7 @@
                 </div>
             </div>
             <nav class="md:flex md:items-center md:justify-between">
-                    <!-- Logo o imagen a la izquierda
-                    <div class="cursor-pointer">
-                        <a href="{{ route('LoginView') }}">
-                            <img src="{{ asset('img/Logo_K0munitat-removebg-preview.png') }}" alt="Logo Komunitat" class="h-10">
-                        </a>
-                    </div>
-                -->
+                   
                     <!-- Menú de pantalla de navegación -->
                     <div class="space-y-1 pb-3 border-t pt-2 md:hidden ">
                         <ul class="md:flex md:items-center z-[-1] md:z-auto md:static absolute bg-[#fffdf9] w-full md:w-auto md:py-0 py-4 md:pl-0 pl-7 left-0">
