@@ -1,18 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
-import vegetablePatch from '../views/profile/image/huerto2.jpg';
-import vegetablePatchImage from '../views/profile/image/huerto.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes, faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
 
 export default function PersonalProfile() {
-    const [user, setUser] = useState(JSON.parse(document.getElementById('personalProfile').getAttribute('data-user')));
+    const [user, setUser] = useState({});
+    const [loading, setLoading] = useState(true);
     const [editingDescription, setEditingDescription] = useState(false);
-    const [newDescription, setNewDescription] = useState(user.description);
+    const [newDescription, setNewDescription] = useState('');
     const [modalImage, setModalImage] = useState(null);
+    const [posts, setPosts] = useState([]);
+    const [commentsModalOpen, setCommentsModalOpen] = useState(false);
+    const [selectedPostComments, setSelectedPostComments] = useState(null);
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await fetch('/postUser');
+                if (response.ok) {
+                    const data = await response.json();
+                    setUser(data.user || {});
+                    setPosts(data.posts || []);
+                    setLoading(false);
+                } else {
+                    console.error('Error al obtener datos del usuario');
+                }
+            } catch (error) {
+                console.error('Error inesperado', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const startEditingDescription = () => {
-        setNewDescription(user.description);
+        setNewDescription(user.description || '');
         setEditingDescription(true);
     };
 
@@ -38,7 +60,6 @@ export default function PersonalProfile() {
         }
     };
 
-
     const cancelEditingDescription = () => {
         setEditingDescription(false);
     };
@@ -47,16 +68,41 @@ export default function PersonalProfile() {
         setModalImage({ imageSrc, likes, comments, description });
     };
 
+    const openCommentsModal = async (post) => {
+        setCommentsModalOpen(true);
+        setSelectedPostComments(post);
+        
+        try {
+            const response = await fetch(`/CommentsUser/${post.id}`);
+            if (response.ok) {
+                const data = await response.json();
+                setSelectedPostComments({ ...post, comments: data.comments || [] });
+            } else {
+                console.error('Error al obtener los comentarios del post');
+            }
+        } catch (error) {
+            console.error('Error inesperado', error);
+        }
+    };
+
+    const closeCommentsModal = () => {
+        setCommentsModalOpen(false);
+        setSelectedPostComments(null);
+    };
+
     const closeModal = () => {
         setModalImage(null);
     };
 
+    if (loading) {
+        return <p>Loading...</p>; // Muestra un mensaje de carga mientras se recuperan los datos
+    }
 
     return (
         <div className="container mx-auto mt-8">
             <div className="bg-white shadow-md rounded p-8 mb-4">
                 <div className="flex items-center justify-between mb-4">
-                    <h1 className="text-3xl font-bold">{user.username}</h1>
+                    <h1 className="text-3xl font-bold">{`${user.username}`}</h1>
                     <button className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Edit profile
                     </button>
@@ -95,7 +141,11 @@ export default function PersonalProfile() {
                                 </div>
                             ) : (
                                 <div className="border rounded p-2 relative" style={{ width: '800px', height: '120px', marginBottom: '10px' }}>
-                                    {user.profile_description}
+                                    {user.profile_description ? (
+                                        <p>{user.profile_description}</p>
+                                    ) : (
+                                        <p>No description available</p>
+                                    )}
                                     <button className="bg-blue-500 text-white px-2 py-1 rounded absolute bottom-0 right-0 mb-2 mr-2" onClick={() => { startEditingDescription(); setNewDescription(user.profile_description); }}>
                                         <FontAwesomeIcon icon={faEdit} size="xs" />
                                     </button>
@@ -104,66 +154,39 @@ export default function PersonalProfile() {
                         </div>
                     </div>
                 </div>
+
                 <div className="mt-6">
                     <h2 className="text-2xl text-center font-bold mb-4">Publications</h2>
                     <div className="grid grid-cols-2 gap-4">
-                        {/* Publicación 1 */}
-                        <div
-                            className="post-card border border-gray-300 p-4 bg-gray-100 cursor-pointer"
-                            onClick={() => openModal(vegetablePatch, '50 likes', '10 comentarios', 'Descripción de la publicación 1')}
-                        >
-                            <img
-                                className="w-full h-32 object-cover rounded"
-                                src={vegetablePatch}
-                                alt="Publicación 1"
-                                style={{ width: '800px', height: '350px' }}
-                            />
-                            <div className="mt-2">
-                                <div className="flex mb-2">
+                        {posts.map((post) => (
+                            <div
+                                key={post.id}
+                                className="post-card border border-gray-300 p-4 bg-gray-100 cursor-pointer"
+                            >
+                                <img
+                                    className="w-full h-32 object-cover rounded"
+                                    src={`/profile/images/${post.image.name}`}
+                                    alt={`Publicación ${post.id}`}
+                                    style={{ width: '800px', height: '350px' }}
+                                    onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
+                                />
+                                <div className="flex items-center mb-2">
                                     <div className="flex items-center mr-2">
                                         <FontAwesomeIcon icon={faHeart} className="text-red-500 mr-1" />
-                                        {'50'}
+                                        {post.likes.length}
                                     </div>
-                                    <div className="flex items-center">
-                                        <FontAwesomeIcon icon={faComment} className="text-blue-500 mr-1" />
-                                        {'10'}
-                                    </div>
-                                </div>
-                                <p className="">Mi pequeño paraíso verde 🌿🍅🌽 Este es mi rincón de la naturaleza, donde las frutas y verduras crecen con amor y dedicación. 🌱🥦 La diversidad de colores y sabores en mi huerto es simplemente mágica. 🌈 Desde jugosas fresas hasta tomates maduros, cada cosecha es una recompensa por el esfuerzo diario. 🍓🍆 ¡Bienvenidos a mi oasis de frescura y sabor! 🌻🍇 #HuertoEnCasa #AmoLaNaturaleza #CosechaPropia</p>
-                                <p>{modalImage && modalImage.description}</p>
-                            </div>
-                        </div>
-
-                        {/* Publicación 2 */}
-                        <div
-                            className="post-card border border-gray-300 p-4 bg-gray-100 cursor-pointer"
-                            onClick={() => openModal(vegetablePatchImage, '30 likes', '5 comentarios', 'Descripción de la publicación 2')}
-                        >
-                            <img
-                                className="w-full h-32 object-cover rounded"
-                                src={vegetablePatchImage}
-                                alt="Publicación 2"
-                                style={{ width: '800px', height: '350px' }}
-                            />
-                            <div className="mt-2">
-                                <div className="flex mb-2">
-                                    <div className="flex items-center mr-2">
-                                        <FontAwesomeIcon icon={faHeart} className="text-red-500 mr-1" />
-                                        {'30'}
-                                    </div>
-                                    <div className="flex items-center">
-                                        <FontAwesomeIcon icon={faComment} className="text-blue-500 mr-1" />
-                                        {'5'}
+                                    <div className="flex items-center" onClick={() => openCommentsModal(post)}>
+                                        <FontAwesomeIcon icon={faComment} className="text-blue-500 mr-1 cursor-pointer" />
+                                        {post.comments.length}
                                     </div>
                                 </div>
-                                <p className="">Descubre mi pequeño edén verde 🌱🌿🍋 ¡Mi huerto está en pleno esplendor! 🌺🍅 Cada rincón rebosa vida y colores vibrantes. Desde las hojas verdes frescas hasta los frutos maduros listos para ser cosechados. 🍓🥒 Cuidar de estas plantas es un ritual que llena mi corazón de gratitud y conexión con la tierra. 🌍✨ ¡Únete a mí en este viaje de cultivo y descubrimiento! 🌾🍇 #CosechaFeliz #HuertoEnCasa #AmoLaNaturaleza</p>
-                                <p>{modalImage && modalImage.description}</p>
+                                <div className="mt-2">
+                                    <p>{post.description}</p>
+                                </div>
                             </div>
-                        </div>
+                        ))}
                     </div>
                 </div>
-
-                
             </div>
 
             {/* Modal */}
@@ -173,7 +196,7 @@ export default function PersonalProfile() {
                         <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={closeModal}>&times;</span>
                         <img
                             className="w-full h-auto"
-                            src={modalImage.imageSrc}
+                            src={`/profile/images/${modalImage.imageSrc}`}
                             alt="Imagen Ampliada"
                             style={{ width: '600px', height: '600px' }}
                         />
@@ -193,6 +216,22 @@ export default function PersonalProfile() {
                     </div>
                 </div>
             )}
+
+            {/* Comments Modal */}
+            {commentsModalOpen && selectedPostComments && (
+                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50" onClick={closeCommentsModal}>
+                    <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '1200px', height: '600px' }}>
+                        <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={(e) => { e.stopPropagation(); closeCommentsModal(); }}>&times;</span>
+                        {/* Aquí puedes mostrar los comentarios de la publicación */}
+                        {selectedPostComments.comments.map((comment, index) => (
+                            <div key={index} className="border-b py-2">
+                                <p>{comment.username}: {comment.comment}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            )}
+
         </div>
     );
 }

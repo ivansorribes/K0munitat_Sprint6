@@ -41,4 +41,6 @@ Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name(
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
 
 Route::post('/updateProfileDescription', [UserController::class, 'updateProfileDescription'])->name('updateProfileDescription')->middleware('auth');
-Route::post('/postUser', [UserController::class, 'postUser'])->name('postUser')->middleware('auth');
+Route::get('/postUser', [UserController::class, 'postUser'])->name('postUser')->middleware('auth');
+Route::get('/CommentsUser/{id_post}', [UserController::class, 'CommentsUser'])->name('CommentsUser')->middleware('auth');
+
