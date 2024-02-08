@@ -36,7 +36,7 @@ Route::get('/login', function () {
 
 Route::get('/about-us', function () {
     return view('about-us');
-});
+})->name('about-us');
 
 // Rutas para el proceso de autenticación
 Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-sesion');
