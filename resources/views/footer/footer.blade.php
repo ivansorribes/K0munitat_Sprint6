@@ -10,8 +10,8 @@
 </head>
 <body>
 </body>
-    <footer class="bg-[#fffdf9] dark:bg-gray-900 mx-auto max-w-full  shadow">
-        <div class="container mx-auto w-full max-w-full px-6 py-14 lg:py-8 border border-gray-200 dark:border-gray-700">
+    <footer class="bg-[#000000] dark:[#fffdf9] mx-auto max-w-full  shadow">
+        <div class="container mx-auto w-full max-w-full px-6 py-14 lg:py-8 border-t border-b border-gray-200 dark:border-gray-700">
             <div class="md:flex md:justify-between">
               <div class="mb-6 md:mb-0">
                   <a href="{{ route('about-us') }}" class="flex items-center">
