@@ -12,4 +12,5 @@
         @include('header.header')
         <div id="aboutus"></div>
     </body>
+        @include('footer.footer')
 </html>

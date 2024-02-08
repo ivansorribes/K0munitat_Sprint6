@@ -8,8 +8,8 @@
         @vite('resources/css/app.css')
     </head>
     <body>
-        <header class="bg-[#fffdf9] px-6 shadow">
-            <div class="flex h-16 max-w-6xl mx-auto items-center justify-between">
+        <header class="bg-[#fffdf9] px-4 py-6 mx-auto sm:px-6 lg:px-8 shadow">
+            <div class="flex h-16 max-w-7xl mx-auto items-center justify-between">
                 <button class="text-[#adce71] rounded p-1 -ml-1 transition-colors hover:bg-[#f4971e] hover:text-[#fffdf9] focus:ring-2">
                     <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-8 w-8">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
