@@ -35,6 +35,11 @@ Route::get('/about-us', function () {
     return view('about-us');
 });
 
+Route::get('/adminPanel', function () {
+    return view('login.panelAdmin');
+});
+
+
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
