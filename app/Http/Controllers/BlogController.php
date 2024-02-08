@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Blog;
+use App\Models\posts_admin_blog;
 
 
 class BlogController extends Controller
@@ -13,8 +13,13 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $posts = Blog::all();
-        return view('posts.index', compact('posts'));
+        $posts = posts_admin_blog::all();
+    
+        if ($posts->isEmpty()) {
+            return view('blog.blog')->with('error', 'No hay registros en la base de datos.');
+        }
+    
+        return view('blog.blog', compact('posts'));
     }
 
     /**
@@ -36,7 +41,7 @@ class BlogController extends Controller
             // Add validation for other fields as needed
         ]);
 
-        Blog::create($request->all());
+        blog::create($request->all());
 
         return redirect()->route('posts.index')
             ->with('success', 'Post created successfully');
@@ -47,7 +52,7 @@ class BlogController extends Controller
      */
     public function show($id)
     {
-        $post = Blog::find($id);
+        $post =blog::find($id);
         return view('posts.show', compact('post'));
     }
 
@@ -56,7 +61,7 @@ class BlogController extends Controller
      */
     public function edit($id)
     {
-        $post = Blog::find($id);
+        $post = blog::find($id);
         return view('posts.edit', compact('post'));
     }
 
@@ -71,7 +76,7 @@ class BlogController extends Controller
             // Add validation for other fields as needed
         ]);
 
-        $post = Blog::find($id);
+        $post = blog::find($id);
         $post->update($request->all());
 
         return redirect()->route('posts.index')
@@ -83,7 +88,7 @@ class BlogController extends Controller
      */
     public function destroy($id)
     {
-        $post = Blog::find($id);
+        $post = blog::find($id);
         $post->delete();
 
         return redirect()->route('posts.index')

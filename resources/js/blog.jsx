@@ -62,35 +62,12 @@ const BlogCard = ({ date, title, content }) => {
 };
 
 const BlogSection = () => {
-  const blogData = [
-    {
-      date: "7 March, 2022",
-      title: "Laboriosam Doloribus Quas. Voluptatum",
-      content:
-        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore laborum iste laboriosam doloribus quas. Voluptatum",
-    },
-
-    {
-      date: "7 March, 2022",
-      title: "Roger",
-      content:
-        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore laborum iste laboriosam doloribus quas. Voluptatum",
-    },
-
-    {
-      date: "7 March, 2022",
-      title: "Laboriosam Doloribus Quas. Voluptatum",
-      content:
-        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore laborum iste laboriosam doloribus quas. Voluptatum",
-    },
-
-    {
-      date: "7 March, 2022",
-      title: "Laboriosam Doloribus Quas. Voluptatum",
-      content:
-        "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Tempore laborum iste laboriosam doloribus quas. Voluptatum",
-    },
-  ];
+  const [blogData, setblogData] = useState([]);
+  useEffect(() => {
+    if (window.blogData) {
+      setPosts(window.blogData);
+    }
+  }, []);
 
   return (
     <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
@@ -106,7 +83,7 @@ const BlogSection = () => {
   );
 };
 
-if (document.getElementById('blog')) {
-  const root = createRoot(document.getElementById('blog'));
+if (document.getElementById("blog")) {
+  const root = createRoot(document.getElementById("blog"));
   root.render(<BlogSection />);
 }
