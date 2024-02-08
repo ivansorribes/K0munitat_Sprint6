@@ -7,9 +7,9 @@
         @viteReactRefresh      
         @vite('resources/js/app.js')
         @vite('resources/css/app.css')
-
     </head>
     <body>
-        <div id="codeareact"></div>
+        @include('header.header')
+        <div id="aboutus"></div>
     </body>
 </html>

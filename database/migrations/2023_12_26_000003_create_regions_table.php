@@ -10,11 +10,10 @@ class CreateRegionsTable extends Migration
     {
         Schema::create('regions', function (Blueprint $table) {
 
-        $table->id();
-        $table->foreignId('id_autonomousCommunity')->references('id')->on('autonomousCommunities');
-		$table->string('name');
-        $table->timestamps();
-
+            $table->unsignedBigInteger('id')->primary();
+            $table->foreignId('id_autonomousCommunity')->references('id')->on('autonomousCommunities');
+            $table->string('name');
+            $table->timestamps();
         });
     }
 
