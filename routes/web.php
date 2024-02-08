@@ -52,7 +52,7 @@ Route::get('/map', function () {
     return view('map');
 });
 
-Route::get('/homepage', function () {
+Route::get('/', function () {
     return view('home-page');
 });
 Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
