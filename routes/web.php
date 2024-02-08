@@ -20,16 +20,12 @@ use App\Http\Controllers\PostsController;
 */
 
 Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
-
 // Rutas para mostrar vistas
 Route::get('/login', [AuthController::class, 'LoginView'])->name('LoginView');
 Route::get('/register', [AuthController::class, 'RegisterView'])->name('RegisterView');
 Route::view('/privada', 'login.secret')->middleware('auth')->name('privada');
 Route::get('/resetPassword', [AuthController::class, 'resetPasswordView'])->name('resetPasswordView');
 Route::get('passwordReset/{token}', [AuthController::class, 'resetFormView'])->name('resetFormView');
-Route::get('/about-us', function () { return view('./about-us/about-us'); });
-Route::get('/blog', function () { return view('./blog/blog'); });
-
 
 // Rutas para el proceso de autenticación
 Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-sesion');
