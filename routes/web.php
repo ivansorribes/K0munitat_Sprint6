@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommunitiesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -34,9 +35,9 @@ Route::get('/about-us', function () {
     return view('about-us');
 });
 
-Route::get('/communitiesForm', function () {
-    return view('communities.communitiesFormCreate');
-});
+//Rutas de comunidades
+Route::resource('/communities', CommunitiesController::class);
+
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');

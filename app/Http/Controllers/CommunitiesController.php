@@ -9,34 +9,47 @@ class CommunitiesController extends Controller
 {
     public function create()
     {
-        return view('communities.create');
+        return view('communities.communitiesFormCreate');
+    }
+
+    public function index()
+    {
+        return view('communities.CommunitiesList');
     }
 
     public function store(Request $request)
     {
-        communities::create($request->all());
-        return redirect()->route('nombre_del_modelo.index');
+        $communities = new communities();
+        $communities->name = $request->name();
+        $communities->id_autonomousCommunity = $request->id_autonomousCommunity();
+        $communities->id_region = $request->id_region();
+        $communities->isActive = $request->isActive();
+        $communities->save();
     }
 
-    public function show(communities $modelo)
+    public function show($id)
     {
-        return view('nombre_del_modelo.show', compact('modelo'));
+        return view('XXXXXXX');
     }
 
-    public function edit(communities $modelo)
+    public function edit(Communities $modelo)
     {
         return view('nombre_del_modelo.edit', compact('modelo'));
     }
 
-    public function update(Request $request, NombreDelModelo $modelo)
+    public function update(Request $request, $id)
     {
-        $modelo->update($request->all());
-        return redirect()->route('nombre_del_modelo.index');
+        $communities=Communities::findOrFail($request->$id);
+        $communities->name = $request->name();
+        $communities->id_autonomousCommunity = $request->id_autonomousCommunity();
+        $communities->id_region = $request->id_region();
+        $communities->isActive = $request->isActive();
+        $communities->save();
     }
 
-    public function destroy(NombreDelModelo $modelo)
+    public function destroy($id)
     {
-        $modelo->delete();
-        return redirect()->route('nombre_del_modelo.index');
+        $communities=Communities::destroy($id);
+        return $communities;
     }
 }

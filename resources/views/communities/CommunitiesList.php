@@ -10,7 +10,7 @@
         @vite('resources/css/app.css')
     </head>
     <body >
-        <div id="communityform"></div>
-        <h1>Hello</h1>
+        <button href="{{ url('/login?redirect_to='.url()->current()) }}">Crear</button>
+         <div id="community"></div>
     </body>
 </html>
