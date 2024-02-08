@@ -18,7 +18,6 @@ use App\Http\Controllers\AuthController;
 |
 */
 
-Route::get('/', [UserController::class, 'LoginView'])->name('LoginView')->middleware('guest');
 Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
 // Rutas para mostrar vistas
 Route::get('/login', [AuthController::class, 'LoginView'])->name('LoginView');
@@ -57,3 +56,7 @@ Route::post('/updateProfileDescription', [UserController::class, 'updateProfileD
 
 //Route::get('/', HomeController::class)->name('home');
 
+
+Route::get('/map', function () {
+    return view('map');
+});

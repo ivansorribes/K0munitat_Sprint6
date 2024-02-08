@@ -16,6 +16,7 @@ class CreateCommunitiesTable extends Migration
 		$table->string('description');
 		$table->foreignId('id_autonomousCommunity')->constrained('autonomousCommunities');
 		$table->foreignId('id_region')->constrained('regions');
+        $table->boolean('private')->default('1');
 		$table->datetime('created_at')->nullable();
         $table->datetime('updated_at')->nullable();
 		$table->boolean('isActive')->default('1');

@@ -32,6 +32,7 @@ class communitiesFactory extends Factory
             'description' => fake()->description(),            
             'id_autonomousCommunity' => $this->faker->randomElement($id_autonomousCommunity),
             'id_region' => $this->faker->randomElement($id_region),
+            'private' => true,
             'created_at' => now(),
             'isActive' => $this->faker->boolean()
         ];
