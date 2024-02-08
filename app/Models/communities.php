@@ -17,6 +17,7 @@ class Communities extends Model
         'description',
         'id_autonomousCommunity',
         'id_region',
+        'private',
         'created_at',
         'isActive'        
     ];
