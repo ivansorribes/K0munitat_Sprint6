@@ -1,8 +1,5 @@
-<<<<<<< HEAD
     # For more information: https://laravel.com/docs/sail
-=======
 # For more information: https://laravel.com/docs/sail
->>>>>>> main
 version: '3'
 services:
     laravel.test:
@@ -113,8 +110,5 @@ volumes:
     sail-redis:
         driver: local
     sail-meilisearch:
-<<<<<<< HEAD
         driver: local
-=======
-        driver: local
->>>>>>> main
+        

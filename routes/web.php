@@ -34,7 +34,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/about-us', function () {
     return view('about-us');
-});
+})->name('about-us');
 
 Route::get('/adminPanel', function () {
     return view('login.panelAdmin');
