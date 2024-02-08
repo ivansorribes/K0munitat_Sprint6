@@ -18,7 +18,7 @@ class posts extends Model
         'title',
         'description',
         'category',
-        'isactive',
+        'isActive',
         'private',
         'type',
     ];
@@ -37,6 +37,4 @@ class posts extends Model
     {
         return $this->belongsTo(communities::class);
     }
-
-
 }

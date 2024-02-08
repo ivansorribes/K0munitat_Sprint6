@@ -20,8 +20,8 @@ class postsFactory extends Factory
     public function definition(): array
     {
         $id_user = User::all()->pluck('id')->toArray();
-        $id_category = categories::all()->pluck('id')->toArray(); 
-        $id_community = communities::all()->pluck('id')->toArray(); 
+        $id_category = categories::all()->pluck('id')->toArray();
+        $id_community = communities::all()->pluck('id')->toArray();
 
 
 
@@ -33,7 +33,7 @@ class postsFactory extends Factory
             'description' => $this->faker->text(),
             'isActive' => $this->faker->boolean,
             'private' => $this->faker->boolean,
-            'type' =>fake()->randomElement(['advertisment', 'post']),
+            'type' => fake()->randomElement(['advertisement', 'post']),
 
         ];
     }
