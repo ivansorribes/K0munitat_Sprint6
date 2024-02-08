@@ -5,4 +5,4 @@ import './Codea.jsx'
 
 import './login.jsx'
 
-
+import './components/Exchanges.jsx'
