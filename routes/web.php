@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PostsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,7 +34,12 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::get('/about-us', function () {
     return view('about-us');
+})->name('about-us');
+
+Route::get('/adminPanel', function () {
+    return view('login.panelAdmin');
 });
+
 
 
 // Rutas para el olvido y restablecimiento de contraseña
@@ -44,3 +50,21 @@ Route::post('/updateProfileDescription', [UserController::class, 'updateProfileD
 Route::get('/postUser', [UserController::class, 'postUser'])->name('postUser')->middleware('auth');
 Route::get('/CommentsUser/{id_post}', [UserController::class, 'CommentsUser'])->name('CommentsUser')->middleware('auth');
 
+
+Route::get('/map', function () {
+    return view('map');
+});
+
+Route::get('/homepage', function () {
+    return view('home-page');
+});
+Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
+Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
+
+Route::get('/community/advertisement-list', function (Illuminate\Http\Request $request) {
+    return app(PostsController::class)->index($request, 'advertisement');
+})->name('advertisement-list');
+
+Route::get('/community/post-list', function (Illuminate\Http\Request $request) {
+    return app(PostsController::class)->index($request, 'post');
+})->name('post-list');

@@ -9,6 +9,7 @@
         @vite('resources/css/app.css')
     </head>
     <body>
+        @include('header.header')
         <div id="aboutus"></div>
     </body>
 </html>
