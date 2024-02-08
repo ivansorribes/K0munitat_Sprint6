@@ -1,5 +1,5 @@
 import React from "react";
-import { createRoot } from "react-dom";
+import { createRoot } from "react-dom/client";
 
 const BlogCard = ({ date, title, content }) => {
   return (
@@ -106,6 +106,7 @@ const BlogSection = () => {
   );
 };
 
-// Use createRoot to render the component
-const root = createRoot(document.getElementById("blog"));
-root.render(<BlogSection />);
+if (document.getElementById('blog')) {
+  const root = createRoot(document.getElementById('blog'));
+  root.render(<BlogSection />);
+}
