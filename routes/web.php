@@ -38,7 +38,11 @@ Route::get('/about-us', function () {
 })->name('about-us');
 
 //Rutas de comunidades
+Route::get('/communities/list', [CommunitiesController::class, 'comuAutonomus'])->name('comuAutonomus.list');
+
 Route::resource('/communities', CommunitiesController::class);
+
+
 Route::get('/adminPanel', function () {
     return view('login.panelAdmin');
 });

@@ -1,5 +1,6 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
+import CommunitySelector from '../components/select/selectCommunityAut';
 
 export default function CommunitiesFormCreate() {
     return (
@@ -40,6 +41,10 @@ export default function CommunitiesFormCreate() {
             ></textarea>
           </div>
     
+          <div>
+            <CommunitySelector />
+          </div>
+
           <div>
             <button
               className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none"

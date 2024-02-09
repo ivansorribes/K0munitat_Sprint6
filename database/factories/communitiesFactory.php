@@ -10,7 +10,7 @@ use App\Models\regions;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Communities>
  */
-class communitiesFactory extends Factory
+class CommunitiesFactory extends Factory
 {
     /**
      * Define the model's default state.

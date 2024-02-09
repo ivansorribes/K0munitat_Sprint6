@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Communities extends Model
+class communities extends Model
 {
     use HasFactory;
     protected $table = 'communities';
@@ -19,7 +19,7 @@ class Communities extends Model
         'id_region',
         'private',
         'created_at',
-        'isActive'        
+        'isActive'
     ];
 
     public function user(): BelongsTo

@@ -11,6 +11,5 @@
     </head>
     <body >
         <div id="communityform"></div>
-        <h1>Hello</h1>
     </body>
 </html>
