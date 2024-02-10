@@ -1,8 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import CommunitySelector from '../components/select/selectCommunityAut';
+import CommunityRegionSelector from '../components/select/selectCommunityAut';
+import RegionSelector from '../components/select/selectRegion';
+
 
 export default function CommunitiesFormCreate() {
+  const [selectedCommunity, setSelectedCommunity] = useState('');
+  const [selectedRegion, setSelectedRegion] = useState('');
+
+  const handleSelectCommunity = (communityId) => {
+    setSelectedCommunity(communityId);
+  };
+
+  const handleSelectRegion = (regionId) => {
+    setSelectedRegion(regionId);
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("Comunidad seleccionada:", selectedCommunity);
+    console.log("Región seleccionada:", selectedRegion);
+    // Agrega la lógica para enviar el formulario al servidor si es necesario
+  };
+
     return (
       <div className="flex justify-center items-center p-12 min-h-screen">
       <div className="w-full max-w-[700px]">   
@@ -42,7 +62,7 @@ export default function CommunitiesFormCreate() {
           </div>
     
           <div>
-            <CommunitySelector />
+            <CommunityRegionSelector />
           </div>
 
           <div>
@@ -56,7 +76,8 @@ export default function CommunitiesFormCreate() {
       </div>
     </div>    
     );
-}
+  }
+
 
 if (document.getElementById('communityform')) {
     createRoot(document.getElementById('communityform')).render(<CommunitiesFormCreate />);

@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommunitiesController;
+use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 
 /*
@@ -38,7 +39,8 @@ Route::get('/about-us', function () {
 })->name('about-us');
 
 //Rutas de comunidades
-Route::get('/communities/list', [CommunitiesController::class, 'comuAutonomus'])->name('comuAutonomus.list');
+Route::get('/comuAut/list', [AutonomousCommunitiesController::class,'list'])->name('comuAut.list');
+Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class,'regionList'])->name('comuAut.regList');
 
 Route::resource('/communities', CommunitiesController::class);
 
