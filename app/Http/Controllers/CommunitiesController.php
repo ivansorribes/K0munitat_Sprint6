@@ -15,8 +15,6 @@ class CommunitiesController extends Controller
 
     public function index()
     {
-        $po = communities::All();
-        return $po;
         //return view('communities.CommunitiesList');
     }
 
@@ -35,7 +33,7 @@ class CommunitiesController extends Controller
             ]);
     
             // Crear la comunidad
-            $community = Communities::create($validatedData);
+            $community = communities::create($validatedData);
     
             // Redirigir de vuelta al formulario después de la presentación
             return response()->json(['message' => 'Community created successfully']);
@@ -47,22 +45,54 @@ class CommunitiesController extends Controller
     
     public function show($id)
     {
-        return view('XXXXXXX');
+        // Obtén la comunidad por ID
+        $community = Communities::find($id);
+
+        if (!$community) {
+            abort(404); // O devuelve una vista de error
+        }
+
+        return view('communities.show', ['community' => $community]);
     }
 
-    public function edit(communities $modelo)
+    public function edit($id)
     {
-        return view('nombre_del_modelo.edit', compact('modelo'));
+        $community = communities::find($id);
+
+        if (!$community) {
+            return response()->json(['message' => 'Community not found'], 404);
+        }
+
+        return view('communities.edit', ['community' => $community]);
     }
 
     public function update(Request $request, $id)
     {
-        $communities=communities::findOrFail($request->$id);
-        $communities->name = $request->name();
-        $communities->id_autonomousCommunity = $request->id_autonomousCommunity();
-        $communities->id_region = $request->id_region();
-        $communities->isActive = $request->isActive();
-        $communities->save();
+        try {
+            // Validación de datos
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:254',
+                'description' => 'required|string|max:254',
+                'id_autonomousCommunity' => 'required',
+                'id_region' => 'required',
+                'private' => 'required|boolean',
+                'id_admin' => 'required'
+            ]);
+
+            // Actualizar la comunidad
+            $community = communities::find($id);
+
+            if (!$community) {
+                return response()->json(['message' => 'Community not found'], 404);
+            }
+
+            $community->update($validatedData);
+
+            return response()->json(['message' => 'Community updated successfully']);
+        } catch (\Exception $e) {
+            // Captura de errores
+            return response()->json(['message' => 'Error updating community', 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function destroy($id)

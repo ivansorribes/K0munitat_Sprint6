@@ -1,38 +1,38 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Formik, Form, Field } from 'formik';
+import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
 import CommunityRegionSelector from '../components/select/selectCommunityAut';
 
 export default function CommunitiesFormCreate() {
   const [idAutonomousCommunity, setIdAutonomousCommunity] = useState('');
   const [idRegion, setIdRegion] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [serverErrors, setServerErrors] = useState(null);
 
   const handleSubmit = async (values) => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const formValues = { ...values, id_autonomousCommunity: idAutonomousCommunity, id_region: idRegion };
-    console.log('Datos del formulario:', formValues);
+    setSubmitting(true);
+
     try {
       const response = await axios.post('http://localhost/communities', formValues);
-  
-      if (response.status === 302) {
-        // Redirección exitosa, puedes manejar esto según tus necesidades
+
+      if (response.data.message) {
+        // La comunidad se creó exitosamente
+        // Puedes redirigir o mostrar un mensaje de éxito
         console.log('Form submitted successfully');
-      } else {
-        // Si la solicitud no tiene éxito (cualquier código diferente de 302)
-        throw new Error(`Failed to submit the form. Server returned ${response.statusText}`);
       }
     } catch (error) {
-      if (error.response) {
-        // Si el servidor devuelve un código de estado diferente de 2xx
-        console.error('Server error:', error.response.data);
-      } else if (error.request) {
-        // Si la solicitud fue realizada pero no se recibió respuesta
-        console.error('No response received:', error.request);
+      if (error.response && error.response.data.errors) {
+        // Errores de validación
+        setServerErrors(error.response.data.errors);
       } else {
         // Otros errores
         console.error('Error submitting the form:', error.message);
       }
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -47,7 +47,6 @@ export default function CommunitiesFormCreate() {
             name: '',
             description: '',
             id_admin: 2,
-
           }}
           onSubmit={handleSubmit}
         >
@@ -64,6 +63,7 @@ export default function CommunitiesFormCreate() {
                 placeholder="Community name"
                 className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-4 text-base font-medium text-[#6B7280] focus:outline-none focus:border-[#6A64F1] focus:shadow-md"
               />
+              <ErrorMessage name="name" component="div" className="text-red-500" />
             </div>
 
             <div className="mb-5">
@@ -77,27 +77,33 @@ export default function CommunitiesFormCreate() {
                 placeholder="Type your message"
                 className="w-full resize-none rounded-md border border-[#e0e0e0] bg-white py-3 px-4 text-base font-medium text-[#6B7280] focus:outline-none focus:border-[#6A64F1] focus:shadow-md"
               />
+              <ErrorMessage name="description" component="div" className="text-red-500" />
             </div>
 
             <div className="mb-5">
               <label htmlFor="name" className="mb-3 block text-base font-medium text-[#07074D]">
                 Community Ubication
               </label>
-              <CommunityRegionSelector 
-                  width="w-full"
-                  onCommunityChange={setIdAutonomousCommunity}
+              <CommunityRegionSelector
+                width="w-full"
+                onCommunityChange={setIdAutonomousCommunity}
                 onRegionChange={setIdRegion}
-             />
+              />
+              <ErrorMessage name="id_autonomousCommunity" component="div" className="text-red-500" />
+              <ErrorMessage name="id_region" component="div" className="text-red-500" />
             </div>
 
             <div className="mb-5">
               <label className="block text-base font-medium text-[#07074D]">Type</label>
               <div className="mt-2">
                 <Field type="radio" id="public" name="private" value="0" className="mr-2" />
-                <label htmlFor="public" className="mr-4">Public</label>
+                <label htmlFor="public" className="mr-4">
+                  Public
+                </label>
                 <Field type="radio" id="private" name="private" value="1" className="mr-2" />
                 <label htmlFor="private">Private</label>
               </div>
+              <ErrorMessage name="private" component="div" className="text-red-500" />
             </div>
 
             <div>
@@ -108,6 +114,15 @@ export default function CommunitiesFormCreate() {
                 Submit
               </button>
             </div>
+
+            {serverErrors && (
+              <div className="mt-5 text-red-500">
+                {/* Muestra los errores del servidor */}
+                {Object.values(serverErrors).map((error, index) => (
+                  <div key={index}>{error}</div>
+                ))}
+              </div>
+            )}
           </Form>
         </Formik>
       </div>
@@ -115,8 +130,6 @@ export default function CommunitiesFormCreate() {
   );
 }
 
-if (document.getElementById('communityform')) {
-  createRoot(document.getElementById('communityform')).render(
-    <CommunitiesFormCreate />
-  );
+if (document.getElementById('communityFormEdit')) {
+  createRoot(document.getElementById('communityFormEdit')).render(<CommunitiesFormCreate />);
 }

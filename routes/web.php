@@ -42,8 +42,13 @@ Route::get('/about-us', function () {
 Route::get('/comuAut/list', [AutonomousCommunitiesController::class,'list'])->name('comuAut.list');
 Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class,'regionList'])->name('comuAut.regList');
 
-Route::resource('/communities', CommunitiesController::class);
-
+Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
+Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
+Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
+Route::post('/communities', [CommunitiesController::class, 'store']);
+Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
+Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
+Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
 
 Route::get('/adminPanel', function () {
     return view('login.panelAdmin');
