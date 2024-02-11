@@ -1,5 +1,24 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+
+          "primary": "#adce71",
+
+          "secondary": "#f4971e",
+
+          "accent": "#155b2a",
+
+          "neutral": "#3d3c3b",
+
+          "base-100": "#fffdf9",
+        },
+      },
+    ],
+  },
+
   content: [
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
@@ -12,5 +31,5 @@ export default {
       },
     },
   },
-  plugins: [],
+  plugins: [require("daisyui")],
 }

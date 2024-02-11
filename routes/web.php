@@ -61,6 +61,9 @@ Route::get('/map', function () {
     return view('map');
 });
 
+Route::get('/', function () {
+    return view('home-page');
+});
 Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
 Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
 
