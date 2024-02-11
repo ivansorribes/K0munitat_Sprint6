@@ -11,21 +11,21 @@ class AutonomousCommunitiesController extends Controller
     public function list() {
         $communitiesAut = DB::table('autonomousCommunities')
             ->select(
-                'autonomousCommunities.id as community_id',
+                'autonomousCommunities.id as id_autonomousCommunity',
                 'autonomousCommunities.name as community_name'
             )
             ->get();
     
-        return response()->json(['data' => $communitiesAut]);    
+        return response()->json(['data' => $communitiesAut]);
     }
 
-    public function regionList($communityAut_id) {
+    public function regionList($id_autonomousCommunity) {
         $regions = DB::table('regions')
                         ->select(
-                            'id as region_id',
+                            'id as id_region',
                             'name as region_name'
                         )
-                        ->where('id_autonomousCommunity', $communityAut_id)
+                        ->where('id_autonomousCommunity', $id_autonomousCommunity)
                         ->get();
     
         return response()->json(['data' => $regions]);
