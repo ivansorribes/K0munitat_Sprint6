@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -19,7 +20,7 @@ class communities extends Model
         'id_region',
         'private',
         'created_at',
-        'isActive'        
+        'isActive'
     ];
 
     public function user(): BelongsTo

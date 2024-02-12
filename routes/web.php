@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommunitiesController;
+use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 
 /*
@@ -35,6 +37,18 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 Route::get('/about-us', function () {
     return view('about-us');
 })->name('about-us');
+
+//Rutas de comunidades
+Route::get('/comuAut/list', [AutonomousCommunitiesController::class,'list'])->name('comuAut.list');
+Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class,'regionList'])->name('comuAut.regList');
+
+Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
+Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
+Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
+Route::post('/communities', [CommunitiesController::class, 'store']);
+Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
+Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
+Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
 
 Route::get('/adminPanel', function () {
     return view('login.panelAdmin');
