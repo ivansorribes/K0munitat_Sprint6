@@ -18,22 +18,16 @@ class PostsController extends Controller
      */
     public function index(Request $request, $communityId = null, $type = 'post')
     {
-        // Inicia la consulta base
         $query = posts::query();
-
-        // Filtra por tipo
         $query->where('type', $type);
 
         if ($communityId) {
-            // Asegura que la comunidad exista o falla con un 404
             $community = Communities::findOrFail($communityId);
-            // Filtra los posts por comunidad si se proporciona un ID
             $query->where('id_community', $communityId);
         }
 
         $posts = $query->get();
 
-        // Retorna la vista adecuada con los posts obtenidos
         return view('post-list', [
             'posts' => $posts,
             'community' => $community ?? null,
