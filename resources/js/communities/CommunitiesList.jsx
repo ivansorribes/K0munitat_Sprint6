@@ -14,7 +14,6 @@ const CommunitiesList = () => {
       try {
         const response = await axios.get('http://localhost/api/communities');
         setCommunities(response.data);
-        console.log(response.data);
       } catch (error) {
         console.error('Error loading communities:', error.message);
       }
