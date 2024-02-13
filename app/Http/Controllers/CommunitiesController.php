@@ -11,7 +11,7 @@ class CommunitiesController extends Controller
 
     public function create()
     {
-        return view('communities.communitiesFormCreate');
+        return view('communities.createForm');
     }
 
     public function index()

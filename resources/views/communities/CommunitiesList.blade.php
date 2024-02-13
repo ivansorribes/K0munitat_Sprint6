@@ -10,7 +10,6 @@
         @vite('resources/css/app.css')
     </head>
     <body >
-        <button >Crear</button>
          <div id="communityList"></div>
     </body>
 </html>
