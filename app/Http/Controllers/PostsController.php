@@ -16,19 +16,29 @@ class PostsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $communityId = null)
+    public function index(Request $request, $communityId = null, $type = 'post')
     {
-        $query = posts::where('type', 'advertisement');
+        // Inicia la consulta base
+        $query = posts::query();
+
+        // Filtra por tipo
+        $query->where('type', $type);
 
         if ($communityId) {
-
+            // Asegura que la comunidad exista o falla con un 404
             $community = Communities::findOrFail($communityId);
+            // Filtra los posts por comunidad si se proporciona un ID
             $query->where('id_community', $communityId);
         }
 
         $posts = $query->get();
 
-        return view('advertisement-list', ['posts' => $posts, 'community' => $community ?? null]);
+        // Retorna la vista adecuada con los posts obtenidos
+        return view('post-list', [
+            'posts' => $posts,
+            'community' => $community ?? null,
+            'type' => $type,
+        ]);
     }
 
 

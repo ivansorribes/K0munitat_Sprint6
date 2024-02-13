@@ -9,6 +9,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CommunitiesController;
 use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
+use Illuminate\Http\Request;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,9 +73,10 @@ Route::get('/', function () {
 Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
 Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
 
-Route::get('/community/{community}/advertisement-list', [PostsController::class, 'index'])
-    ->name('advertisement-list');
+Route::get('/community/{communityId}/advertisement-list', function (Request $request, $communityId) {
+    return app(PostsController::class)->index($request, $communityId, 'advertisement');
+})->name('advertisement-list');
 
-Route::get('/community/post-list', function (Illuminate\Http\Request $request) {
-    return app(PostsController::class)->index($request, 'post');
+Route::get('/community/{communityId}/post-list', function (Request $request, $communityId) {
+    return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
