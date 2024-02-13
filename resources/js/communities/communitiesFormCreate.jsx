@@ -130,6 +130,6 @@ export default function CommunitiesFormCreate() {
   );
 }
 
-if (document.getElementById('communityFormEdit')) {
-  createRoot(document.getElementById('communityFormEdit')).render(<CommunitiesFormCreate />);
+if (document.getElementById('communityForm')) {
+  createRoot(document.getElementById('communityForm')).render(<CommunitiesFormCreate />);
 }

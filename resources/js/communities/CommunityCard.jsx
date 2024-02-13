@@ -1,52 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { createRoot } from 'react-dom';
-import Card from '../components/cards/Card';  // Ajusta la ruta según tu estructura de archivos
+import React from 'react';
+import 'tailwindcss/tailwind.css';
 
+const CommunityCard = ({ community, onViewClick }) => {
+  return (
+    <div className="bg-white p-6 rounded-md shadow-md">
+      <h2 className="text-2xl font-bold mb-2">{community.name}</h2>
+      <p className="text-gray-500 mb-4">{community.description}</p>
 
-const CommunityCard = () => {
-
-    const [communityId, setCommunityId] = useState(1); // Puedes inicializar el ID según tus necesidades
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`http://localhost/api/communities/${communityId}`);
-        if (!response.ok) {
-          throw new Error('Error al obtener datos de la comunidad');
-        }
-    
-        const data = await response.json();
-        setCommunityId(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    
-    // Llamada inicial cuando el componente se monta
-    useEffect(() => {
-      fetchData();
-    }, [communityId]); // Asegura que se vuelva a llamar cuando communityId cambie
-    
-    // Puedes cambiar el ID de la comunidad y volver a cargar datos según sea necesario
-    const handleEdit = (community) => {
-      console.log('Editar comunidad:', community);
-      // programar editar
-    };
-    
-    const handleDelete = (communityId) => {
-      console.log('Borrar comunidad con ID:', communityId);
-      // hay que programa borrar
-    };
-    
-    // Renderiza CommunityCard solo si los datos de la comunidad están disponibles
-    return communityId ? (
-      <Card
-        community={communityId}
-        onEditClick={handleEdit}
-        onDeleteClick={handleDelete}
-      />
-    ) : null;
+      <div className="bg-white p-6 rounded-md shadow-md">
+        <button onClick={onViewClick} className="text-green-500 hover:underline mr-2">
+          Ver Comunidad
+        </button>
+      </div>
+    </div>
+  );
 };
 
-// Usa createRoot y render
-const root = createRoot(document.getElementById('communityShow'));
-root.render(<CommunityCard />);
+export default CommunityCard;

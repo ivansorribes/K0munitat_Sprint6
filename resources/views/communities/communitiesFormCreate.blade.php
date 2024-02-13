@@ -11,6 +11,6 @@
         @vite('resources/css/app.css')
     </head>
     <body >
-        <div id="communityform"></div>
+        <div id="communityForm"></div>
     </body>
 </html>

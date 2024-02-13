@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class CommunitiesController extends Controller
 {
+
     public function create()
     {
         return view('communities.communitiesFormCreate');
@@ -15,7 +16,8 @@ class CommunitiesController extends Controller
 
     public function index()
     {
-        //return view('communities.CommunitiesList');
+        return view('communities.CommunitiesList');
+
     }
 
    
