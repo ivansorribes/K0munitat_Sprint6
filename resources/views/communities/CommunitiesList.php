@@ -3,14 +3,14 @@
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>Laravel 10 - REACT 18</title>
-        @viteReactRefresh      
+        <title>ًCommunities Form</title>
+        <link rel="stylesheet" href="{{ mix('css/app.css') }}">
+        @viteReactRefresh
         @vite('resources/js/app.js')
         @vite('resources/css/app.css')
     </head>
-    <body>
-        @include('header.header')
-        <div id="aboutus"></div>
+    <body >
+        <button href="{{ url('/login?redirect_to='.url()->current()) }}">Crear</button>
+         <div id="community"></div>
     </body>
-        @include('footer.footer')
 </html>

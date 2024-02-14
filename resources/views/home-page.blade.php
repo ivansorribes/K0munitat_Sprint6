@@ -11,12 +11,14 @@
     @vite('resources/css/app.css')
     <script src="{{ mix('js/app.js') }}" defer></script>
 </head>
+@include('header.header')
 
 <body class="justify-center items-center">
+
     <!-- Otras partes del cuerpo ... -->
 
     <!-- Decorative background image and gradient -->
-    <div aria-hidden="true" class="absolute inset-0">
+    <div aria-hidden="true" class="absolute inset-0 w-full" style="z-index: -1;">
         <div class="absolute inset-0 mx-auto max-w-7xl overflow-hidden xl:px-8">
             <img src="https://static.vecteezy.com/system/resources/previews/027/100/937/non_2x/on-the-right-side-there-are-lying-vegetables-while-on-the-left-side-empty-space-to-copy-free-photo.jpg" alt="" class="h-50 w-full object-cover object-center">
         </div>
@@ -32,12 +34,17 @@
             <p class="mx-auto mt-4 max-w-xl text-xl text-gray-600">Join a community to interact with its users and exchange products and tools</p>
             <a href="#" class="mt-6 inline-block w-full rounded-md border border-transparent bg-gray-900 px-8 py-3 font-medium text-white hover:bg-cyan-800 sm:w-auto">join a community
             </a>
-            <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:py-10">
-                <div id="exchanges"></div>
-            </div>
+
         </div>
     </section>
+    <div class="flex justify-center mt-10">
+        <div id="map"></div>
+    </div>
+    <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:py-10">
+        <div id="exchanges"></div>
+    </div>
 
 </body>
+@include('footer.footer')
 
 </html>

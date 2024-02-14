@@ -8,7 +8,7 @@ export default function Exchanges() {
 
     return (
         <div className="justify-center items-center py-5 text-center bg-light mx-auto">
-            <div className="mt-5 py-5 text-center justify-center items-center">
+            <div className="py-5 text-center justify-center items-center">
                 <h1 className="titulo-principal my-5 text-gray-600 text-xl">Are you joining the exchange?</h1>
 
                 <div className="flex flex-row gap-6">

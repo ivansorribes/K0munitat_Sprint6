@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    @include('header.header')
     <div class="flex justify-center">
         <div id="map">
         </div>

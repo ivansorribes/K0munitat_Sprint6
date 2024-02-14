@@ -9,17 +9,32 @@ use App\Models\imagePost;
 use App\Models\categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use App\Models\communities;
 
 class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $type = 'advertisement')
+    public function index(Request $request, $communityId = null, $type = 'post')
     {
-        $posts = posts::where('type', $type)->get();
-        return view('advertisement-list', ['posts' => $posts]);
+        $query = posts::query();
+        $query->where('type', $type);
+
+        if ($communityId) {
+            $community = Communities::findOrFail($communityId);
+            $query->where('id_community', $communityId);
+        }
+
+        $posts = $query->get();
+
+        return view('post-list', [
+            'posts' => $posts,
+            'community' => $community ?? null,
+            'type' => $type,
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
