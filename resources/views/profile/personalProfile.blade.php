@@ -7,6 +7,8 @@
     @viteReactRefresh      
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
+
+    @include('header.header')
 </head>
 <body>
 <div id="personalProfile"></div>

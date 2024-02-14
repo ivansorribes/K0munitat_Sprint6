@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit, faSave, faTimes, faHeart, faComment } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faSave, faTimes, faHeart, faComment, faEllipsisV } from '@fortawesome/free-solid-svg-icons'; // Importa faEllipsisV aquí
 
 export default function PersonalProfile() {
     const [user, setUser] = useState({});
@@ -12,6 +12,7 @@ export default function PersonalProfile() {
     const [posts, setPosts] = useState([]);
     const [commentsModalOpen, setCommentsModalOpen] = useState(false);
     const [selectedPostComments, setSelectedPostComments] = useState(null);
+    const [menuOpen, setMenuOpen] = useState(false); // Agrega el estado para el menú desplegable
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -161,7 +162,7 @@ export default function PersonalProfile() {
                         {posts.map((post) => (
                             <div
                                 key={post.id}
-                                className="post-card border border-gray-300 p-4 bg-gray-100 cursor-pointer"
+                                className="post-card border border-gray-300 p-4 bg-gray-100 cursor-pointer relative"
                             >
                                 <img
                                     className="w-full h-32 object-cover rounded"
@@ -170,6 +171,19 @@ export default function PersonalProfile() {
                                     style={{ width: '800px', height: '350px' }}
                                     onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
                                 />
+                                {/* Botón desplegable */}
+                                <div className="absolute top-2 right-2">
+                                    <div className="dropdown relative">
+                                        <button className="dropdown-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+                                            <FontAwesomeIcon icon={faEllipsisV} className="text-gray-500" />
+                                        </button>
+                                        <div className={`dropdown-menu ${menuOpen ? 'block' : 'hidden'} absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10`}>
+                                            <button className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleEditPost(post)}>Edit</button>
+                                            <button className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleDeletePost(post)}>Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                {/* Resto del contenido de la publicación */}
                                 <div className="flex items-center mb-2">
                                     <div className="flex items-center mr-2">
                                         <FontAwesomeIcon icon={faHeart} className="text-red-500 mr-1" />
