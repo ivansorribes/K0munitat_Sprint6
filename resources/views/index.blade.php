@@ -16,7 +16,7 @@
 
 </head>
 
-<body class="bg-gray-100">
+<body class="bg-blue-500">
 
     <div class="container mx-auto px-4 mt-8">
 
