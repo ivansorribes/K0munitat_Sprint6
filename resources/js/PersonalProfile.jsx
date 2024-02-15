@@ -205,13 +205,23 @@ export default function PersonalProfile() {
                                 key={post.id}
                                 className="post-card border border-gray-300 p-4 bg-gray-100 cursor-pointer relative"
                             >
-                                <img
-                                    className="w-full h-32 object-cover rounded"
-                                    src={`/profile/images/${post.image.name}`}
-                                    alt={`Publicación ${post.id}`}
-                                    style={{ width: '800px', height: '350px' }}
-                                    onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
-                                />
+                                {post.image ? (
+                                    <img
+                                        className="w-full h-32 object-cover rounded"
+                                        src={`/profile/images/${post.image.name}`}
+                                        alt={`Publicación ${post.id}`}
+                                        style={{ width: '800px', height: '350px' }}
+                                        onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
+                                    />
+                                ) : (
+                                    <img
+                                        className="w-full h-32 object-cover rounded"
+                                        src="/profile/images/DefaultPost.png"
+                                        alt="Default Image"
+                                        style={{ width: '800px', height: '350px' }}
+                                        onClick={() => openModal('DefaultPost.png', `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
+                                    />
+                                )}
                                 {/* Botón desplegable */}
                                 <div className="absolute top-2 right-2">
                                     <div className="dropdown relative">
@@ -240,6 +250,8 @@ export default function PersonalProfile() {
                                 </div>
                             </div>
                         ))}
+
+
                     </div>
                 </div>
             </div>
@@ -266,45 +278,6 @@ export default function PersonalProfile() {
                                     <FontAwesomeIcon icon={faComment} className="text-blue-500 mr-1" />
                                     {modalImage.comments}
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-            {/* Comments Modal */}
-            {commentsModalOpen && selectedPostComments && (
-                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="modal-content bg-white rounded-xl overflow-hidden max-w-lg relative" style={{ width: '200px', height: '500px' }}>
-                        {/* Mover la cruz (botón de cierre) */}
-                        <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={(e) => { e.stopPropagation(); closeCommentsModal(); }}>&times;</span>
-                        <div className="p-6">
-                            <div className="mb-4">
-                                <h2 className="text-2xl font-bold mb-2 text-center">Comments</h2>
-                                {/* Línea negra debajo del título Comment */}
-                                <hr className="border-gray-800 my-0" />
-                            </div>
-                            {/* Renderizar comentarios con scroll */}
-                            <div className="max-h-400px overflow-y-auto">
-                                {selectedPostComments.comments.map((comment, index) => (
-                                    <div key={index} className="flex items-center mb-4">
-                                        {/* Mostrar imagen de usuario */}
-                                        <img
-                                            src={comment.profile_image ? `/profile/images/${comment.profile_image}` : '/profile/images/DefaultImage.png'}
-                                            alt={`Avatar de ${comment.username}`}
-                                            className="w-12 h-12 rounded-full mr-4"
-                                        />
-                                        <div>
-                                            {/* Mostrar nombre de usuario */}
-                                            <p className="font-bold text-blue-500 mb-1">{comment.username}</p>
-                                            {/* Mostrar comentario */}
-                                            <p className="text-gray-700 mb-4">{comment.comment}</p>
-                                            {/* Línea negra debajo del comentario */}
-                                            {index !== selectedPostComments.comments.length - 1 && (
-                                                <hr className="border-gray-800 my-0" />
-                                            )}
-                                        </div>
-                                    </div>
-                                ))}
                             </div>
                         </div>
                     </div>
@@ -359,9 +332,9 @@ export default function PersonalProfile() {
             {editModalOpen && selectedEditPost && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                     <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '800px', height: '600px' }}>
-                        <div className="flex flex-col">
-                            <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={closeEditModal}>&times;</span>
-                            <h1>Edit Post</h1>
+                        <div className="flex flex-col relative">
+                            <span className="close absolute top-4 right-4 text-3xl cursor-pointer" onClick={closeEditModal}>&times;</span>
+                            <h1 className="text-2xl font-bold text-center mb-4">Edit Post</h1>
                             <div className="flex items-center mb-4">
                                 <img
                                     className="w-16 h-16 object-cover rounded mr-4"
@@ -370,22 +343,26 @@ export default function PersonalProfile() {
                                 />
                                 <input type="file" onChange={(e) => handleImageChange(e)} className="mb-4" />
                             </div>
-                            <h1>Title</h1>
-                            <input
-                                type="text"
-                                defaultValue={selectedEditPost.title}
-                                placeholder="Title"
-                                className="border rounded p-2 mb-4"
-                                onChange={(e) => setSelectedEditPost({ ...selectedEditPost, title: e.target.value })}
-                            />
-                            <h1>Description</h1>
-                            <textarea
-                                defaultValue={selectedEditPost.description}
-                                placeholder="Description"
-                                className="border rounded p-2 mb-4 h-32"
-                                onChange={(e) => setSelectedEditPost({ ...selectedEditPost, description: e.target.value })}
-                            />
-                            <div>
+                            <div className="mb-4">
+                                <label className="block mb-1 font-bold">Title</label>
+                                <input
+                                    type="text"
+                                    defaultValue={selectedEditPost.title}
+                                    placeholder="Title"
+                                    className="border rounded p-2 w-full"
+                                    onChange={(e) => setSelectedEditPost({ ...selectedEditPost, title: e.target.value })}
+                                />
+                            </div>
+                            <div className="mb-4">
+                                <label className="block mb-1 font-bold">Description</label>
+                                <textarea
+                                    defaultValue={selectedEditPost.description}
+                                    placeholder="Description"
+                                    className="border rounded p-2 w-full h-32"
+                                    onChange={(e) => setSelectedEditPost({ ...selectedEditPost, description: e.target.value })}
+                                />
+                            </div>
+                            <div className="flex justify-start">
                                 <button className="bg-green-500 text-white px-4 py-2 rounded mr-2" onClick={handleSavePost}>Save</button>
                                 <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={closeEditModal}>Cancel</button>
                             </div>
@@ -393,6 +370,7 @@ export default function PersonalProfile() {
                     </div>
                 </div>
             )}
+
 
 
         </div>
