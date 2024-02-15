@@ -7,12 +7,15 @@
     @viteReactRefresh      
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
+
+    @include('header.header')
 </head>
 <body>
-<div id="personalProfile" data-user="{{ json_encode($user) }}"></div>
+<div id="personalProfile"></div>
 <script>
     window.csrf_token = "{{ csrf_token() }}";
 </script>
 
 </body>
+@include('footer.footer')
 </html>
