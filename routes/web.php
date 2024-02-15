@@ -67,6 +67,26 @@ Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit
 Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
 Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
 
+
+
+// Rutas para el olvido y restablecimiento de contraseña
+Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
+Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
+
+Route::post('/updateProfileDescription', [UserController::class, 'updateProfileDescription'])->name('updateProfileDescription')->middleware('auth');
+Route::get('/postUser', [UserController::class, 'postUser'])->name('postUser')->middleware('auth');
+Route::get('/CommentsUser/{id_post}', [UserController::class, 'CommentsUser'])->name('CommentsUser')->middleware('auth');
+Route::post('/updatePost/{id_post}', [UserController::class, 'EditPost'])->name('EditPost')->middleware('auth');
+
+
+
+Route::get('/map', function () {
+    return view('map');
+});
+
+Route::get('/homepage', function () {
+    return view('home-page');
+});
 // ADVERTISEMENTS
 Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
 Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
