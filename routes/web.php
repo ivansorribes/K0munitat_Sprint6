@@ -10,6 +10,7 @@ use App\Http\Controllers\CommunitiesController;
 use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
+use App\Http\Controllers\BlogController;
 
 /*
 |--------------------------------------------------------------------------
@@ -79,3 +80,7 @@ Route::get('/community/{communityId}/advertisement-list', function (Request $req
 Route::get('/community/{communityId}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
+
+Route::get('/blog', function (Illuminate\Http\Request $request) {
+    return app(BlogController::class)->index($request, 'post');
+})->name('blog');
