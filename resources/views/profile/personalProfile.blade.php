@@ -17,4 +17,5 @@
 </script>
 
 </body>
+@include('footer.footer')
 </html>

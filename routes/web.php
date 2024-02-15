@@ -76,6 +76,8 @@ Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('
 Route::post('/updateProfileDescription', [UserController::class, 'updateProfileDescription'])->name('updateProfileDescription')->middleware('auth');
 Route::get('/postUser', [UserController::class, 'postUser'])->name('postUser')->middleware('auth');
 Route::get('/CommentsUser/{id_post}', [UserController::class, 'CommentsUser'])->name('CommentsUser')->middleware('auth');
+Route::post('/updatePost/{id_post}', [UserController::class, 'EditPost'])->name('EditPost')->middleware('auth');
+
 
 
 Route::get('/map', function () {
