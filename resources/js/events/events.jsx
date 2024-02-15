@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import { createRoot } from 'react-dom/client';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
@@ -36,8 +37,6 @@ const MyCalendar = () => {
   );
 };
 
-export default MyCalendar;
 if (document.getElementById('MyCalendar')) {
-  const root = createRoot(document.getElementById('MyCalendar'));
-  root.render(<MyCalendar />);
+  createRoot(document.getElementById('MyCalendar')).render(<MyCalendar />);
 }
