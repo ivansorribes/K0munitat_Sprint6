@@ -10,7 +10,7 @@ use App\Http\Controllers\CommunitiesController;
 use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\HeaderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -79,3 +79,8 @@ Route::get('/community/{communityId}/advertisement-list', function (Request $req
 Route::get('/community/{communityId}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
+
+
+
+//Header
+Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
