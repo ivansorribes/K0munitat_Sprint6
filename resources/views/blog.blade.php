@@ -10,5 +10,8 @@
     </head>
     <body>
         <div id="blog"></div>
+        <script type="text/javascript">
+            window.postData = @json(@posts);
+        </script>
     </body>
 </html>

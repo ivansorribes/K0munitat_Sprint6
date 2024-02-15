@@ -81,6 +81,8 @@ Route::get('/community/{communityId}/post-list', function (Request $request, $co
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
 
-Route::get('/blog', function (Illuminate\Http\Request $request) {
-    return app(BlogController::class)->index($request, 'post');
-})->name('blog');
+// Route::get('/blog', function () {
+//     return app(BlogController::class)->index(request(), 'post');
+// })->name('blog');
+
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');

@@ -16,6 +16,7 @@ class post_admin_blog extends Model
         'title',
         'description',
         'post_image',
+        
 
     ];
 }

@@ -7,6 +7,7 @@ import './AboutUs.jsx';
 import './components/Map.jsx';
 import './AdvertisementList.jsx';
 import './AdminPanel.jsx';
+import './blog.jsx'
 
 import './communities/communitiesFormCreate.jsx';
 import './communities/communitiesFormEdit.jsx';

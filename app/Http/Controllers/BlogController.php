@@ -14,12 +14,16 @@ class BlogController extends Controller
     public function index()
     {
         $posts = post_admin_blog::all();
-    
+
         if ($posts->isEmpty()) {
             return view('blog')->with('error', 'No hay registros en la base de datos.');
         }
     
-        return view('blog', compact('posts'));
+        return view('blog', [
+            'posts' => $posts,
+            ]
+        );
+        //return response()->json($posts);
     }
 
     /**
