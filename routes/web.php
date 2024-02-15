@@ -25,7 +25,7 @@ use Illuminate\Http\Request;
 // HOMEPAGE
 Route::get('/', function () {
     return view('home-page');
-});
+})->name('home');
 
 // ABOUT US
 Route::get('/about-us', function () {
