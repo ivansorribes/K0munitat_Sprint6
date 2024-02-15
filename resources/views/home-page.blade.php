@@ -13,7 +13,10 @@
 </head>
 @include('header.header')
 
-<body class="justify-center items-center">
+
+
+<body class="justify-center items-center" style="background-image: url('{{ asset('img/wallpaper.webp') }}'); background-size: cover; background-position: center;">
+
 
     <!-- Otras partes del cuerpo ... -->
 
@@ -45,5 +48,6 @@
     </div>
 
 </body>
+@include('footer.footer')
 
 </html>
