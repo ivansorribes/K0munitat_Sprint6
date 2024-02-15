@@ -88,14 +88,17 @@ Route::get('/homepage', function () {
     return view('home-page');
 });
 // ADVERTISEMENTS
-Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
-Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
+Route::get('/communities/{community}/form-create-advertisement', [PostsController::class, 'createAdvertisement'])->name('form-create-advertisement');
+Route::post('/communities/{community}/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
 
-Route::get('/community/{communityId}/advertisement-list', function (Request $request, $communityId) {
+Route::get('/communities/{community}/advertisement-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'advertisement');
 })->name('advertisement-list');
 
 // POSTS
-Route::get('/community/{communityId}/post-list', function (Request $request, $communityId) {
+Route::get('/communities/{community}/form-create-post', [PostsController::class, 'createPost'])->name('form-create-post');
+Route::post('/communities/{community}/form-create-post', [PostsController::class, 'store'])->name('form-create-post-post');
+
+Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
