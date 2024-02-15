@@ -33,8 +33,9 @@ class AuthController extends Controller
         return view('login.resetPassword');
     }
 
-    public function resetFormView(Request $request, $token = null){
-        return view('login.resetPasswordForm')->with(['token'=>$token, 'email'=>$request->email]);
+    public function resetFormView(Request $request, $token = null)
+    {
+        return view('login.resetPasswordForm')->with(['token' => $token, 'email' => $request->email]);
     }
 
     //Funcio per a registrar un usuari
@@ -70,35 +71,46 @@ class AuthController extends Controller
 
 
     //Funció per fer login
+
     function login(Request $request)
     {
-        //Validem que les dades introduïdes siguin correctes
+        // Validar las credenciales del usuario
         $request->validate([
             'email' => 'required|email|exists:users,email',
             'password' => 'required',
         ]);
-        //Creem un array amb les credencials del usuari introduïdes al formulari
+
+        // Credenciales del usuario
         $credentials = [
             "email" => $request->email,
             "password" => $request->password,
         ];
-        //Determina si la casella de remember esta marcada. Si està marcada serà true, sinó false
+
+        // Determinar si la casilla de "remember" está marcada
         $remember = $request->has('remember');
-        //Intenta autenticar a l'usuari amb les credencials, si son correctes executara el bloc if
+
+        // Intentar autenticar al usuario
         if (Auth::attempt($credentials, $remember)) {
-            //Regenerem la sessió per a evitar el risc de sesions secunadries
+            // Regenerar la sesión para evitar el riesgo de sesiones secundarias
             $request->session()->regenerate();
-            //Després d'iniciar sessió, redirigim a l'usuari a la ruta que volia entrar si existeix, sinó a la ruta proporcionada
-            return redirect()->intended(route('privada'));
+
+            // Verificar si el usuario tiene el rol "superAdmin"
+            if (Auth::user()->role === 'superAdmin') {
+                // Si es "superAdmin", redirigir al panel de administración
+                return redirect('/adminPanel');
+            } else {
+                // Si no es "superAdmin", redirigir a la ruta privada
+                return redirect()->intended(route('privada'));
+            }
         } else {
-            //Si no són correctes torna a l'usuari  a la pàgina de login i mostra una notificació
+            // Si las credenciales no son correctas, redirigir al login con un mensaje de error
             return redirect('/login')->with(['fail' => 'Invalid email or password.'])->withInput();
         }
     }
 
 
 
-    function logout(Request $request) 
+    function logout(Request $request)
     {
         Auth::logout();
 
@@ -106,59 +118,59 @@ class AuthController extends Controller
         $request->session()->regenerateToken();
 
         return redirect(route('LoginView'));
-
     }
 
-    public function sendResetLink(Request $request){
+    public function sendResetLink(Request $request)
+    {
         $request->validate([
-            'email'=>'required|email|exists:users,email'
+            'email' => 'required|email|exists:users,email'
         ]);
 
         $token = Str::random(64);
         DB::table('password_resets')->insert([
-            'email'=>$request->email,
-            'token'=>$token,
-            'created_at'=>Carbon::now(),
+            'email' => $request->email,
+            'token' => $token,
+            'created_at' => Carbon::now(),
         ]);
 
-        $action_link = route('resetFormView',['token'=>$token,'email'=>$request->email]);
-        $body = "We have recieved a request to reset the password for K0munitat account associated with ".$request->email.
-        ". You can reset your password by clicking the link below.";
+        $action_link = route('resetFormView', ['token' => $token, 'email' => $request->email]);
+        $body = "We have recieved a request to reset the password for K0munitat account associated with " . $request->email .
+            ". You can reset your password by clicking the link below.";
 
-        Mail::send('email-forgot',['action_link'=>$action_link,'body'=>$body], function($message) use ($request){
+        Mail::send('email-forgot', ['action_link' => $action_link, 'body' => $body], function ($message) use ($request) {
             $message->from('noreply@k0munitat.com', 'K0munitat');
             $message->to($request->email, 'user Name')
-                    ->subject('Reset Password');
-        }); 
+                ->subject('Reset Password');
+        });
 
         return back()->with('success', 'We have e-mailed your password reset link');
     }
 
-    public function resetPassword(Request $request){
+    public function resetPassword(Request $request)
+    {
         $request->validate([
-            'email'=>'required|email|exists:users,email',
-            'password'=>'required|min:5|confirmed',
-            'password_confirmation'=>'required',
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required|min:5|confirmed',
+            'password_confirmation' => 'required',
         ]);
 
         $check_token = DB::table('password_resets')->where([
-            'email'=>$request->email,
-            'token'=>$request->token,
+            'email' => $request->email,
+            'token' => $request->token,
         ])->first();
 
-        if(!$check_token){
+        if (!$check_token) {
             return back()->withInput()->with('fail', 'Invalid token');
-        }else{
+        } else {
             User::where('email', $request->email)->update([
-                'password'=>Hash::make($request->password)
+                'password' => Hash::make($request->password)
             ]);
 
             DB::table('password_resets')->where([
-                'email'=>$request->email
+                'email' => $request->email
             ])->delete();
 
             return redirect()->route('LoginView')->with('info', 'Your password has been changed! You can login with new password');
         }
-
     }
 }
