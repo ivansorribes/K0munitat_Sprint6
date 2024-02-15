@@ -20,7 +20,7 @@
             </button>
             <!--<a href="#">LOgo</a>-->
             <div class="flex cursor-pointer -mr-4 ml-8">
-                <a href="{{ route('inicia-sesion') }}">
+                <a href="{{ route('LoginView') }}">
                     <img src="{{ asset('img/logo.png') }}" alt="Logo Komunitat" class="hover:scale-110 h-10 mt-2">
                 </a>
                 <div class="space-y-1 space-x-8 ml-8 pb-3 border-t pt-2 hidden md:flex">
@@ -73,7 +73,7 @@
             <!-- Botones de navegación -->
             <div class="md:hidden sm:flex items-end gap-6 space-x-4 sm:z-auto sm:static absolute w-auto">
                 <a href="{{ route('validate-register') }}" class="bg-[#155b2a] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Login</a>
-                <a href="{{ route('inicia-sesion') }}" class="bg-gradient-to-br from-[#155b2a] to-[#adce71] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Sign up</a>
+                <a href="{{ route('LoginView') }}" class="bg-gradient-to-br from-[#155b2a] to-[#adce71] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Sign up</a>
             </div>
 
         </nav>
