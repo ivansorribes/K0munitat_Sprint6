@@ -37,4 +37,9 @@ class posts extends Model
     {
         return $this->belongsTo(communities::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(imagePost::class, 'id_post');
+    }
 }
