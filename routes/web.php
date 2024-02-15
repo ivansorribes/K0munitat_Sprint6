@@ -68,7 +68,7 @@ Route::put('/communities/{community}', [CommunitiesController::class, 'update'])
 Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
 
 // ADVERTISEMENTS
-Route::get('/form-create-advertisement', [PostsController::class, 'create'])->name('form-create-advertisement');
+Route::get('/form-create-advertisement', [PostsController::class, 'createAdvertisement'])->name('form-create-advertisement');
 Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
 
 Route::get('/community/{communityId}/advertisement-list', function (Request $request, $communityId) {
@@ -76,6 +76,9 @@ Route::get('/community/{communityId}/advertisement-list', function (Request $req
 })->name('advertisement-list');
 
 // POSTS
+Route::get('/form-create-post', [PostsController::class, 'createPost'])->name('form-create-post');
+Route::post('/form-create-post', [PostsController::class, 'store'])->name('form-create-post-post');
+
 Route::get('/community/{communityId}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');

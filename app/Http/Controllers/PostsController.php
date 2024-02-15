@@ -39,10 +39,21 @@ class PostsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function createAdvertisement()
     {
-        $categories = categories::all();
+        $categories = $this->getCategories();
         return view('form-create-advertisement', ['categories' => $categories]);
+    }
+
+    public function createPost()
+    {
+        $categories = $this->getCategories();
+        return view('form-create-post', ['categories' => $categories]);
+    }
+
+    private function getCategories()
+    {
+        return categories::all();
     }
 
     /**
@@ -56,7 +67,7 @@ class PostsController extends Controller
                 'description' => 'required|max:1000',
                 'category_id' => 'required|exists:categories,id',
                 'private' => 'sometimes|boolean',
-                'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+                'image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
                 'type' => 'required|in:advertisement,post',
             ]);
 
@@ -92,7 +103,7 @@ class PostsController extends Controller
                 ]);
             }
 
-            return redirect('/map');
+            return redirect('/');
         } catch (\Exception $e) {
             Log::error('Error al crear el post: ' . $e->getMessage());
             return back()->withErrors('Ocurrió un error al crear el post. Por favor, intenta de nuevo.')->withInput();
