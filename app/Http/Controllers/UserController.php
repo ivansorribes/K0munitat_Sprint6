@@ -93,7 +93,7 @@ class UserController extends Controller
         $comments = DB::table('commentsPosts')
             ->join('comments', 'commentsPosts.id_comment', '=', 'comments.id')
             ->join('users', 'comments.id_user', '=', 'users.id')
-            ->select('comments.id', 'comments.comment', 'comments.id_user', 'users.username')
+            ->select('comments.id', 'comments.comment', 'comments.id_user', 'users.username', 'users.profile_image')
             ->where('commentsPosts.id_post', '=', $id_post)
             ->get();
 
