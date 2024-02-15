@@ -11,14 +11,16 @@
         @vite('resources/css/app.css')
     </head>
     <body >
-    <script>
-        function handleEditClick(community) {
-            // Implementa tu lógica para manejar el evento de clic en "Editar"
-            console.log('Editar clickeado para la comunidad:', community);
-            // Puedes redirigir a la página de edición o realizar cualquier otra acción aquí
-        }
-    </script>
-        <div id="communityShow"></div>
+        <div>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
+                View Post
+            </button>
+             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 border border-blue-700 rounded">
+                View Advertisement
+            </button>
+        </div>
+        
+       
         
     </body>
 </html>
