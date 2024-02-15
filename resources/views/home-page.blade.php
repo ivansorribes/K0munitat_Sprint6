@@ -35,7 +35,7 @@
         <div class="mx-auto max-w-2xl lg:max-w-none">
             <h2 id="sale-heading" class="text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl lg:text-6xl">Explore our wide variety of communities</h2>
             <p class="mx-auto mt-4 max-w-xl text-xl text-gray-600">Join a community to interact with its users and exchange products and tools</p>
-            <a href="#" class="mt-6 inline-block w-full rounded-md border border-transparent bg-gray-900 px-8 py-3 font-medium text-white hover:bg-cyan-800 sm:w-auto">join a community
+            <a href="{{ route('communities.index') }}" class="mt-6 inline-block w-full rounded-md border border-transparent bg-gray-900 px-8 py-3 font-medium text-white hover:bg-cyan-800 sm:w-auto">join a community
             </a>
 
         </div>
