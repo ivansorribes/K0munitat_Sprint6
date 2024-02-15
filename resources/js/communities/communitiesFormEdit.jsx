@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import axios from 'axios';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 
 
-const CommunitiesFormEdit = ({ communityId }) => {
-  const [community, setCommunity] = useState(null);
+const CommunitiesFormEdit = ({ communityData, onCancel, onSubmit }) => {
+    const [community, setCommunity] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,6 +49,7 @@ const CommunitiesFormEdit = ({ communityId }) => {
       onSubmit={handleSubmit}
     >
       <Form>
+      <h1 className="text-4xl font-bold mb-5">Edit Community</h1>
         <div>
           <label htmlFor="name">Community Name</label>
           <Field
@@ -123,7 +123,4 @@ const CommunitiesFormEdit = ({ communityId }) => {
   );
 };
 
-if (document.getElementById('communityFormEdit')) {
-    ReactDOM.render(<CommunitiesFormEdit communityId={communityId} />, document.getElementById('communityFormEdit'));
-  }
-  
+export default CommunitiesFormEdit;  // No cambies el nombre de la exportación
