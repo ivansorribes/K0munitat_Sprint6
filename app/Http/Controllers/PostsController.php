@@ -10,6 +10,7 @@ use App\Models\categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\communities;
+use Illuminate\Support\Facades\URL;
 
 class PostsController extends Controller
 {
@@ -18,16 +19,24 @@ class PostsController extends Controller
      */
     public function index(Request $request, $communityId = null, $type = 'post')
     {
-        $query = posts::query();
+        $query = posts::with(['images' => function ($query) {
+            $query->select('id', 'id_post', 'name');
+        }]);
         $query->where('type', $type);
 
         if ($communityId) {
-            $community = Communities::findOrFail($communityId);
+            $community = communities::findOrFail($communityId);
             $query->where('id_community', $communityId);
         }
 
         $posts = $query->get();
 
+        // Añadir URL completa a cada imagen
+        $posts->each(function ($post) {
+            $post->images->each(function ($image) {
+                $image->url = URL::to('storage/posts/' . $image->name);
+            });
+        });
         return view('post-list', [
             'posts' => $posts,
             'community' => $community ?? null,
