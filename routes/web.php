@@ -10,7 +10,7 @@ use App\Http\Controllers\CommunitiesController;
 use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
-
+use App\Http\Controllers\HeaderController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -102,3 +102,8 @@ Route::post('/communities/{community}/form-create-post', [PostsController::class
 Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
+
+
+
+//Header
+Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
