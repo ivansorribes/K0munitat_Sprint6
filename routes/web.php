@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Password;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CommunitiesController;
 use App\Http\Controllers\PostsController;
 
 /*
@@ -65,3 +66,7 @@ Route::get('/community/advertisement-list', function (Illuminate\Http\Request $r
 Route::get('/community/post-list', function (Illuminate\Http\Request $request) {
     return app(PostsController::class)->index($request, 'post');
 })->name('post-list');
+
+
+Route::get('/index', [CommunitiesController::class, 'index'])->name('index');
+Route::put('/index/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
