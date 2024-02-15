@@ -29,7 +29,7 @@
                               <a href="{{ route('about-us') }}" class="hover:underline">Blog</a>
                           </li>
                           <li class="mb-4">
-                            <a href="{{ route('communities.index') }}" class="hover:underline">Communities</a>
+                            <a href="{{ route('about-us') }}" class="hover:underline">About Us</a>
                           </li>
                       </ul>
                   </div>
