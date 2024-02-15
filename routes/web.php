@@ -68,16 +68,16 @@ Route::put('/communities/{community}', [CommunitiesController::class, 'update'])
 Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
 
 // ADVERTISEMENTS
-Route::get('/form-create-advertisement', [PostsController::class, 'createAdvertisement'])->name('form-create-advertisement');
-Route::post('/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
+Route::get('/communities/{community}/form-create-advertisement', [PostsController::class, 'createAdvertisement'])->name('form-create-advertisement');
+Route::post('/communities/{community}/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
 
 Route::get('/communities/{community}/advertisement-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'advertisement');
 })->name('advertisement-list');
 
 // POSTS
-Route::get('/form-create-post', [PostsController::class, 'createPost'])->name('form-create-post');
-Route::post('/form-create-post', [PostsController::class, 'store'])->name('form-create-post-post');
+Route::get('/communities/{community}/form-create-post', [PostsController::class, 'createPost'])->name('form-create-post');
+Route::post('/communities/{community}/form-create-post', [PostsController::class, 'store'])->name('form-create-post-post');
 
 Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');

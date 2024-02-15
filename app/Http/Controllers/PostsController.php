@@ -39,16 +39,22 @@ class PostsController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function createAdvertisement()
+    public function createAdvertisement($communityId) // Asumiendo que recibes el communityId como parámetro
     {
         $categories = $this->getCategories();
-        return view('form-create-advertisement', ['categories' => $categories]);
+        return view('form-create-advertisement', [
+            'categories' => $categories,
+            'communityId' => $communityId // Pasando el communityId a la vista
+        ]);
     }
 
-    public function createPost()
+    public function createPost($communityId) // Asumiendo que recibes el communityId como parámetro
     {
         $categories = $this->getCategories();
-        return view('form-create-post', ['categories' => $categories]);
+        return view('form-create-post', [
+            'categories' => $categories,
+            'communityId' => $communityId // Pasando el communityId a la vista
+        ]);
     }
 
     private function getCategories()

@@ -22,7 +22,7 @@
         <div class="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div class="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full max-w-md text-center">
             <h2 class="text-2xl font-semibold mb-6 text-center text-yellow-600">Create advertisement form</h2>
-            <form action="{{ route('form-create-advertisement-post') }}" method="post" enctype="multipart/form-data">
+            <form action="{{ route('form-create-advertisement-post', ['community' => $communityId]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="type" value="advertisement">
                 <div class=" mb-4 relative">
