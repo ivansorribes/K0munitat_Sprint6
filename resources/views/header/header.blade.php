@@ -11,8 +11,8 @@
 
 <body>
     <!--Header para un usuario no autenticado-->
-    <header class="bg-[#fffdf9] px-6 shadow">
-        <div class="flex h-16 max-w-6xl mx-auto items-center justify-between">
+    <header class="bg-[#fffdf9]  px-6  shadow">
+        <div class="flex h-30 max-w-6xl mx-auto items-center justify-between">
             <button class="text-[#adce71] rounded p-1 -ml-1 transition-colors hover:bg-[#f4971e] hover:text-[#fffdf9] focus:ring-2">
                 <svg data-slot="icon" fill="none" stroke-width="1.5" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="h-8 w-8">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path>
@@ -20,16 +20,16 @@
             </button>
             <!--<a href="#">LOgo</a>-->
             <div class="flex cursor-pointer -mr-4 ml-8">
-                <a href="{{ route('inicia-sesion') }}">
+                <a href="{{ route('home') }}">
                     <img src="{{ asset('img/logo.png') }}" alt="Logo Komunitat" class="hover:scale-110 h-10 mt-2">
                 </a>
                 <div class="space-y-1 space-x-8 ml-8 pb-3 border-t pt-2 hidden md:flex">
                     <ul class="md:flex md:items-center z-[-1] md:z-auto md:static absolute bg-[#fffdf9] w-full md:w-auto md:py-0 py-4 md:pl-0 pl-7 left-0">
                         <li class="mx-4 my-6 md:my-0">
-                            <a href="#" class="block px-3 py-2 text-[#f4971e] rounded-md">Home</a>
+                            <a href="{{ route('home') }}" class="block px-3 py-2 text-[#f4971e] rounded-md">Home</a>
                         </li>
                         <li class="mx-4 my-6 md:my-0">
-                            <a href="#" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">Blog</a>
+                            <a href="{{ route('about-us') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">Blog</a>
                         </li>
                         <li class="mx-4 my-6 md:my-0">
                             <a href="{{ route('about-us') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">About Us</a>
@@ -73,7 +73,7 @@
             <!-- Botones de navegación -->
             <div class="md:hidden sm:flex items-end gap-6 space-x-4 sm:z-auto sm:static absolute w-auto">
                 <a href="{{ route('validate-register') }}" class="bg-[#155b2a] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Login</a>
-                <a href="{{ route('inicia-sesion') }}" class="bg-gradient-to-br from-[#155b2a] to-[#adce71] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Sign up</a>
+                <a href="{{ route('LoginView') }}" class="bg-gradient-to-br from-[#155b2a] to-[#adce71] text-[#fffdf9] px-5 py-2 btn-action rounded-full hover:bg-[#f4971e] transition duration-300">Sign up</a>
             </div>
 
         </nav>
