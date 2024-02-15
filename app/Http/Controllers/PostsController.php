@@ -65,7 +65,7 @@ class PostsController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, $communityId)
     {
         try {
             $validatedData = $request->validate([
@@ -80,7 +80,7 @@ class PostsController extends Controller
             $post = posts::create([
                 'id_user' => 1, // Asume un valor estático o ajusta según tu lógica de autenticación
                 'id_category' => $validatedData['category_id'],
-                'id_community' => 1, // Ajusta según necesites
+                'id_community' => $communityId, // Ajusta según necesites
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'isActive' => true,
