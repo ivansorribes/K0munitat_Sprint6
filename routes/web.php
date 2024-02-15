@@ -79,3 +79,8 @@ Route::get('/community/{communityId}/advertisement-list', function (Request $req
 Route::get('/community/{communityId}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
+
+
+Route::get('/events', function () {
+    return view('events.calendar');
+})->name('calendar');
