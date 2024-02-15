@@ -9,6 +9,7 @@
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
 </head>
+@include('header.header')
 
 <body>
     <div id="advertisementList"></div>
@@ -16,5 +17,6 @@
         window.postsData = @json($posts);
     </script>
 </body>
+@include('footer.footer')
 
 </html>
