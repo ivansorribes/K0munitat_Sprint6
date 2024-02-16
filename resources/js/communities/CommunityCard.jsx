@@ -11,7 +11,7 @@ const CommunityCard = ({ community, onViewClick }) => {
 
       <a href={communityUrl} target="_blank" rel="noopener noreferrer">
         <button className="bg-green-500 text-white px-4 py-2 rounded-lg text-lg mt-4">
-          Entrar
+          Enter Community
         </button>
       </a>
     </div>
