@@ -1,11 +1,11 @@
 @extends('layout.basic')
 
+@section('title', 'Community')
+
 @section('content')
     <body>
         <h1>{{ $community->name }}</h1>
         <p>{{ $community->description }}</p>
-    </body>
-    <body>
         <div>
             <a href="{{ route('post-list', ['community' => $community->id]) }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded inline-block text-center">
                 View Posts
