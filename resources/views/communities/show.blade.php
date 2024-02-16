@@ -3,7 +3,6 @@
 @section('title', 'Community')
 
 @section('content')
-    <body>
         <h1>{{ $community->name }}</h1>
         <p>{{ $community->description }}</p>
         <div>
@@ -22,5 +21,4 @@
                 Create Advertisement
             </a>
         </div>
-    </body>
 @endsection
