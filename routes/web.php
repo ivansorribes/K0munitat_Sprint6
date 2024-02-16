@@ -77,6 +77,7 @@ Route::post('/updateProfileDescription', [UserController::class, 'updateProfileD
 Route::get('/postUser', [UserController::class, 'postUser'])->name('postUser')->middleware('auth');
 Route::get('/CommentsUser/{id_post}', [UserController::class, 'CommentsUser'])->name('CommentsUser')->middleware('auth');
 Route::post('/updatePost/{id_post}', [UserController::class, 'EditPost'])->name('EditPost')->middleware('auth');
+Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->name('Delete^pst')->middleware('auth');
 
 
 

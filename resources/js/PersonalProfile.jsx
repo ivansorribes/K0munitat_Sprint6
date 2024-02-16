@@ -13,8 +13,10 @@ export default function PersonalProfile() {
     const [selectedPostComments, setSelectedPostComments] = useState(null);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [selectedEditPost, setSelectedEditPost] = useState(null);
-    const [menuOpen, setMenuOpen] = useState(false);
-
+    const [menuOpen, setMenuOpen] = useState([]);
+    const [selectedImageURL, setSelectedImageURL] = useState(''); // Nuevo estado para la URL de la imagen seleccionada
+    const [deleteConfirmationOpen, setDeleteConfirmationOpen] = useState(false);
+    const [postToDelete, setPostToDelete] = useState(null);
     useEffect(() => {
         const fetchUserData = async () => {
             try {
@@ -23,6 +25,8 @@ export default function PersonalProfile() {
                     const data = await response.json();
                     setUser(data.user || {});
                     setPosts(data.posts || []);
+                    // Inicializar menuOpen con un array de falsos del mismo tamaño que posts
+                    setMenuOpen(Array(data.posts.length).fill(false));
                 } else {
                     console.error('Error al obtener datos del usuario');
                 }
@@ -89,7 +93,9 @@ export default function PersonalProfile() {
     const openEditModal = (post) => {
         setSelectedEditPost(post);
         setEditModalOpen(true);
-        setMenuOpen(false);
+        setSelectedImageURL(`/profile/images/${post.image.name}`); // Establecer la URL de la imagen seleccionada
+        // Cerrar cualquier menú desplegable abierto al abrir el modal de edición
+        setMenuOpen(Array(posts.length).fill(false));
     };
 
     const closeCommentsModal = () => {
@@ -109,6 +115,7 @@ export default function PersonalProfile() {
     const handleImageChange = (e) => {
         const newImage = e.target.files[0];
         setSelectedEditPost({ ...selectedEditPost, image: newImage });
+        setSelectedImageURL(URL.createObjectURL(newImage)); // Establecer la URL de la imagen seleccionada
     };
 
     const handleSavePost = async () => {
@@ -127,17 +134,76 @@ export default function PersonalProfile() {
             });
 
             if (response.ok) {
+                // Obtener la URL de la imagen actualizada del servidor
+                const data = await response.json();
+                const updatedPost = { ...selectedEditPost, image: data.imageUrl };
+
+                // Actualizar el estado local con el post actualizado
                 const updatedPosts = posts.map((post) =>
-                    post.id === selectedEditPost.id ? selectedEditPost : post
+                    post.id === selectedEditPost.id ? updatedPost : post
                 );
                 setPosts(updatedPosts);
+
+                // Cerrar el modal de edición
                 closeEditModal();
+
+                // Recargar la página
+                window.location.reload();
             } else {
                 console.error('Error al editar el post');
             }
         } catch (error) {
             console.error('Error inesperado', error);
         }
+    };
+
+
+    const toggleMenuOpen = (index) => {
+        const newMenuOpen = [...menuOpen];
+        newMenuOpen[index] = !newMenuOpen[index];
+        setMenuOpen(newMenuOpen);
+    };
+
+    // Función para abrir el modal de confirmación y establecer el post a eliminar
+    const openDeleteConfirmation = (post) => {
+        setPostToDelete(post);
+        setDeleteConfirmationOpen(true);
+    };
+
+    // Función para cerrar el modal de confirmación
+    const closeDeleteConfirmation = () => {
+        setPostToDelete(null);
+        setDeleteConfirmationOpen(false);
+    };
+
+    // Función para manejar la eliminación del post si el usuario confirma
+    const handleDeleteConfirmed = async () => {
+        try {
+            const response = await fetch(`/deletePost/${postToDelete.id}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': window.csrf_token,
+                },
+            });
+
+            if (response.ok) {
+                // Eliminar el post del estado local
+                const updatedPosts = posts.filter(post => post.id !== postToDelete.id);
+                setPosts(updatedPosts);
+                // Cerrar el modal de confirmación
+                closeDeleteConfirmation();
+            } else {
+                console.error('Error al eliminar el post');
+            }
+        } catch (error) {
+            console.error('Error inesperado', error);
+        }
+    };
+
+    // Función para manejar la cancelación de la eliminación del post
+    const handleDeleteCanceled = () => {
+        // Cerrar el modal de confirmación
+        closeDeleteConfirmation();
     };
 
     return (
@@ -200,37 +266,28 @@ export default function PersonalProfile() {
                 <div className="mt-6">
                     <h2 className="text-2xl text-center font-bold mb-4">Publications</h2>
                     <div className="grid grid-cols-2 gap-4">
-                        {posts.map((post) => (
+                        {posts.map((post, index) => (
                             <div
                                 key={post.id}
                                 className="post-card border border-gray-300 p-4 bg-gray-100 cursor-pointer relative"
                             >
-                                {post.image ? (
-                                    <img
-                                        className="w-full h-32 object-cover rounded"
-                                        src={`/profile/images/${post.image.name}`}
-                                        alt={`Publicación ${post.id}`}
-                                        style={{ width: '800px', height: '350px' }}
-                                        onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
-                                    />
-                                ) : (
-                                    <img
-                                        className="w-full h-32 object-cover rounded"
-                                        src="/profile/images/DefaultPost.png"
-                                        alt="Default Image"
-                                        style={{ width: '800px', height: '350px' }}
-                                        onClick={() => openModal('DefaultPost.png', `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
-                                    />
-                                )}
+                                <img
+                                    className="w-full h-32 object-cover rounded"
+                                    src={`/profile/images/${post.image.name}`}
+                                    alt={`Publicación ${post.id}`}
+                                    style={{ width: '800px', height: '350px' }}
+                                    onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
+                                />
                                 {/* Botón desplegable */}
                                 <div className="absolute top-2 right-2">
                                     <div className="dropdown relative">
-                                        <button className="dropdown-toggle" onClick={() => setMenuOpen(!menuOpen)}>
+                                        <button className="dropdown-toggle" onClick={() => toggleMenuOpen(index)}>
                                             <FontAwesomeIcon icon={faEllipsisV} className="text-gray-500" />
                                         </button>
-                                        <div className={`dropdown-menu ${menuOpen ? 'block' : 'hidden'} absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10`}>
+                                        <div className={`dropdown-menu ${menuOpen[index] ? 'block' : 'hidden'} absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10`}>
                                             <button className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => openEditModal(post)}>Edit</button>
-                                            {<button className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => handleDeletePost(post)}>Delete</button>}
+                                            <button className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => openDeleteConfirmation(post)}>Delete</button>
+                                            {/* Eliminar el botón de eliminar post */}
                                         </div>
                                     </div>
                                 </div>
@@ -250,8 +307,6 @@ export default function PersonalProfile() {
                                 </div>
                             </div>
                         ))}
-
-
                     </div>
                 </div>
             </div>
@@ -286,7 +341,7 @@ export default function PersonalProfile() {
             {/* Comments Modal */}
             {commentsModalOpen && selectedPostComments && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="modal-content bg-white rounded-xl overflow-hidden max-w-lg relative" style={{ width: '600px', height: '500px' }}>
+                    <div className="modal-content bg-white rounded-xl overflow-hidden max-w-lg relative" style={{ width: '200px', height: '500px' }}>
                         {/* Mover la cruz (botón de cierre) */}
                         <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={(e) => { e.stopPropagation(); closeCommentsModal(); }}>&times;</span>
                         <div className="p-6">
@@ -296,7 +351,7 @@ export default function PersonalProfile() {
                                 <hr className="border-gray-800 my-0" />
                             </div>
                             {/* Renderizar comentarios con scroll */}
-                            <div className="overflow-y-auto" style={{ maxHeight: '400px' }}>
+                            <div className="max-h-400px overflow-y-auto">
                                 {selectedPostComments.comments.map((comment, index) => (
                                     <div key={index} className="flex items-center mb-4">
                                         {/* Mostrar imagen de usuario */}
@@ -307,7 +362,7 @@ export default function PersonalProfile() {
                                         />
                                         <div>
                                             {/* Mostrar nombre de usuario */}
-                                            <p className="font-bold text-green-900 mb-1">{comment.username}</p>
+                                            <p className="font-bold text-blue-500 mb-1">{comment.username}</p>
                                             {/* Mostrar comentario */}
                                             <p className="text-gray-700 mb-4">{comment.comment}</p>
                                             {/* Línea negra debajo del comentario */}
@@ -332,37 +387,33 @@ export default function PersonalProfile() {
             {editModalOpen && selectedEditPost && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                     <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '800px', height: '600px' }}>
-                        <div className="flex flex-col relative">
-                            <span className="close absolute top-4 right-4 text-3xl cursor-pointer" onClick={closeEditModal}>&times;</span>
-                            <h1 className="text-2xl font-bold text-center mb-4">Edit Post</h1>
+                        <div className="flex flex-col">
+                            <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={closeEditModal}>&times;</span>
+                            <h1>Edit Post</h1>
                             <div className="flex items-center mb-4">
                                 <img
                                     className="w-16 h-16 object-cover rounded mr-4"
-                                    src={`/profile/images/${selectedEditPost.image.name}`}
+                                    src={selectedImageURL}
                                     alt="Current Image"
                                 />
                                 <input type="file" onChange={(e) => handleImageChange(e)} className="mb-4" />
                             </div>
-                            <div className="mb-4">
-                                <label className="block mb-1 font-bold">Title</label>
-                                <input
-                                    type="text"
-                                    defaultValue={selectedEditPost.title}
-                                    placeholder="Title"
-                                    className="border rounded p-2 w-full"
-                                    onChange={(e) => setSelectedEditPost({ ...selectedEditPost, title: e.target.value })}
-                                />
-                            </div>
-                            <div className="mb-4">
-                                <label className="block mb-1 font-bold">Description</label>
-                                <textarea
-                                    defaultValue={selectedEditPost.description}
-                                    placeholder="Description"
-                                    className="border rounded p-2 w-full h-32"
-                                    onChange={(e) => setSelectedEditPost({ ...selectedEditPost, description: e.target.value })}
-                                />
-                            </div>
-                            <div className="flex justify-start">
+                            <h1>Title</h1>
+                            <input
+                                type="text"
+                                defaultValue={selectedEditPost.title}
+                                placeholder="Title"
+                                className="border rounded p-2 mb-4"
+                                onChange={(e) => setSelectedEditPost({ ...selectedEditPost, title: e.target.value })}
+                            />
+                            <h1>Description</h1>
+                            <textarea
+                                defaultValue={selectedEditPost.description}
+                                placeholder="Description"
+                                className="border rounded p-2 mb-4 h-32"
+                                onChange={(e) => setSelectedEditPost({ ...selectedEditPost, description: e.target.value })}
+                            />
+                            <div>
                                 <button className="bg-green-500 text-white px-4 py-2 rounded mr-2" onClick={handleSavePost}>Save</button>
                                 <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={closeEditModal}>Cancel</button>
                             </div>
@@ -370,7 +421,17 @@ export default function PersonalProfile() {
                     </div>
                 </div>
             )}
-
+            {deleteConfirmationOpen && postToDelete && (
+                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="modal-content bg-white p-4 rounded-xl overflow-hidden">
+                        <p className="text-center text-lg font-semibold mb-4">Are you sure you want to delete this post?</p>
+                        <div className="flex justify-center">
+                            <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={handleDeleteConfirmed}>Yes</button>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleDeleteCanceled}>No</button>
+                        </div>
+                    </div>
+                </div>
+            )}
 
 
         </div>
