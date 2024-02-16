@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create advertisement</title>
+    <title>Create post</title>
     @viteReactRefresh
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
@@ -21,7 +21,7 @@
     <div class="relative py-3 sm:max-w-xl sm:mx-auto">
         <div class="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div class="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full max-w-md text-center">
-            <h2 class="text-2xl font-semibold mb-6 text-center text-yellow-600">Create post form</h2>
+            <h2 class="text-2xl font-semibold mb-6 text-center text-yellow-600">Create a post</h2>
             <form action="{{ route('form-create-post-post', ['community' => $communityId]) }}" method="post" enctype="multipart/form-data">
                 @csrf
                 <input type="hidden" name="type" value="post">
