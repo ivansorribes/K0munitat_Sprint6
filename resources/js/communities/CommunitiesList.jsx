@@ -43,7 +43,7 @@ const CommunitiesList = () => {
             target="_blank"
             rel="noopener noreferrer"
           >
-            <button className="bg-green-500 text-white px-4 py-2 rounded-lg text-lg mt-4">
+            <button className="button-create">
               Create
             </button>
           </a>
@@ -59,7 +59,7 @@ const CommunitiesList = () => {
             ))}
           </div>
         </div>
-        <div className="flex justify-center mt-5">
+        <div className="flex justify-center mt-5 py-2">
         <ReactPaginate
             previousLabel={'previous'}
             nextLabel={'next'}

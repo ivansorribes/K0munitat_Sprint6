@@ -4,3 +4,20 @@
     border: 1px solid #adce71;
   }
 
+  .button-create {
+    background-color: #f4971e; 
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 1.125rem; 
+    margin-top: 1rem; 
+  }
+
+  .button-card {
+    background-color: #adce71; 
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 1.125rem; 
+    margin-top: 1rem; 
+  }
