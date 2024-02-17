@@ -13,8 +13,8 @@ class postsSeeder extends Seeder
      */
     public function run(): void
     {
-        posts::factory(10)->create();
-        
-        
+        //posts::factory(10)->create();
+
+
     }
 }

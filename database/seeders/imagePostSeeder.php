@@ -13,7 +13,7 @@ class imagePostSeeder extends Seeder
      */
     public function run(): void
     {
-        imagePost::factory(10)->create();
-          
+        //imagePost::factory(10)->create();
+
     }
 }
