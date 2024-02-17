@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    @viteReactRefresh
-    @vite('resources/js/app.js')
-    @vite('resources/css/app.css')
-</head>
-<body>
-</body>
+
     <footer class="bg-[#000000] mx-auto max-w-full  shadow">
         <div class="container mx-auto w-full max-w-full px-6 py-14 lg:py-8 border-t border-b border-gray-200 dark:border-gray-700">
             <div class="md:flex md:justify-between">
@@ -65,6 +54,3 @@
           </div>
         </div>
     </footer>
-    
-
-</html>
