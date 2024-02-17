@@ -88,7 +88,7 @@ Route::get('/homepage', function () {
     return view('home-page');
 });
 // ADVERTISEMENTS
-Route::get('/communities/{community}/form-create-advertisement', [PostsController::class, 'createAdvertisement'])->name('form-create-advertisement');
+// Route::get('/communities/{community}/form-create-advertisement', [PostsController::class, 'createAdvertisement'])->name('form-create-advertisement');
 Route::post('/communities/{community}/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
 
 Route::get('/communities/{community}/advertisement-list', function (Request $request, $communityId) {
@@ -96,7 +96,7 @@ Route::get('/communities/{community}/advertisement-list', function (Request $req
 })->name('advertisement-list');
 
 // POSTS
-Route::get('/communities/{community}/form-create-post', [PostsController::class, 'createPost'])->name('form-create-post');
+// Route::get('/communities/{community}/form-create-post', [PostsController::class, 'createPost'])->name('form-create-post');
 Route::post('/communities/{community}/form-create-post', [PostsController::class, 'store'])->name('form-create-post-post');
 
 Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
@@ -107,3 +107,6 @@ Route::get('/communities/{community}/post-list', function (Request $request, $co
 
 //Header
 Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
+
+Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
+Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');

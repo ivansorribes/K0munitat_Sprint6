@@ -4,27 +4,25 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Create advertisement</title>
+    <title>Create Advertisement / Post</title>
     @viteReactRefresh
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/js/all.min.js"></script>
-    <style>
-        .eye-icon {
-            cursor: pointer;
-        }
-    </style>
 </head>
+@include('header.header')
 
-<body class="min-h-screen flex items-center justify-center bg-white">
-    <div class="relative py-3 sm:max-w-xl sm:mx-auto">
-        <div class="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
-        <div class="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full max-w-md text-center">
-            <h2 class="text-2xl font-semibold mb-6 text-center text-yellow-600">Create an advertisement</h2>
-            <form action="{{ route('form-create-advertisement-post', ['community' => $communityId]) }}" method="post" enctype="multipart/form-data">
+<body>
+    <div class="flex justify-center items-center p-12 min-h-screen">
+        <div class="w-full max-w-[700px]">
+            <h1 class="text-4xl font-bold mb-5">Create Advertisement / Post</h1>
+            <form action="{{ route('form-create-advertisement-post-post', ['community' => $communityId]) }}" method="post" enctype="multipart/form-data">
                 @csrf
-                <input type="hidden" name="type" value="advertisement">
+                <select name="type" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5">
+                    <option value="post">Post</option>
+                    <option value="advertisement">Advertisement</option>
+                </select>
                 <div class=" mb-4 relative">
                     <label for="title" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
                         Title
@@ -47,7 +45,7 @@
 
                 <div class="mb-4 relative">
                     <label for="category_id" class="block text-gray-600 text-sm font-medium mb-2 text-yellow-600">
-                        type
+                        Category
                     </label>
                     <select name="category_id" class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600">
                         <option value="">Select an option</option>
@@ -70,9 +68,8 @@
                     Submit
                 </button>
             </form>
+
         </div>
     </div>
-
 </body>
-
-</html>
+@include('footer.footer')
