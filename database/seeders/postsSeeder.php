@@ -6,6 +6,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\posts;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class postsSeeder extends Seeder
 {
@@ -25,6 +26,8 @@ class postsSeeder extends Seeder
                 'isActive' => 1,
                 'private' => 0,
                 'type' => 'post',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
                 //id 2
@@ -36,6 +39,8 @@ class postsSeeder extends Seeder
                 'isActive' => 1,
                 'private' => 0,
                 'type' => 'post',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
                 //id 3
@@ -47,6 +52,8 @@ class postsSeeder extends Seeder
                 'isActive' => 1,
                 'private' => 0,
                 'type' => 'advertisement',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
                 //id 4
@@ -58,6 +65,8 @@ class postsSeeder extends Seeder
                 'isActive' => 1,
                 'private' => 0,
                 'type' => 'advertisement',
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             // Añade más registros según sea necesario
         ];
