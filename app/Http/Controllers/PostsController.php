@@ -118,7 +118,7 @@ class PostsController extends Controller
                 ]);
             }
 
-            return redirect('/');
+            return redirect("/communities/{$communityId}");
         } catch (\Exception $e) {
             Log::error('Error al crear el post: ' . $e->getMessage());
             return back()->withErrors('Ocurrió un error al crear el post. Por favor, intenta de nuevo.')->withInput();
