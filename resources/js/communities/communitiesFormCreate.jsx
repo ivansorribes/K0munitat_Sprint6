@@ -9,12 +9,12 @@ export default function CommunitiesFormCreate() {
   const [idRegion, setIdRegion] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [serverErrors, setServerErrors] = useState(null);
+  const id = document.getElementById("id_user").value;
 
   const handleSubmit = async (values) => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const formValues = { ...values, id_autonomousCommunity: idAutonomousCommunity, id_region: idRegion };
     setSubmitting(true);
-
     try {
       const response = await axios.post('http://localhost/communities', formValues);
 
@@ -46,13 +46,12 @@ export default function CommunitiesFormCreate() {
             private: '',
             name: '',
             description: '',
-            id_admin: 2,
+            id_admin: id,
           }}
           onSubmit={handleSubmit}
         >
           <Form className="bg-white p-8 rounded-md shadow-md">
             <h1 className="text-4xl font-bold mb-5">Create Community Form</h1>
-
             <div className="mb-5">
               <label htmlFor="name" className="mb-3 block text-base font-medium text-[#07074D]">
                 Community Name
