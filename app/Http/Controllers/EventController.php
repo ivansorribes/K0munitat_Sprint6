@@ -18,7 +18,7 @@ class EventController extends Controller
         // Validación de datos (puedes personalizar según tus necesidades)
         $request->validate([
             'id_community' => 'required|integer',
-            'id_admin' => 'required|integer',
+            'id_user' => 'required|integer',
             'title' => 'required|string',
             'start' => 'required|date',
             'end' => 'required|date|after_or_equal:start',
@@ -27,7 +27,7 @@ class EventController extends Controller
         // Crear un nuevo evento
         $event = new Event();
         $event->id_community = $request->input('id_community');
-        $event->id_admin = $request->input('id_admin');
+        $event->id_user = $request->input('id_user');
         $event->title = $request->input('title');
         $event->start = $request->input('start');
         $event->end = $request->input('end');

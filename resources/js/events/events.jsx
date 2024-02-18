@@ -44,13 +44,28 @@ const EventCalendar = () => {
     };
 
     const handleFormSubmit = (values, { resetForm }) => {
+        values.id_community = parseInt(values.id_community, 10);
         axios.post('http://localhost/api/events', values)
             .then(response => {
                 setEvents(prevEvents => [...prevEvents, response.data]);
                 setModalIsOpen(false);
                 resetForm();
             })
-            .catch(error => console.error('Error saving event:', error));
+            .catch(error => {
+                console.error('Error saving event:', error);
+                if (error.response) {
+                    // El servidor respondió con un código de error
+                    console.error('Response data:', error.response.data);
+                    console.error('Response status:', error.response.status);
+                    console.error('Response headers:', error.response.headers);
+                } else if (error.request) {
+                    // La solicitud se hizo pero no se recibió respuesta
+                    console.error('No response received:', error.request);
+                } else {
+                    // Algo sucedió en la configuración de la solicitud que generó un error
+                    console.error('Error setting up the request:', error.message);
+                }
+            });
     };
 
     return (
@@ -63,13 +78,21 @@ const EventCalendar = () => {
             >
                 <h2>New Event</h2>
                 <Formik
-                    initialValues={{ title: '', start: '', end: '' }}
+                    initialValues={
+                        { 
+                            title: '',
+                            start: '',
+                            end: '',
+                            id_user: 7,
+                            id_community:'',
+                        }
+                    }
                     onSubmit={handleFormSubmit}
                 >
                     <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-                                Título:
+                                Title:
                             </label>
                             <Field
                                 type="text"
@@ -81,8 +104,21 @@ const EventCalendar = () => {
                             <ErrorMessage name="title" component="p" className="text-red-500 text-xs italic" />
                         </div>
                         <div className="mb-4">
+                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
+                                Community:
+                            </label>
+                            <Field
+                                type="text"
+                                name="id_community"
+                                id="id_community"
+                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                                required
+                            />
+                            <ErrorMessage name="title" component="p" className="text-red-500 text-xs italic" />
+                        </div>
+                        <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="start">
-                                Fecha de inicio:
+                                Init date:
                             </label>
                             <Field
                                 type="datetime-local"
@@ -95,7 +131,7 @@ const EventCalendar = () => {
                         </div>
                         <div className="mb-6">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="end">
-                                Fecha de fin:
+                                End Date:
                             </label>
                             <Field
                                 type="datetime-local"
@@ -111,7 +147,7 @@ const EventCalendar = () => {
                                 type="submit"
                                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                             >
-                                Guardar
+                                Save
                             </button>
                         </div>
                     </Form>
@@ -122,7 +158,7 @@ const EventCalendar = () => {
                 events={events}
                 startAccessor="start"
                 endAccessor="end"
-                style={{ height: 600 , zIndex: 50 }}
+                style={{ height: 600 }}
                 selectable
                 onSelectSlot={handleSelect}
             />
