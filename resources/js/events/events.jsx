@@ -22,9 +22,18 @@ const customStyles = {
 
   };
 
-const EventCalendar = () => {
+
+  const EventCalendar = () => {
     const [events, setEvents] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(null); // Nuevo estado para almacenar la fecha seleccionada
+    const [formValues, setFormValues] = useState({
+        title: '',
+        start: '',
+        end: '',
+        id_user: 7,
+        id_community: '',
+    });
 
     useEffect(() => {
         // Cargar eventos desde la API al montar el componente
@@ -37,10 +46,21 @@ const EventCalendar = () => {
     const handleSelect = ({ start, end }) => {
         console.log('Opening modal...');
         setModalIsOpen(true);
+
+        // Obtener la fecha seleccionada en el formato correcto y ajustar la zona horaria
+        const selectedDate = new Date(start);
+        selectedDate.setHours(selectedDate.getHours() - selectedDate.getTimezoneOffset() / 60);
+
+        // Actualizar el estado del formulario con la fecha seleccionada
+        setFormValues(prevValues => ({
+            ...prevValues,
+            start: selectedDate.toISOString().slice(0, -8),
+        }));
     };
 
     const handleModalClose = () => {
         setModalIsOpen(false);
+        setSelectedDate(null); // Limpiar la fecha seleccionada al cerrar el modal
     };
 
     const handleFormSubmit = (values, { resetForm }) => {
@@ -50,21 +70,17 @@ const EventCalendar = () => {
                 setEvents(prevEvents => [...prevEvents, response.data]);
                 setModalIsOpen(false);
                 resetForm();
+                setSelectedDate(null); // Limpiar la fecha seleccionada después de enviar el formulario
+                setFormValues({
+                    title: '',
+                    start: '',
+                    end: '',
+                    id_user: 7,
+                    id_community: '',
+                });
             })
             .catch(error => {
-                console.error('Error saving event:', error);
-                if (error.response) {
-                    // El servidor respondió con un código de error
-                    console.error('Response data:', error.response.data);
-                    console.error('Response status:', error.response.status);
-                    console.error('Response headers:', error.response.headers);
-                } else if (error.request) {
-                    // La solicitud se hizo pero no se recibió respuesta
-                    console.error('No response received:', error.request);
-                } else {
-                    // Algo sucedió en la configuración de la solicitud que generó un error
-                    console.error('Error setting up the request:', error.message);
-                }
+                // Manejar errores
             });
     };
 
@@ -117,18 +133,20 @@ const EventCalendar = () => {
                             <ErrorMessage name="title" component="p" className="text-red-500 text-xs italic" />
                         </div>
                         <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="start">
-                                Init date:
-                            </label>
-                            <Field
-                                type="datetime-local"
-                                name="start"
-                                id="start"
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                required
-                            />
-                            <ErrorMessage name="start" component="p" className="text-red-500 text-xs italic" />
-                        </div>
+                        <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="start">
+                            Init date:
+                        </label>
+                        <Field
+                            type="datetime-local"
+                            name="start"
+                            id="start"
+                            value={formValues.start}
+                            onChange={(e) => setFormValues({ ...formValues, start: e.target.value })}
+                            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                            required
+                        />
+                        <ErrorMessage name="start" component="p" className="text-red-500 text-xs italic" />
+                    </div>
                         <div className="mb-6">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="end">
                                 End Date:
