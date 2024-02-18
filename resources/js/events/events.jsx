@@ -43,21 +43,22 @@ const customStyles = {
             .catch(error => console.error('Error fetching events:', error));
     }, []);
 
-    const handleSelect = ({ start, end }) => {
-        console.log('Opening modal...');
+    const handleSelect = ({ start }) => {
         setModalIsOpen(true);
-
-        // Obtener la fecha seleccionada en el formato correcto y ajustar la zona horaria
-        const selectedDate = new Date(start);
-        selectedDate.setHours(selectedDate.getHours() - selectedDate.getTimezoneOffset() / 60);
-
+    
+        // Obtener la fecha seleccionada solo con el día
+        const selectedDate = moment(start).startOf('day');
+    
+        // Formatear la fecha en el formato deseado (Año-Mes-Día)
+        const formattedDate = selectedDate.format('YYYY-MM-DD');
+    
         // Actualizar el estado de la fecha seleccionada
         setSelectedDate(selectedDate);
-
-        // Actualizar el estado del formulario con la fecha seleccionada
+    
+        // Actualizar el estado del formulario con la fecha formateada
         setFormValues(prevValues => ({
             ...prevValues,
-            start: selectedDate.toISOString().slice(0, -8),
+            start: formattedDate,
         }));
     };
 
@@ -141,7 +142,7 @@ const customStyles = {
                             Init date:
                         </label>
                         <Field
-                            type="datetime-local"
+                            type="date"
                             name="start"
                             id="start"
                             value={formValues.start}
@@ -156,7 +157,7 @@ const customStyles = {
                                 End Date:
                             </label>
                             <Field
-                                type="datetime-local"
+                                type="date"
                                 name="end"
                                 id="end"
                                 className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
