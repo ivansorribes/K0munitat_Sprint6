@@ -108,7 +108,7 @@ export default function CommunitiesFormCreate() {
             <div>
               <button
                 type="submit"
-                className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white focus:outline-none"
+                className="hover:shadow-form rounded-md bg-primary py-3 px-8 text-base font-semibold text-white focus:outline-none"
               >
                 Submit
               </button>

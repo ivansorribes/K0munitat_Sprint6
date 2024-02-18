@@ -1,23 +1,54 @@
 .active {
-    background-color: #adce71;
-    color: white;
-    border: 1px solid #adce71;
-  }
+  background-color: #adce71;
+  color: black;
+  border: 1px solid #adce71;
+}
 
+.button-create {
+  background-color: #f4971e;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 1rem; /* Ajusta el tamaño del texto */
+  margin-top: 1rem;
+}
+
+.button-create:hover {
+  background-color: #3d3c3b;
+  color: #fffdf9;
+}
+
+.button-card {
+  background-color: #adce71;
+  color: black;
+  padding: 10px 15px; /* Ajusta el padding para un tamaño más compacto */
+  border-radius: 8px;
+  font-size: 1rem; /* Ajusta el tamaño del texto */
+  text-decoration: none;
+  min-width: 200px; /* Establece un ancho mínimo */
+  text-align: center;
+  transition: background-color 0.3s ease;
+}
+
+.button-card:hover {
+  background-color: #155b2a;
+  color: #fffdf9;
+}
+
+.view-button {
+  font-weight: bold;
+  margin-right: 5%;
+}
+
+/* Ajustes para pantallas más pequeñas */
+@media screen and (max-width: 767px) {
+  .button-card,
   .button-create {
-    background-color: #f4971e; 
-    color: #ffffff;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 1.125rem; 
-    margin-top: 1rem; 
+      width: 100%; /* Ocupa el 100% del ancho disponible */
+      margin-bottom: 10px; /* Añade espacio entre los botones */
   }
 
-  .button-card {
-    background-color: #adce71; 
-    color: #ffffff;
-    padding: 8px 16px;
-    border-radius: 8px;
-    font-size: 1.125rem; 
-    margin-top: 1rem; 
+  .view-button {
+      margin-right: 0; /* Elimina el margen derecho en pantallas más pequeñas */
   }
+}
