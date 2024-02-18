@@ -40,7 +40,6 @@ const CommunitiesList = () => {
         <div className="md:col-span-1 flex flex-col justify-center items-center mt-4 md:mt-0">
           <a
             href="http://localhost/communities/create"
-            target="_blank"
             rel="noopener noreferrer"
           >
             <button className="button-create">
