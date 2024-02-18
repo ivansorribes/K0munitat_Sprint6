@@ -51,6 +51,9 @@ const customStyles = {
         const selectedDate = new Date(start);
         selectedDate.setHours(selectedDate.getHours() - selectedDate.getTimezoneOffset() / 60);
 
+        // Actualizar el estado de la fecha seleccionada
+        setSelectedDate(selectedDate);
+
         // Actualizar el estado del formulario con la fecha seleccionada
         setFormValues(prevValues => ({
             ...prevValues,
@@ -65,6 +68,7 @@ const customStyles = {
 
     const handleFormSubmit = (values, { resetForm }) => {
         values.id_community = parseInt(values.id_community, 10);
+        values.start = formValues.start; // Utilizar el valor del estado para 'start'
         axios.post('http://localhost/api/events', values)
             .then(response => {
                 setEvents(prevEvents => [...prevEvents, response.data]);
