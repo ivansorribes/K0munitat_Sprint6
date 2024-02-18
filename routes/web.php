@@ -55,18 +55,19 @@ Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-se
 Route::post('/validate-register', [AuthController::class, 'register'])->name('validate-register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::middleware(['auth'])->group(function () {
 //Rutas de comunidades
-Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
-Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class, 'regionList'])->name('comuAut.regList');
+    Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
+    Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class, 'regionList'])->name('comuAut.regList');
 
-Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
-Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
-Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
-Route::post('/communities', [CommunitiesController::class, 'store']);
-Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
-Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
-Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
-
+    Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
+    Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
+    Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
+    Route::post('/communities', [CommunitiesController::class, 'store']);
+    Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
+    Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
+    Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
+});
 
 
 // Rutas para el olvido y restablecimiento de contraseña
