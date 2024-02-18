@@ -10,18 +10,17 @@ composer install
 ./vendor/bin/sail up --build
 ```
 
-🔨 Build the database:
-
-```
-./vendor/bin/sail php artisan migrate
-```
-
-🌱 Run the seeders:
+🔨 Build the database & run the seeders 🌱:
 
 ```
 ./vendor/bin/sail php artisan migrate --seed
 ```
 
+⛓️ Link the stored files:
+
+```
+./vendor/bin/sail php artisan storage:link
+```
 
 👩‍💻In another terminal:
 
