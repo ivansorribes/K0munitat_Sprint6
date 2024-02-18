@@ -2,12 +2,14 @@ import { createRoot } from 'react-dom/client';
 import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import 'moment-timezone' 
 import Modal from 'react-modal';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 
 const localizer = momentLocalizer(moment);
+moment.tz.setDefault('Europe/Madrid');
 
 const customStyles = {
     content: {
@@ -70,6 +72,7 @@ const customStyles = {
     const handleFormSubmit = (values, { resetForm }) => {
         values.id_community = parseInt(values.id_community, 10);
         values.start = formValues.start; // Utilizar el valor del estado para 'start'
+        values.end = moment(values.end).endOf('day').toDate();
         axios.post('http://localhost/api/events', values)
             .then(response => {
                 setEvents(prevEvents => [...prevEvents, response.data]);
@@ -83,12 +86,13 @@ const customStyles = {
                     id_user: 7,
                     id_community: '',
                 });
+                window.location.reload();
             })
             .catch(error => {
                 // Manejar errores
             });
     };
-
+    
     return (
         <div className="my-6 mx-auto max-w-6xl">
             <Modal
@@ -180,8 +184,8 @@ const customStyles = {
                 localizer={localizer}
                 events={events}
                 startAccessor="start"
-                endAccessor="end"
-                style={{ height: 600 }}
+                endAccessor={event => moment(event.end).endOf('day').toDate()} // Ajusta según tus necesidades   
+                style={{ height: 700 }}
                 selectable
                 onSelectSlot={handleSelect}
             />
