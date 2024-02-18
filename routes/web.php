@@ -11,6 +11,7 @@ use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -110,3 +111,4 @@ Route::get('/events', function () {
 
 //Header
 Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
+
