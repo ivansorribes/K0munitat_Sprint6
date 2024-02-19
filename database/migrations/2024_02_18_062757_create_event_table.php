@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('event', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_community');
-            $table->unsignedBigInteger('id_user');
-            $table->foreign('id_community')->references('id')->on('communities');
-            $table->foreign('id_user')->references('id')->on('users');
+            $table->foreignId('id_community')->references('id')->on('communities');
+            $table->foreignId('id_user')->references('id')->on('users');
             $table->string('title');
             $table->date('start');
             $table->date('end');
