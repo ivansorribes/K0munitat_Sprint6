@@ -37,7 +37,7 @@ class PostsController extends Controller
                 $image->url = URL::to('storage/posts/' . $image->name);
             });
         });
-        return view('post-list', [
+        return view('advertisements-posts.post-list', [
             'posts' => $posts,
             'community' => $community ?? null,
             'type' => $type,
@@ -60,7 +60,7 @@ class PostsController extends Controller
     public function createPost($communityId) // Asumiendo que recibes el communityId como parámetro
     {
         $categories = $this->getCategories();
-        return view('form-create-post', [
+        return view('advertisements-posts.form-create-advertisement-post', [
             'categories' => $categories,
             'communityId' => $communityId // Pasando el communityId a la vista
         ]);
@@ -118,7 +118,7 @@ class PostsController extends Controller
                 ]);
             }
 
-            return redirect('/');
+            return redirect("/communities/{$communityId}");
         } catch (\Exception $e) {
             Log::error('Error al crear el post: ' . $e->getMessage());
             return back()->withErrors('Ocurrió un error al crear el post. Por favor, intenta de nuevo.')->withInput();
