@@ -182,7 +182,7 @@ export default function PersonalProfile() {
     const handleDeletePost = async (postId) => {
         try {
             const response = await fetch(`/deletePost/${postId}`, {
-                method: 'POSTz',
+                method: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': window.csrf_token,
                 },
@@ -383,7 +383,7 @@ export default function PersonalProfile() {
             {/* Edit Modal */}
             {editModalOpen && selectedEditPost && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '100px', height: '1000px' }}>
+                    <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '600px', height: '600px' }}>
                         <div className="flex flex-col">
                             <h1>Edit Post</h1>
                             <div className="flex items-center mb-4">
