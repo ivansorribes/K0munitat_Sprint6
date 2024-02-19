@@ -148,19 +148,16 @@ class UserController extends Controller
     public function DeletePost(Request $request, $id_post)
     {
         try {
-            // Verificar si el post existe
-            $post = DB::table('posts')->find($id_post);
+            $affected = DB::table('posts')
+                ->where('id', $id_post)
+                ->update(['isActive' => 0]);
 
-            if (!$post) {
-                return response()->json(['error' => 'El post no existe'], 404);
+            if ($affected) {
+                return response()->json(['message' => 'El post ha sido marcado como inactivo correctamente'], 200);
+            } else {
+                return response()->json(['error' => 'No se encontró el post'], 404);
             }
-
-            // Actualizar el campo 'isActive' del post a 0 para marcarlo como inactivo
-            DB::table('posts')->where('id', $id_post)->update(['isActive' => 0]);
-
-            return response()->json(['message' => 'El post ha sido marcado como inactivo correctamente'], 200);
         } catch (\Exception $e) {
-            // Manejar cualquier excepción que ocurra durante el proceso
             return response()->json(['error' => 'Ha ocurrido un error al marcar el post como inactivo'], 500);
         }
     }

@@ -168,6 +168,8 @@ export default function PersonalProfile() {
     const openDeleteConfirmation = (post) => {
         setPostToDelete(post);
         setDeleteConfirmationOpen(true);
+        setMenuOpen(Array(posts.length).fill(false));
+
     };
 
     // Función para cerrar el modal de confirmación
@@ -177,26 +179,25 @@ export default function PersonalProfile() {
     };
 
     // Función para manejar la eliminación del post si el usuario confirma
-    const handleDeleteConfirmed = async () => {
+    const handleDeletePost = async (postId) => {
         try {
-            const response = await fetch(`/deletePost/${postToDelete.id}`, {
-                method: 'DELETE',
+            const response = await fetch(`/deletePost/${postId}`, {
+                method: 'POSTz',
                 headers: {
                     'X-CSRF-TOKEN': window.csrf_token,
                 },
             });
 
             if (response.ok) {
-                // Eliminar el post del estado local
-                const updatedPosts = posts.filter(post => post.id !== postToDelete.id);
-                setPosts(updatedPosts);
-                // Cerrar el modal de confirmación
-                closeDeleteConfirmation();
+                // Remove the deleted post from the posts array
+                setPosts(posts.filter(post => post.id !== postId));
+                // Close the delete confirmation modal
+                setDeleteConfirmationOpen(false);
             } else {
-                console.error('Error al eliminar el post');
+                console.error('Error deleting post');
             }
         } catch (error) {
-            console.error('Error inesperado', error);
+            console.error('Unexpected error', error);
         }
     };
 
@@ -341,7 +342,7 @@ export default function PersonalProfile() {
             {/* Comments Modal */}
             {commentsModalOpen && selectedPostComments && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="modal-content bg-white rounded-xl overflow-hidden max-w-lg relative" style={{ width: '200px', height: '500px' }}>
+                    <div className="modal-content bg-white rounded-xl overflow-hidden max-w-lg relative" style={{ width: '800px', height: '500px' }}>
                         {/* Mover la cruz (botón de cierre) */}
                         <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={(e) => { e.stopPropagation(); closeCommentsModal(); }}>&times;</span>
                         <div className="p-6">
@@ -388,7 +389,6 @@ export default function PersonalProfile() {
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                     <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '800px', height: '600px' }}>
                         <div className="flex flex-col">
-                            <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={closeEditModal}>&times;</span>
                             <h1>Edit Post</h1>
                             <div className="flex items-center mb-4">
                                 <img
@@ -426,8 +426,8 @@ export default function PersonalProfile() {
                     <div className="modal-content bg-white p-4 rounded-xl overflow-hidden">
                         <p className="text-center text-lg font-semibold mb-4">Are you sure you want to delete this post?</p>
                         <div className="flex justify-center">
-                            <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={handleDeleteConfirmed}>Yes</button>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={handleDeleteCanceled}>No</button>
+                            <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={() => handleDeletePost(postToDelete.id)}>Yes</button>
+                            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={closeDeleteConfirmation}>No</button>
                         </div>
                     </div>
                 </div>
