@@ -19,9 +19,8 @@ export default function CommunitiesFormCreate() {
       const response = await axios.post('http://localhost/communities', formValues);
 
       if (response.data.message) {
-        // La comunidad se creó exitosamente
-        // Puedes redirigir o mostrar un mensaje de éxito
-        console.log('Form submitted successfully');
+        window.alert('Form submitted successfully');
+        window.location.href = 'http://localhost/communities';
       }
     } catch (error) {
       if (error.response && error.response.data.errors) {
@@ -29,7 +28,7 @@ export default function CommunitiesFormCreate() {
         setServerErrors(error.response.data.errors);
       } else {
         // Otros errores
-        console.error('Error submitting the form:', error.message);
+        window.alert('Error submitting the form:', error.message);
       }
     } finally {
       setSubmitting(false);
