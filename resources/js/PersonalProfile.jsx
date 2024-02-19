@@ -339,45 +339,45 @@ export default function PersonalProfile() {
                     </div>
                 </div>
             )}
- {/* Comments Modal */}
-{commentsModalOpen && selectedPostComments && (
-    <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-        <div className="modal-content bg-white rounded-xl overflow-y-auto max-h-full relative" style={{ width: '500px', maxHeight: '500px' }}>
-            {/* Mover la cruz (botón de cierre) */}
-            <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={(e) => { e.stopPropagation(); closeCommentsModal(); }}>&times;</span>
-            <div className="p-6">
-                <div className="mb-4">
-                    <h2 className="text-2xl font-bold mb-2 text-center">Comments</h2>
-                    {/* Línea negra debajo del título Comment */}
-                    <hr className="border-gray-800 my-0" />
-                </div>
-                {/* Renderizar comentarios */}
-                <div className="max-h-full">
-                    {selectedPostComments.comments.map((comment, index) => (
-                        <div key={index} className="flex items-center mb-4">
-                            {/* Mostrar imagen de usuario */}
-                            <img
-                                src={comment.profile_image ? `/profile/images/${comment.profile_image}` : '/profile/images/DefaultImage.png'}
-                                alt={`Avatar de ${comment.username}`}
-                                className="w-12 h-12 rounded-full mr-4"
-                            />
-                            <div>
-                                {/* Mostrar nombre de usuario */}
-                                <p className="font-bold text-blue-500 mb-1">{comment.username}</p>
-                                {/* Mostrar comentario */}
-                                <p className="text-gray-700 mb-4">{comment.comment}</p>
-                                {/* Línea negra debajo del comentario */}
-                                {index !== selectedPostComments.comments.length - 1 && (
-                                    <hr className="border-gray-800 my-0" />
-                                )}
+            {/* Comments Modal */}
+            {commentsModalOpen && selectedPostComments && (
+                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
+                    <div className="modal-content bg-white rounded-xl overflow-hidden max-w-lg relative" style={{ width: '600px', height: '500px' }}>
+                        {/* Mover la cruz (botón de cierre) */}
+                        <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={(e) => { e.stopPropagation(); closeCommentsModal(); }}>&times;</span>
+                        <div className="p-6">
+                            <div className="mb-4">
+                                <h2 className="text-2xl font-bold mb-2 text-center">Comments</h2>
+                                {/* Línea negra debajo del título Comment */}
+                                <hr className="border-gray-800 my-0" />
+                            </div>
+                            {/* Renderizar comentarios con scroll */}
+                            <div className="overflow-y-auto" style={{ maxHeight: '400px' }}>
+                                {selectedPostComments.comments.map((comment, index) => (
+                                    <div key={index} className="flex items-center mb-4">
+                                        {/* Mostrar imagen de usuario */}
+                                        <img
+                                            src={comment.profile_image ? `/profile/images/${comment.profile_image}` : '/profile/images/DefaultImage.png'}
+                                            alt={`Avatar de ${comment.username}`}
+                                            className="w-12 h-12 rounded-full mr-4"
+                                        />
+                                        <div>
+                                            {/* Mostrar nombre de usuario */}
+                                            <p className="font-bold text-green-900 mb-1">{comment.username}</p>
+                                            {/* Mostrar comentario */}
+                                            <p className="text-gray-700 mb-4">{comment.comment}</p>
+                                            {/* Línea negra debajo del comentario */}
+                                            {index !== selectedPostComments.comments.length - 1 && (
+                                                <hr className="border-gray-800 my-0" />
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
-                    ))}
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-)}
+            )}
 
 
             {/* Edit Modal */}
