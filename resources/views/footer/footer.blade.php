@@ -1,15 +1,4 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    @viteReactRefresh
-    @vite('resources/js/app.js')
-    @vite('resources/css/app.css')
-</head>
-<body>
-</body>
+
     <footer class="bg-[#000000] mx-auto max-w-full  shadow">
         <div class="container mx-auto w-full max-w-full px-6 py-14 lg:py-8 border-t border-b border-gray-200 dark:border-gray-700">
             <div class="md:flex md:justify-between">
@@ -29,7 +18,7 @@
                               <a href="{{ route('about-us') }}" class="hover:underline">Blog</a>
                           </li>
                           <li class="mb-4">
-                            <a href="{{ route('communities.index') }}" class="hover:underline">Communities</a>
+                            <a href="{{ route('about-us') }}" class="hover:underline">About Us</a>
                           </li>
                       </ul>
                   </div>
@@ -65,6 +54,3 @@
           </div>
         </div>
     </footer>
-    
-
-</html>

@@ -45,5 +45,6 @@ const CommunitiesList = () => {
   );
 };
 
-const root = createRoot(document.getElementById('communityList'));
-root.render(<CommunitiesList />);
+if (document.getElementById('communityList')) {
+  createRoot(document.getElementById('communityList')).render(<CommunitiesList />);
+}

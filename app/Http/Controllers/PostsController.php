@@ -10,6 +10,7 @@ use App\Models\categories;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\communities;
+use Illuminate\Support\Facades\URL;
 
 class PostsController extends Controller
 {
@@ -18,17 +19,25 @@ class PostsController extends Controller
      */
     public function index(Request $request, $communityId = null, $type = 'post')
     {
-        $query = posts::query();
+        $query = posts::with(['images' => function ($query) {
+            $query->select('id', 'id_post', 'name');
+        }]);
         $query->where('type', $type);
 
         if ($communityId) {
-            $community = Communities::findOrFail($communityId);
+            $community = communities::findOrFail($communityId);
             $query->where('id_community', $communityId);
         }
 
         $posts = $query->get();
 
-        return view('post-list', [
+        // Añadir URL completa a cada imagen
+        $posts->each(function ($post) {
+            $post->images->each(function ($image) {
+                $image->url = URL::to('storage/posts/' . $image->name);
+            });
+        });
+        return view('advertisements-posts.post-list', [
             'posts' => $posts,
             'community' => $community ?? null,
             'type' => $type,
@@ -51,7 +60,7 @@ class PostsController extends Controller
     public function createPost($communityId) // Asumiendo que recibes el communityId como parámetro
     {
         $categories = $this->getCategories();
-        return view('form-create-post', [
+        return view('advertisements-posts.form-create-advertisement-post', [
             'categories' => $categories,
             'communityId' => $communityId // Pasando el communityId a la vista
         ]);
@@ -109,7 +118,7 @@ class PostsController extends Controller
                 ]);
             }
 
-            return redirect('/');
+            return redirect("/communities/{$communityId}");
         } catch (\Exception $e) {
             Log::error('Error al crear el post: ' . $e->getMessage());
             return back()->withErrors('Ocurrió un error al crear el post. Por favor, intenta de nuevo.')->withInput();

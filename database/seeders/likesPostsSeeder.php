@@ -13,7 +13,7 @@ class likesPostsSeeder extends Seeder
      */
     public function run(): void
     {
-        likesPosts::factory(20)->create();
-         
+        //likesPosts::factory(20)->create();
+
     }
 }
