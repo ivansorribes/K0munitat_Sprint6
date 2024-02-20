@@ -56,7 +56,7 @@ Route::post('/validate-register', [AuthController::class, 'register'])->name('va
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
 Route::middleware(['auth'])->group(function () {
-//Rutas de comunidades
+    //Rutas de comunidades
     Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
     Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class, 'regionList'])->name('comuAut.regList');
 
@@ -69,7 +69,6 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
 });
 
-
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
@@ -80,35 +79,17 @@ Route::get('/CommentsUser/{id_post}', [UserController::class, 'CommentsUser'])->
 Route::post('/updatePost/{id_post}', [UserController::class, 'EditPost'])->name('EditPost')->middleware('auth');
 Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->name('deletePost')->middleware('auth');
 
+//Header
+Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
 
-
-Route::get('/map', function () {
-    return view('map');
-});
-
-Route::get('/homepage', function () {
-    return view('home-page');
-});
-// ADVERTISEMENTS
-// Route::get('/communities/{community}/form-create-advertisement', [PostsController::class, 'createAdvertisement'])->name('form-create-advertisement');
-Route::post('/communities/{community}/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
+// POSTS - ADVERTISEMENTS
+Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
+Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
 
 Route::get('/communities/{community}/advertisement-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'advertisement');
 })->name('advertisement-list');
 
-// POSTS
-// Route::get('/communities/{community}/form-create-post', [PostsController::class, 'createPost'])->name('form-create-post');
-Route::post('/communities/{community}/form-create-post', [PostsController::class, 'store'])->name('form-create-post-post');
-
 Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
-
-
-
-//Header
-Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
-
-Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
-Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
