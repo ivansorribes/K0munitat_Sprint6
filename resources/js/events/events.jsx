@@ -72,7 +72,7 @@ const customStyles = {
     const handleFormSubmit = (values, { resetForm }) => {
         values.id_community = parseInt(values.id_community, 10);
         values.start = formValues.start; // Utilizar el valor del estado para 'start'
-        values.end = moment(values.end).endOf('day').toDate();
+        console.log(values);
         axios.post('http://localhost/api/events', values)
             .then(response => {
                 setEvents(prevEvents => [...prevEvents, response.data]);
