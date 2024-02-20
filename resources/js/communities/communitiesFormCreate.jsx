@@ -9,19 +9,18 @@ export default function CommunitiesFormCreate() {
   const [idRegion, setIdRegion] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [serverErrors, setServerErrors] = useState(null);
+  const id = document.getElementById("id_user").value;
 
   const handleSubmit = async (values) => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const formValues = { ...values, id_autonomousCommunity: idAutonomousCommunity, id_region: idRegion };
     setSubmitting(true);
-
     try {
       const response = await axios.post('http://localhost/communities', formValues);
 
       if (response.data.message) {
-        // La comunidad se creó exitosamente
-        // Puedes redirigir o mostrar un mensaje de éxito
-        console.log('Form submitted successfully');
+        window.alert('Form submitted successfully');
+        window.location.href = 'http://localhost/communities';
       }
     } catch (error) {
       if (error.response && error.response.data.errors) {
@@ -29,7 +28,7 @@ export default function CommunitiesFormCreate() {
         setServerErrors(error.response.data.errors);
       } else {
         // Otros errores
-        console.error('Error submitting the form:', error.message);
+        window.alert('Error submitting the form:', error.message);
       }
     } finally {
       setSubmitting(false);
@@ -46,13 +45,12 @@ export default function CommunitiesFormCreate() {
             private: '',
             name: '',
             description: '',
-            id_admin: 2,
+            id_admin: id,
           }}
           onSubmit={handleSubmit}
         >
           <Form className="bg-white p-8 rounded-md shadow-md">
             <h1 className="text-4xl font-bold mb-5">Create Community Form</h1>
-
             <div className="mb-5">
               <label htmlFor="name" className="mb-3 block text-base font-medium text-[#07074D]">
                 Community Name
@@ -109,7 +107,7 @@ export default function CommunitiesFormCreate() {
             <div>
               <button
                 type="submit"
-                className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white focus:outline-none"
+                className="hover:shadow-form rounded-md bg-primary py-3 px-8 text-base font-semibold text-white focus:outline-none"
               >
                 Submit
               </button>
