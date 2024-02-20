@@ -96,20 +96,8 @@ Route::get('/communities/{community}/post-list', function (Request $request, $co
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
 
-// Route::get('/blog', function () {
-//     return app(BlogController::class)->index(request(), 'post');
-// })->name('blog');
-
-Route::get('/blog', [BlogController::class, 'index'])->name('blog');
-
-// Route::get('/blog', function () {
-//     return app(BlogController::class)->index(request(), 'post');
-// })->name('blog');
-
+// BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
 //Header
 Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
-
-Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
-Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
