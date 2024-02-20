@@ -8,10 +8,12 @@
         @vite('resources/js/app.js')
         @vite('resources/css/app.css')
     </head>
+    @include('header.header')
     <body>
         <div id="blog"></div>
         <script type="text/javascript">
-            window.postData = @json(@posts);
+            window.blogData = @json($blog);
         </script>
     </body>
+    @include('footer.footer')
 </html>

@@ -13,89 +13,90 @@ class BlogController extends Controller
      */
     public function index()
     {
-        $posts = post_admin_blog::all();
+        $blog = post_admin_blog::all();
 
-        if ($posts->isEmpty()) {
+        if ($blog->isEmpty()) {
             return view('blog')->with('error', 'No hay registros en la base de datos.');
         }
+
     
         return view('blog', [
-            'posts' => $posts,
+            'blog' => $blog,
             ]
         );
         //return response()->json($posts);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        return view('posts.create');
-    }
+//     /**
+//      * Show the form for creating a new resource.
+//      */
+//     public function create()
+//     {
+//         return view('posts.create');
+//     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            // Add validation for other fields as needed
-        ]);
+//     /**
+//      * Store a newly created resource in storage.
+//      */
+//     public function store(Request $request)
+//     {
+//         $request->validate([
+//             'title' => 'required',
+//             'description' => 'required',
+//             // Add validation for other fields as needed
+//         ]);
 
-        blog::create($request->all());
+//         blog::create($request->all());
 
-        return redirect()->route('posts.index')
-            ->with('success', 'Post created successfully');
-    }
+//         return redirect()->route('posts.index')
+//             ->with('success', 'Post created successfully');
+//     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show($id)
-    {
-        $post =blog::find($id);
-        return view('posts.show', compact('post'));
-    }
+//     /**
+//      * Display the specified resource.
+//      */
+//     public function show($id)
+//     {
+//         $post =blog::find($id);
+//         return view('posts.show', compact('post'));
+//     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
-    {
-        $post = blog::find($id);
-        return view('posts.edit', compact('post'));
-    }
+//     /**
+//      * Show the form for editing the specified resource.
+//      */
+//     public function edit($id)
+//     {
+//         $post = blog::find($id);
+//         return view('posts.edit', compact('post'));
+//     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            // Add validation for other fields as needed
-        ]);
+//     /**
+//      * Update the specified resource in storage.
+//      */
+//     public function update(Request $request, $id)
+//     {
+//         $request->validate([
+//             'title' => 'required',
+//             'description' => 'required',
+//             // Add validation for other fields as needed
+//         ]);
 
-        $post = blog::find($id);
-        $post->update($request->all());
+//         $post = blog::find($id);
+//         $post->update($request->all());
 
-        return redirect()->route('posts.index')
-            ->with('success', 'Post updated successfully');
-    }
+//         return redirect()->route('posts.index')
+//             ->with('success', 'Post updated successfully');
+//     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id)
-    {
-        $post = blog::find($id);
-        $post->delete();
+//     /**
+//      * Remove the specified resource from storage.
+//      */
+//     public function destroy($id)
+//     {
+//         $post = blog::find($id);
+//         $post->delete();
 
-        return redirect()->route('posts.index')
-            ->with('success', 'Post deleted successfully');
-    }
+//         return redirect()->route('posts.index')
+//             ->with('success', 'Post deleted successfully');
+//     }
 }
