@@ -9,13 +9,14 @@ class post_admin_blog extends Model
 {
     use HasFactory;
 
-    protected $table = 'posts';
+    protected $table = 'post_admin_blog';
 
     protected $fillable = [
         
         'title',
         'description',
         'post_image',
+        
 
     ];
 }

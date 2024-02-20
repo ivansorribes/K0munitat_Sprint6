@@ -11,6 +11,8 @@ use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
+use App\Http\Controllers\BlogController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -93,3 +95,9 @@ Route::get('/communities/{community}/advertisement-list', function (Request $req
 Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
+
+// BLOG
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+
+//Header
+Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');

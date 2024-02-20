@@ -15,7 +15,7 @@ class CreateCommunitiesTable extends Migration
 		$table->string('name');
 		$table->string('description');
 		$table->foreignId('id_autonomousCommunity')->references('id')->on('autonomousCommunities');
-		$table->foreignId('id_region')->references('id')->on('regions');
+		$table->foreignId('id_region')->references('id')->on('regions')->onDelete('cascade');
         $table->boolean('private')->default('1');
 		$table->datetime('created_at')->nullable();
         $table->datetime('updated_at')->nullable();
