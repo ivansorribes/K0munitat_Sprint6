@@ -18,7 +18,7 @@
                                 <a href="{{ route('home') }}" class="block px-3 py-2 text-[#f4971e] rounded-md">Home</a>
                             </li>
                             <li class="mx-4 my-6 md:my-0">
-                                <a href="{{ route('about-us') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">Blog</a>
+                                <a href="{{ route('blog') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">Blog</a>
                             </li>
                             <li class="mx-4 my-6 md:my-0">
                                 <a href="{{ route('communities.index') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">Comunidad</a>
@@ -56,7 +56,7 @@
             </button>
             <nav class="flex flex-col min-h-screen items-center py-8 aria-label='mobile'">
                 <a href="{{ route('home') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">Home</a>
-                <a href="{{ route('about-us') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">Blog</a>
+                <a href="{{ route('blog') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">Blog</a>
                 <a href="{{ route('communities.index') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">Community</a>
                 <a href="{{ route('about-us') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">About Us</a>
                 <a href="{{ route('logout') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">Log out</a>
@@ -80,7 +80,7 @@
                             <a href="{{ route('home') }}" class="block px-3 py-2 text-[#f4971e] rounded-md">Home</a>
                         </li>
                         <li class="mx-4 my-6 md:my-0">
-                            <a href="{{ route('about-us') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">Blog</a>
+                            <a href="{{ route('blog') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">Blog</a>
                         </li>
                         <li class="mx-4 my-6 md:my-0">
                             <a href="{{ route('about-us') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500">About Us</a>
@@ -106,7 +106,7 @@
             </button>
             <nav class="flex flex-col min-h-screen items-center py-8 aria-label='mobile'">
                 <a href="{{ route('home') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">Home</a>
-                <a href="{{ route('about-us') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">Blog</a>
+                <a href="{{ route('blog') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">Blog</a>
                 <a href="{{ route('about-us') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">About Us</a>
                 <a href="{{ route('LoginView') }}" class="w-full text-center py-6 text-[#fffdf9] hover:opacity-90">Login</a>
             </nav>
