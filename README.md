@@ -1,6 +1,6 @@
 ## 🚀 Getting started 
 
-Run the following commands in the root folder (K0MUNITAT_SPRINT4):
+🏃🏻 Run the following commands in the root folder (K0MUNITAT_SPRINT4):
 
 ```
 composer install
@@ -8,6 +8,18 @@ composer install
 
 ```
 ./vendor/bin/sail up --build
+```
+
+🔨 Build the database & run the seeders 🌱:
+
+```
+./vendor/bin/sail php artisan migrate --seed
+```
+
+⛓️ Link the stored files:
+
+```
+./vendor/bin/sail php artisan storage:link
 ```
 
 👩‍💻In another terminal:

@@ -13,8 +13,8 @@ class commentsPostsSeeder extends Seeder
      */
     public function run(): void
     {
-        commentsPosts::factory(10)->create();
-           
+        //commentsPosts::factory(10)->create();
+
 
     }
 }

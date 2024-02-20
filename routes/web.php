@@ -55,19 +55,19 @@ Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-se
 Route::post('/validate-register', [AuthController::class, 'register'])->name('validate-register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-//Rutas de comunidades
-Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
-Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class, 'regionList'])->name('comuAut.regList');
+Route::middleware(['auth'])->group(function () {
+    //Rutas de comunidades
+    Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
+    Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class, 'regionList'])->name('comuAut.regList');
 
-Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
-Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
-Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
-Route::post('/communities', [CommunitiesController::class, 'store']);
-Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
-Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
-Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
-
-
+    Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
+    Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
+    Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
+    Route::post('/communities', [CommunitiesController::class, 'store']);
+    Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
+    Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
+    Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
+});
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
@@ -77,33 +77,19 @@ Route::post('/updateProfileDescription', [UserController::class, 'updateProfileD
 Route::get('/postUser', [UserController::class, 'postUser'])->name('postUser')->middleware('auth');
 Route::get('/CommentsUser/{id_post}', [UserController::class, 'CommentsUser'])->name('CommentsUser')->middleware('auth');
 Route::post('/updatePost/{id_post}', [UserController::class, 'EditPost'])->name('EditPost')->middleware('auth');
+Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->name('deletePost')->middleware('auth');
 
+//Header
+Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
 
-
-Route::get('/map', function () {
-    return view('map');
-});
-
-Route::get('/homepage', function () {
-    return view('home-page');
-});
-// ADVERTISEMENTS
-Route::get('/communities/{community}/form-create-advertisement', [PostsController::class, 'createAdvertisement'])->name('form-create-advertisement');
-Route::post('/communities/{community}/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
+// POSTS - ADVERTISEMENTS
+Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
+Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
 
 Route::get('/communities/{community}/advertisement-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'advertisement');
 })->name('advertisement-list');
 
-// POSTS
-Route::get('/communities/{community}/form-create-post', [PostsController::class, 'createPost'])->name('form-create-post');
-Route::post('/communities/{community}/form-create-post', [PostsController::class, 'store'])->name('form-create-post-post');
-
 Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
-
-
-
-//Header
-Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
