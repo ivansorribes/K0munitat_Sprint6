@@ -82,7 +82,6 @@ Route::post('/updatePost/{id_post}', [UserController::class, 'EditPost'])->name(
 Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->name('deletePost')->middleware('auth');
 
 //Header
-Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
 
 // POSTS - ADVERTISEMENTS
 Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
@@ -114,4 +113,3 @@ Route::get('/events', function () {
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
 //Header
-Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');

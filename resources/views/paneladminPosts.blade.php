@@ -30,7 +30,6 @@
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
-                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Category</th>
                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Creation Date</th>
 
                 </tr>
@@ -39,7 +38,7 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 @foreach ($posts as $post)
                 <tr>
-                    <form id="editForm" action="{{ route('update.post') }}" method="POST">
+                    <form id="editForm" action="{{ route('update.post',[$post->id]) }}" method="POST">
                         @csrf
                         @method('PUT')
                         @if($post->type == 'post')
@@ -53,9 +52,6 @@
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">
                             <textarea form="editForm" name="description">{{ $post->description }}</textarea>
-                        </td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <input form="editForm" type="text" name="category" value="{{ $post->category }}">
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap">{{ $post->created_at }} <button type="submit">Guardar</button>
                         </td>
