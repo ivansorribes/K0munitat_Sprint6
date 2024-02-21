@@ -68,5 +68,9 @@ Route::get('/community/post-list', function (Illuminate\Http\Request $request) {
 })->name('post-list');
 
 
-Route::get('/index', [CommunitiesController::class, 'index'])->name('index');
-Route::put('/index/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
+Route::get('/paneladminComunitats', [CommunitiesController::class, 'index'])->name('paneladminComunitats');
+Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
+
+Route::get('/paneladminPosts', [PostsController::class, 'getComunnities'])->name('getComunnities');
+
+Route::put('/posts/{post}', [PostsController::class, 'update'])->name('update.post');

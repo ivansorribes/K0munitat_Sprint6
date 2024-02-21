@@ -21,6 +21,20 @@ class PostsController extends Controller
         return view('advertisement-list', ['posts' => $posts]);
     }
 
+    public function getComunnities()
+    {
+        $posts = posts::with(['user', 'community'])->get();
+        return view('paneladminPosts', compact('posts'));
+    }
+
+    public function update(Request $request, posts $post)
+    {
+        $post->update($request->only(['title', 'description', 'category']));
+
+        // Puedes devolver una respuesta JSON si lo prefieres
+        return response()->json(['message' => 'Post actualizado correctamente']);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -96,14 +110,6 @@ class PostsController extends Controller
      * Show the form for editing the specified resource.
      */
     public function edit(posts $posts)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdatePostsRequest $request, posts $posts)
     {
         //
     }

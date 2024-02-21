@@ -19,7 +19,7 @@ class communities extends Model
         'id_region',
         'private',
         'created_at',
-        'isActive'        
+        'isActive'
     ];
 
     public function user(): BelongsTo

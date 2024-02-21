@@ -23,18 +23,19 @@ class posts extends Model
         'type',
     ];
 
-    public function user(): BelongsTo
+
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function community()
+    {
+        return $this->belongsTo(communities::class, 'id_community');
     }
 
     public function categories(): BelongsTo
     {
         return $this->belongsTo(categories::class);
-    }
-
-    public function community(): BelongsTo
-    {
-        return $this->belongsTo(communities::class);
     }
 }

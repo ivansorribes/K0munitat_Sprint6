@@ -9,7 +9,7 @@ class CommunitiesController extends Controller
     public function index()
     {
         $communities = communities::all();
-        return view('index', compact('communities'));
+        return view('paneladminComunitats', compact('communities'));
     }
     public function stateChange($id)
     {
