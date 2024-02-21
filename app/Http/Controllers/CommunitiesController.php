@@ -1,14 +1,26 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Validation\ValidationException;
 use App\Models\communities;
-
 use Illuminate\Http\Request;
 
 class CommunitiesController extends Controller
 {
+    public function retornarComunitats()
+    {
+        $communities = communities::all();
+        return view('paneladminComunitats', compact('communities'));
+    }
+    public function stateChange($id)
+    {
+        $community = communities::findOrFail($id);
+        $community->isActive = !$community->isActive;
+        $community->save();
 
+        return redirect()->back()->with('success', 'Estado cambiado exitosamente');
+    }
     public function create()
     {
         return view('communities.createForm');
@@ -17,10 +29,9 @@ class CommunitiesController extends Controller
     public function index()
     {
         return view('communities.CommunitiesList');
-
     }
 
-   
+
     public function store(Request $request)
     {
         try {
@@ -33,10 +44,10 @@ class CommunitiesController extends Controller
                 'private' => 'required|boolean',
                 'id_admin' => 'required'
             ]);
-    
+
             // Crear la comunidad
             $community = communities::create($validatedData);
-    
+
             // Redirigir de vuelta al formulario después de la presentación
             return response()->json(['message' => 'Community created successfully']);
         } catch (ValidationException $e) {
@@ -44,7 +55,7 @@ class CommunitiesController extends Controller
             return redirect()->route('communities.create')->withErrors($e->errors());
         }
     }
-    
+
     public function show($id)
     {
         // Obtén la comunidad por ID

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\posts;
@@ -47,7 +47,24 @@ class UserController extends Controller
             return response()->json(['error' => 'Error al actualizar la descripción'], 500);
         }
     }
-
+    public function userInfo()
+    {
+        $users = User::select('id', 'firstname', 'email', 'username', 'telephone', 'city', 'role', 'isActive')->get();
+        return view('paneladminUsers', compact('users'));
+    }
+    public function toggleIsActive($id)
+    {
+        $user = User::findOrFail($id);
+        $user->isActive = !$user->isActive;
+        $user->save();
+        return back();
+    }
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        return back();
+    }
     public function postUser()
     {
         $user = Auth::user();

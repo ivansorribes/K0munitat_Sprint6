@@ -82,7 +82,6 @@ Route::post('/updatePost/{id_post}', [UserController::class, 'EditPost'])->name(
 Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->name('deletePost')->middleware('auth');
 
 //Header
-Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
 
 // POSTS - ADVERTISEMENTS
 Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
@@ -97,6 +96,16 @@ Route::get('/communities/{community}/post-list', function (Request $request, $co
 })->name('post-list');
 
 
+Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
+Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
+
+Route::get('/paneladminPosts', [PostsController::class, 'getComunnities'])->name('getComunnities');
+Route::put('/posts/{post}', [PostsController::class, 'update'])->name('update.post');
+
+Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
+Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
+
 Route::get('/events', function () {
     return view('events.calendar');
 })->name('calendar');
@@ -104,4 +113,3 @@ Route::get('/events', function () {
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
 //Header
-Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
