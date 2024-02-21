@@ -97,7 +97,8 @@ class AuthController extends Controller
             // Verificar si el usuario tiene el rol "superAdmin"
             if (Auth::user()->role === 'superAdmin') {
                 // Si es "superAdmin", redirigir al panel de administración
-                return redirect('/adminPanel');
+                // return redirect('/adminPanel');
+                return redirect('/');
             } else {
                 // Si no es "superAdmin", redirigir a la ruta privada
                 return redirect()->intended(route('privada'));

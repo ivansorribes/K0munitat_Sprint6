@@ -96,6 +96,10 @@ Route::get('/communities/{community}/post-list', function (Request $request, $co
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
 
+
+Route::get('/events', function () {
+    return view('events.calendar');
+})->name('calendar');
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 

@@ -18,7 +18,7 @@
             <a href="{{ route('advertisement-list', ['community' => $community->id]) }}" class="button-card view-button">
                 View Advertisements
             </a>
-            <a href="{{ route('advertisements-posts.form-create-advertisement-post', ['community' => $community->id]) }}" class="button-card view-button mt-5">
+            <a href="{{ route('advertisements-posts.form-create-advertisement-post', ['community' => $community->id]) }}" class="button-card view-button">
                 Create Advertisement / Post
             </a>
         </div>

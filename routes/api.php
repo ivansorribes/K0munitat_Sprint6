@@ -3,7 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\CommunitiesApiController;
-
+use App\Http\Controllers\EventController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,3 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('/communities', [CommunitiesApiController::class, 'index'])->name('api.communities.index');
 Route::get('/communities/{community}', [CommunitiesApiController::class, 'show'])->name('api.communities.show');
+
+Route::get('/events', [EventController::class, 'index'])->name('api.events.index');
+Route::post('/events', [EventController::class, 'store'])->name('api.events.store');
