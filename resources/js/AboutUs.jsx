@@ -22,11 +22,7 @@ export default function AboutUs() {
         </span>
       </h2>
       <p className="pt-4 mb-10 text-gray-600">
-        ¡Bienvenido a K0munitat! Nos entusiasma tenerte con nosotros mientras
-        navegamos por la emocionante travesía del segundo año de Desarrollo de
-        Aplicaciones Web. En nuestro grupo, no solo compartimos aulas y
-        proyectos, sino también una visión común: construir una comunidad
-        vibrante y colaborativa que fusiona la tecnología con la sostenibilidad.
+      Welcome to K0munitat! We're thrilled to have you with us as we navigate the exciting journey of the second year of Web Application Development. In our group, we not only share classrooms and projects, but also a common vision: to build a vibrant and collaborative community that merges technology with sustainability.
       </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div className="shadow-lg rounded-lg overflow-hidden">
@@ -42,35 +38,16 @@ export default function AboutUs() {
         </div>
       </div>
       <p className="pt-10 text-gray-600">
-        En K0munitat, nos hemos propuesto fortalecer los vínculos con la
-        naturaleza y abordar la sobreproducción de alimentos y productos.
-        Creemos en el poder de la innovación tecnológica para impulsar cambios
-        positivos en nuestra sociedad y el medio ambiente. Y así es como nace
-        nuestra aplicación web, una herramienta que va más allá de lo
-        convencional.
+      At K0munitat, we're committed to strengthening connections with nature and addressing overproduction of food and products. We believe in the power of technological innovation to drive positive changes in our society and the environment. And that's how our web application is born, a tool that goes beyond the conventional.
       </p>
       <p className="pt-4 text-gray-600">
-        Imagina una plataforma donde puedes explorar diversas comunidades en tu
-        región, cada una con su identidad única y propósito compartido. Ya sea
-        que te apasione la agricultura sostenible, desees compartir tus
-        habilidades artesanales o simplemente busques un espacio donde tus
-        valores encuentren eco, K0munitat es el lugar perfecto para conectarte
-        con personas afines.
+      Imagine a platform where you can explore diverse communities in your region, each with its unique identity and shared purpose. Whether you're passionate about sustainable agriculture, want to share your crafting skills, or simply seek a space where your values find echo, K0munitat is the perfect place to connect with like-minded individuals.
       </p>
       <p className="pt-4 text-gray-600">
-        A través de nuestra aplicación web, te invitamos a descubrir historias
-        inspiradoras, participar en proyectos emocionantes y contribuir a un
-        movimiento que busca un equilibrio armonioso entre la tecnología y la
-        sostenibilidad. Cada miembro es una pieza esencial de esta comunidad en
-        crecimiento, y queremos que tu voz, tu experiencia y tu entusiasmo se
-        sumen a la riqueza de K0munitat.
+      Through our web application, we invite you to discover inspiring stories, participate in exciting projects, and contribute to a movement that seeks a harmonious balance between technology and sustainability. Each member is an essential piece of this growing community, and we want your voice, your experience, and your enthusiasm to add to the richness of K0munitat.
       </p>
       <p className="pt-4 text-gray-600">
-        ¿Estás listo para embarcarte en este viaje emocionante con nosotros? La
-        aventura apenas comienza, y estamos emocionados de contar contigo.
-        ¡Bienvenido a K0munitat, donde la tecnología se encuentra con la
-        sostenibilidad, y la comunidad se convierte en el motor del cambio
-        positivo!
+      Are you ready to embark on this exciting journey with us? The adventure is just beginning, and we're thrilled to have you on board. Welcome to K0munitat, where technology meets sustainability, and community becomes the engine of positive change!
       </p>
     </div>
   );
