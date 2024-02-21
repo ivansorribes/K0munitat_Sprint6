@@ -72,5 +72,8 @@ Route::get('/paneladminComunitats', [CommunitiesController::class, 'index'])->na
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
 
 Route::get('/paneladminPosts', [PostsController::class, 'getComunnities'])->name('getComunnities');
-
 Route::put('/posts/{post}', [PostsController::class, 'update'])->name('update.post');
+
+Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
+Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');

@@ -16,7 +16,7 @@
 
 </head>
 
-<body class="bg-blue-500">
+<body>
 
     <div class="container">
         <h1>Listado de Comunidades</h1>
