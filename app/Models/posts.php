@@ -38,4 +38,9 @@ class posts extends Model
     {
         return $this->belongsTo(categories::class);
     }
+
+    public function images()
+    {
+        return $this->hasMany(imagePost::class, 'id_post');
+    }
 }

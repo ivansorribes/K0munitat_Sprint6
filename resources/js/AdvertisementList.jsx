@@ -12,9 +12,9 @@ export default function AdvertisementList() {
         <>
             <div className="relative flex min-h-screen flex-col justify-center overflow-hidden bg-gray-50 py-6 sm:py-12">
                 <div className="m-10 flex flex-col items-center mx-auto max-w-screen-lg">
-                    <div className="header flex w-full justify-center">
+                    {/* <div className="header flex w-full justify-center">
                         <h2 className="font-black pb-10 mb-20 text-5xl text-blue-900 before:block before:absolute before:bg-sky-300  relative before:w-1/3 before:h-1 before:bottom-0 before:left-1/3">Advertisements</h2>
-                    </div>
+                    </div> */}
                     <div className="grid w-full gap-10 grid-cols-3">
                         {posts.map((post, index) => (
                             <div key={index} className="bg-white w-full rounded-lg shadow-md flex flex-col transition-all overflow-hidden hover:shadow-2xl">
@@ -41,9 +41,11 @@ export default function AdvertisementList() {
                                         {post.description}
                                     </p>
                                 </div>
-                                <div className="mt-auto">
-                                    <img src="https://picsum.photos/400/300" alt="" className="w-full h-48 object-cover" />
-                                </div>
+                                {post.images.map((image) => (
+                                    <div key={image.id} className="mt-auto">
+                                        <img src={image.url} alt="" className="w-full h-48 object-cover" />
+                                    </div>
+                                ))}
                             </div>
                         ))}
                     </div>

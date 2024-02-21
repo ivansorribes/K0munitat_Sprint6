@@ -1,5 +1,24 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+
+          "primary": "#adce71",
+
+          "secondary": "#f4971e",
+
+          "accent": "#155b2a",
+
+          "neutral": "#3d3c3b",
+
+          "base-100": "#fffdf9",
+        },
+      },
+    ],
+  },
+
   content: [
     "./resources/**/*.blade.php",
     "./resources/**/*.js",
@@ -10,7 +29,25 @@ module.exports = {
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif'],
       },
+      screens:{
+        'tallscreen' :  {'raw': '(min-aspect-ratio: 13/20)'},
+      },
+      keyframes:{
+        'open-menu':{
+          '0%': {transform: 'scaleY(0)'},
+          '80%': {transform: 'scaleY(1,2)'},
+          '100%': {transform: 'scaleY(1)'},
+        }
+      },
+      animation:{
+        'open-menu': 'open-menu 0.5s ease-in-out forwards',
+      }
     },
   },
+
+  
+
+
+
   plugins: [require("daisyui")],
 }
