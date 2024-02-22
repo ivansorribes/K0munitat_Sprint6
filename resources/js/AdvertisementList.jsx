@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 
 export default function AdvertisementList() {
     const [posts, setPosts] = useState([]);
+    const community = window.communityData;
     useEffect(() => {
         if (window.postsData) {
             setPosts(window.postsData);
@@ -15,6 +16,10 @@ export default function AdvertisementList() {
                     {/* <div className="header flex w-full justify-center">
                         <h2 className="font-black pb-10 mb-20 text-5xl text-blue-900 before:block before:absolute before:bg-sky-300  relative before:w-1/3 before:h-1 before:bottom-0 before:left-1/3">Advertisements</h2>
                     </div> */}
+                    <div className="text-center my-8">
+                        <h1 className="text-3xl font-bold">{community.name}</h1>
+                        <p className="text-gray-700">{community.description}</p>
+                    </div>
                     <div className="grid w-full gap-10 grid-cols-3">
                         {posts.map((post, index) => (
                             <div key={index} className="bg-white w-full rounded-lg shadow-md flex flex-col transition-all overflow-hidden hover:shadow-2xl">
