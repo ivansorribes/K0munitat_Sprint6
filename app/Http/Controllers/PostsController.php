@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\communities;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
@@ -87,9 +88,9 @@ class PostsController extends Controller
             ]);
 
             $post = posts::create([
-                'id_user' => 1, // Asume un valor estático o ajusta según tu lógica de autenticación
+                'id_user' => Auth::id(),
                 'id_category' => $validatedData['category_id'],
-                'id_community' => $communityId, // Ajusta según necesites
+                'id_community' => $communityId,
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'isActive' => true,
