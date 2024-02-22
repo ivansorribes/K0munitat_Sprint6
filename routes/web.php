@@ -64,7 +64,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
     Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
-    Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
+
+    // Show community with posts & ads
+    Route::get('/communities/{community}', [PostsController::class, 'index'])->name('communities.show');
     Route::post('/communities', [CommunitiesController::class, 'store']);
     Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
     Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
@@ -86,14 +88,6 @@ Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->nam
 // POSTS - ADVERTISEMENTS
 Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
 Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
-
-Route::get('/communities/{community}/advertisement-list', function (Request $request, $communityId) {
-    return app(PostsController::class)->index($request, $communityId, 'advertisement');
-})->name('advertisement-list');
-
-Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
-    return app(PostsController::class)->index($request, $communityId, 'post');
-})->name('post-list');
 
 
 Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');

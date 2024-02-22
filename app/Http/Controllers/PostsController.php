@@ -18,12 +18,12 @@ class PostsController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $communityId = null, $type = 'post')
+    public function index(Request $request, $communityId = null)
     {
         $query = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
         }]);
-        $query->where('type', $type);
+        // $query->where('type', $type);
 
         if ($communityId) {
             $community = communities::findOrFail($communityId);
@@ -38,10 +38,9 @@ class PostsController extends Controller
                 $image->url = URL::to('storage/posts/' . $image->name);
             });
         });
-        return view('advertisements-posts.post-list', [
+        return view('communities.show', [
             'posts' => $posts,
             'community' => $community ?? null,
-            'type' => $type,
         ]);
     }
 
