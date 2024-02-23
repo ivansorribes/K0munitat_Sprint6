@@ -13,6 +13,7 @@
 
 <body>
     <div id="advertisementDetails"></div>
+    <div id="advertisementComments"></div>
     <script type="text/javascript">
         window.postData = @json($post);
     </script>
