@@ -54,7 +54,7 @@ export default function AdvertisementList() {
                                     </span>
                                 </div>
                                 <h3 className="mb-4 font-semibold text-2xl">
-                                    <a href="" className="transition-all text-blue-900 hover:text-blue-600">
+                                    <a href={`/communities/${community.id}/${post.id}`} className="transition-all text-blue-900 hover:text-blue-600">
                                         {post.title}
                                     </a>
                                 </h3>

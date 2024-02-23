@@ -88,7 +88,7 @@ Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->nam
 // POSTS - ADVERTISEMENTS
 Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
 Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
-
+Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show'])->name('advertisements-posts.show');
 
 Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');

@@ -13,6 +13,6 @@ import './communities/communitiesFormCreate.jsx';
 import './communities/communitiesFormEdit.jsx';
 import './communities/CommunityCard.jsx';
 import './communities/CommunitiesList.jsx';
-
+import './AdvertisementDetails.jsx';
 import './events/events.jsx';
 

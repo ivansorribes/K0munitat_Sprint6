@@ -141,9 +141,23 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(posts $posts)
+    public function show(Request $request, $postId)
     {
-        //
+        $post = posts::with(['images' => function ($query) {
+            $query->select('id', 'id_post', 'name');
+        }])->findOrFail($postId);
+
+        $community = null;
+        if ($post->community_id) {
+            $community = communities::findOrFail($post->community_id);
+        }
+
+        $post->images->each(function ($image) {
+            $image->url = URL::to('storage/posts/' . $image->name);
+        });
+        return view('advertisements-posts.show', [
+            'post' => $post,
+        ]);
     }
 
     /**
