@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\communities;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
+use App\Models\commentsPosts;
 
 class PostsController extends Controller
 {
@@ -145,6 +146,8 @@ class PostsController extends Controller
     {
         $post = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
+        }, 'comments' => function ($query) {
+            $query->select('id', 'id_post', 'id_user', 'comment');
         }])->findOrFail($id_post);
 
         $community = null;
@@ -155,6 +158,7 @@ class PostsController extends Controller
         $post->images->each(function ($image) {
             $image->url = URL::to('storage/posts/' . $image->name);
         });
+
         return response()->json([
             'post' => $post,
         ]);
