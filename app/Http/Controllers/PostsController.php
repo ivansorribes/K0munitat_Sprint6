@@ -143,8 +143,6 @@ class PostsController extends Controller
      */
     public function show(Request $request, $community, $id_post)
     {
-        Log::info("Mostrando id_post: {$id_post}");
-
         $post = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
         }])->findOrFail($id_post);
