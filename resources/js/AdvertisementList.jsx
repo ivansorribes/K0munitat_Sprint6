@@ -3,12 +3,22 @@ import { createRoot } from "react-dom/client";
 
 export default function AdvertisementList() {
     const [posts, setPosts] = useState([]);
+    const [filter, setFilter] = useState('all');
     const community = window.communityData;
     useEffect(() => {
         if (window.postsData) {
             setPosts(window.postsData);
         }
     }, []);
+
+    const handleFilterChange = (e) => {
+        setFilter(e.target.value);
+    };
+
+    const filteredPosts = posts.filter(post => {
+        if (filter === 'all') return true;
+        return post.type === filter;
+    });
     return (
         <>
             <div className="flex flex-col items-center mx-auto max-w-screen-lg m-10">
@@ -16,11 +26,18 @@ export default function AdvertisementList() {
                     <h1 className="text-3xl font-bold">{community.name}</h1>
                     <p className="text-gray-700">{community.description}</p>
                 </div>
-                <a href={`/communities/${community.id}/form-create-advertisement-post`} class="mb-5 button-card view-button">
-                    Create Advertisement / Post
-                </a>
+                <div className="flex justify-between w-full mb-5">
+                    <select onChange={handleFilterChange} value={filter} className="button-card view-button">
+                        <option value="all">All</option>
+                        <option value="advertisement">Advertisements</option>
+                        <option value="post">Posts</option>
+                    </select>
+                    <a href={`/communities/${community.id}/form-create-advertisement-post`} className="button-card view-button">
+                        Create Advertisement / Post
+                    </a>
+                </div>
                 <div className="grid w-full gap-10 grid-cols-3">
-                    {posts.map((post, index) => (
+                    {filteredPosts.map((post, index) => (
                         <div key={index} className="bg-white w-full rounded-lg shadow-md flex flex-col transition-all overflow-hidden hover:shadow-2xl">
                             <div className="p-6">
                                 <div className="pb-3 mb-4 border-b border-stone-200 text-xs font-medium flex justify-between text-blue-900">
