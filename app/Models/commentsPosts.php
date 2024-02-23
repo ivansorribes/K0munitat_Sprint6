@@ -15,16 +15,19 @@ class commentsPosts extends Model
 
     protected $fillable = [
         'id_post',
-        'id_comment'       
+        'id_user', // Asegúrate de incluir todas las columnas fillable necesarias
+        'comment',
     ];
 
+    // Define la relación con el modelo Post
     public function post(): BelongsTo
     {
-        return $this->belongsTo(posts::class);
+        return $this->belongsTo(posts::class, 'id_post');
     }
 
-    public function comment(): BelongsTo
+    // Define la relación con el modelo User
+    public function user(): BelongsTo
     {
-        return $this->belongsTo(comments::class);
+        return $this->belongsTo(User::class, 'id_user');
     }
 }
