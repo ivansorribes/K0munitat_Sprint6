@@ -8,6 +8,7 @@
     @viteReactRefresh
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 @include('header.header')
 

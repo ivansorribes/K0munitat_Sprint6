@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState('');
 
     useEffect(() => {
         const pathParts = window.location.pathname.split('/');
@@ -20,6 +21,31 @@ export default function AdvertisementComments() {
     if (comments.length === 0) {
         return <div>No comments yet.</div>;
     }
+
+    const handlePostComment = async () => {
+        const formData = new FormData();
+        formData.append('id_post', '1'); // Asume que este valor es obtenido de alguna manera relevante
+        formData.append('id_user', '1'); // Este valor debe ser dinámico basado en el usuario autenticado
+        formData.append('comment', newComment);
+
+        try {
+            const response = await fetch('http://localhost/api/comments', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log(data);
+            setComments([...comments, data]);
+            setNewComment('');
+        } catch (error) {
+            console.error('Error posting the comment:', error);
+        }
+    };
 
     return (
         <section className="bg-white dark:bg-gray-900 py-8 lg:py-16 antialiased">
@@ -45,6 +71,24 @@ export default function AdvertisementComments() {
                         </p>
                     </article>
                 ))}
+                <div className="mb-6">
+                    <textarea
+                        id="comment"
+                        rows="4"
+                        className="w-full p-2 text-sm text-black border-2 border-gray-200 dark:border-gray-700 rounded-lg"
+                        placeholder="Write a comment..."
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        required
+                    />
+                    <button
+                        type="button" // Cambiado a type="button" para evitar la recarga de la página
+                        className="mt-2 py-2 px-4 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                        onClick={handlePostComment}
+                    >
+                        Post comment
+                    </button>
+                </div>
             </div>
         </section>
     );
