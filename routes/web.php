@@ -11,6 +11,8 @@ use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
+use App\Http\Controllers\BlogController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -58,19 +60,19 @@ Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-se
 Route::post('/validate-register', [AuthController::class, 'register'])->name('validate-register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
-//Rutas de comunidades
-Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
-Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class, 'regionList'])->name('comuAut.regList');
+Route::middleware(['auth'])->group(function () {
+    //Rutas de comunidades
+    Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
+    Route::get('/comuAut/regList/{AutCom}', [AutonomousCommunitiesController::class, 'regionList'])->name('comuAut.regList');
 
-Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
-Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
-Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
-Route::post('/communities', [CommunitiesController::class, 'store']);
-Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
-Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
-Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
-
-
+    Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
+    Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
+    Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
+    Route::post('/communities', [CommunitiesController::class, 'store']);
+    Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
+    Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
+    Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
+});
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
@@ -82,35 +84,35 @@ Route::get('/CommentsUser/{id_post}', [UserController::class, 'CommentsUser'])->
 Route::post('/updatePost/{id_post}', [UserController::class, 'EditPost'])->name('EditPost')->middleware('auth');
 Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->name('deletePost')->middleware('auth');
 
+//Header
 
-
-Route::get('/map', function () {
-    return view('map');
-});
-
-Route::get('/homepage', function () {
-    return view('home-page');
-});
-// ADVERTISEMENTS
-// Route::get('/communities/{community}/form-create-advertisement', [PostsController::class, 'createAdvertisement'])->name('form-create-advertisement');
-Route::post('/communities/{community}/form-create-advertisement', [PostsController::class, 'store'])->name('form-create-advertisement-post');
+// POSTS - ADVERTISEMENTS
+Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
+Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
 
 Route::get('/communities/{community}/advertisement-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'advertisement');
 })->name('advertisement-list');
-
-// POSTS
-// Route::get('/communities/{community}/form-create-post', [PostsController::class, 'createPost'])->name('form-create-post');
-Route::post('/communities/{community}/form-create-post', [PostsController::class, 'store'])->name('form-create-post-post');
 
 Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
     return app(PostsController::class)->index($request, $communityId, 'post');
 })->name('post-list');
 
 
+Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
+Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
+
+Route::get('/paneladminPosts', [PostsController::class, 'getComunnities'])->name('getComunnities');
+Route::put('/posts/{post}', [PostsController::class, 'update'])->name('update.post');
+
+Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
+Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
+Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
+
+Route::get('/events', function () {
+    return view('events.calendar');
+})->name('calendar');
+// BLOG
+Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
 //Header
-Route::get('/header', [HeaderController::class, 'renderHeader'])->name('header');
-
-Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
-Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');

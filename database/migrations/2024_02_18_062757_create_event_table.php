@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('post_admin_blog', function (Blueprint $table) {
+        Schema::create('event', function (Blueprint $table) {
             $table->id();
-            $table->string('title',50);
-		    $table->string('description',1000);
-            $table->string('post_image')->nullable();
+            $table->foreignId('id_community')->references('id')->on('communities');
+            $table->foreignId('id_user')->references('id')->on('users');
+            $table->string('title');
+            $table->date('start');
+            $table->date('end');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('post_admin_blog');
+        Schema::dropIfExists('event');
     }
 };

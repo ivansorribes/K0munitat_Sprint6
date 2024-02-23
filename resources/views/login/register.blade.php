@@ -38,7 +38,7 @@
                         placeholder="Nombre"
                     />
                     @error('firstname')
-                        <div class="alert alert-danger mb-5" style="color: red;">{{ $message }}</div>
+                        <div style="color: red;">{{ $message }}</div>
                     @enderror
                 </div>
             
@@ -55,7 +55,7 @@
                         placeholder="Apellido"
                     />
                     @error('lastname')
-                        <div class="alert alert-danger mb-5" style="color: red;">{{ $message }}</div>
+                        <div style="color: red;">{{ $message }}</div>
                     @enderror
                 </div>
             
@@ -72,7 +72,7 @@
                         placeholder="Nombre de Usuario"
                     />
                     @error('username')
-                        <div class="alert alert-danger mb-5" style="color: red;">{{ $message }}</div>
+                        <div style="color: red;">{{ $message }}</div>
                     @enderror
                 </div>
             
@@ -89,7 +89,7 @@
                         placeholder="correo@example.com"
                     />
                     @error('email')
-                        <div class="alert alert-danger mb-5" style="color: red;">{{ $message }}</div>
+                        <div style="color: red;">{{ $message }}</div>
                     @enderror
                 </div>
             
@@ -109,7 +109,7 @@
                         </div>
                     </div>
                     @error('password')
-                        <div class="alert alert-danger mb-5" style="color: red;">{{ $message }}</div>
+                        <div style="color: red;">{{ $message }}</div>
                     @enderror
                 </div>
             
@@ -129,7 +129,7 @@
                         </div>
                     </div>
                     @error('password_confirm')
-                        <div class="alert alert-danger mb-5" style="color: red;">{{ $message }}</div>
+                        <div style="color: red;">{{ $message }}</div>
                     @enderror
                 </div>
             
@@ -147,6 +147,7 @@
             </p>
         </div>
     </div>
+    
 
     <script>
         const togglePassword = document.getElementById('togglePassword');

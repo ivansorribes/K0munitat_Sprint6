@@ -20,6 +20,6 @@ class CreateLikesPostsTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('likesPost');
+        Schema::dropIfExists('likesPosts');
     }
 }
