@@ -4,11 +4,19 @@ import { createRoot } from "react-dom/client";
 export default function AdvertisementDetails() {
     const [post, setPost] = useState(null);
     const community = window.communityData;
+    console.log(post)
 
     useEffect(() => {
-        if (window.postData) {
-            setPost(window.postData);
-        }
+        const pathParts = window.location.pathname.split('/');
+        const communityId = pathParts[pathParts.length - 2];
+        const postId = pathParts[pathParts.length - 1];
+
+        fetch(`http://localhost/api/communities/${communityId}/${postId}`)
+            .then(response => response.json())
+            .then(data => {
+                setPost(data.post);
+            })
+            .catch(error => console.error('Error fetching post data:', error));
     }, []);
 
     if (!post) {

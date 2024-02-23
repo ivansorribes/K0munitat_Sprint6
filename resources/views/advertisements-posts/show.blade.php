@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Advertisement list</title>
+    <title>Advertisement Details</title>
     @viteReactRefresh
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
@@ -14,9 +14,6 @@
 <body>
     <div id="advertisementDetails"></div>
     <div id="advertisementComments"></div>
-    <script type="text/javascript">
-        window.postData = @json($post);
-    </script>
 </body>
 @include('footer.footer')
 

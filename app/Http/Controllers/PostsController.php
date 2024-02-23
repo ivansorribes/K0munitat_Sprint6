@@ -141,11 +141,13 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, $postId)
+    public function show(Request $request, $community, $id_post)
     {
+        Log::info("Mostrando id_post: {$id_post}");
+
         $post = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
-        }])->findOrFail($postId);
+        }])->findOrFail($id_post);
 
         $community = null;
         if ($post->community_id) {
@@ -155,7 +157,7 @@ class PostsController extends Controller
         $post->images->each(function ($image) {
             $image->url = URL::to('storage/posts/' . $image->name);
         });
-        return view('advertisements-posts.show', [
+        return response()->json([
             'post' => $post,
         ]);
     }
