@@ -147,16 +147,16 @@ class UserController extends Controller
 
             // Actualizar imagen del post si está presente en la solicitud
             if ($request->hasFile('image')) {
-                // Guardar la nueva imagen en el directorio public/profile/images
+                // Guardar la nueva imagen en el directorio /storage/app/public/posts/
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('profile/images'), $imageName);
+                $image->move(public_path('/storage/app/public/posts/'), $imageName);
 
                 // Actualizar la ruta de la imagen en la base de datos
                 DB::table('imagePost')->where('id_post', $id_post)->update(['name' => $imageName]);
 
                 // Obtener la URL completa de la imagen actualizada
-                $imageUrl = asset('profile/images/' . $imageName);
+                $imageUrl = asset('/storage/app/public/posts/' . $imageName);
             }
 
             // Obtener el post actualizado
