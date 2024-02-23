@@ -15,3 +15,4 @@ import './communities/CommunityCard.jsx';
 
 import './communities/CommunitiesList.jsx';
 
+import './EditPersonalProfile.jsx';
