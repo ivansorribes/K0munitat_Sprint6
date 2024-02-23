@@ -93,7 +93,7 @@ export default function PersonalProfile() {
     const openEditModal = (post) => {
         setSelectedEditPost(post);
         setEditModalOpen(true);
-        setSelectedImageURL(`/profile/images/${post.image.name}`); // Establecer la URL de la imagen seleccionada
+        setSelectedImageURL(`/storage/app/public/posts/${post.image.name}`); // Establecer la URL de la imagen seleccionada
         // Cerrar cualquier menú desplegable abierto al abrir el modal de edición
         setMenuOpen(Array(posts.length).fill(false));
     };
@@ -275,7 +275,7 @@ export default function PersonalProfile() {
                             >
                                 <img
                                     className="w-full h-32 object-cover rounded"
-                                    src={`/storage/app/public/posts${post.image.name}`}
+                                    src={`/storage/app/public/posts/${post.image.name}`}
                                     alt={`Publicación ${post.id}`}
                                     style={{ width: '800px', height: '350px' }}
                                     onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
