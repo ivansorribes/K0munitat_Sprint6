@@ -11,7 +11,7 @@ class CommunitiesController extends Controller
     public function retornarComunitats()
     {
         $communities = communities::all();
-        return view('paneladminComunitats', compact('communities'));
+        return view('adminPanel.paneladminComunitats', compact('communities'));
     }
     public function stateChange($id)
     {

@@ -112,4 +112,16 @@ Route::get('/events', function () {
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
+Route::get('/admin', function () {
+    return view('panelAdmin');
+})->name('admin');
+
+Route::get('/paneladmin', function () {
+    return view('panel-admin');
+})->name('panel-admin');
+
+Route::get('/paneladminAdvertisements', function () {
+    return view('paneladminAdvertisements');
+})->name('paneladminAdvertisements');
+//Header
 //Header

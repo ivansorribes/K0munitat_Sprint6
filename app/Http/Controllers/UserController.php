@@ -50,7 +50,7 @@ class UserController extends Controller
     public function userInfo()
     {
         $users = User::select('id', 'firstname', 'email', 'username', 'telephone', 'city', 'role', 'isActive')->get();
-        return view('paneladminUsers', compact('users'));
+        return view('adminPanel.paneladminUsers', compact('users'));
     }
     public function toggleIsActive($id)
     {
