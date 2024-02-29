@@ -35,7 +35,6 @@ const customStyles = {
         start: '',
         end: '',
         id_user: 7,
-        id_community: '',
     });
 
     useEffect(() => {
@@ -71,7 +70,6 @@ const customStyles = {
     };
 
     const handleFormSubmit = (values, { resetForm }) => {
-        values.id_community = parseInt(values.id_community, 10);
         values.start = formValues.start; // Utilizar el valor del estado para 'start'
         console.log(values);
         axios.post('http://localhost/api/events', values)
