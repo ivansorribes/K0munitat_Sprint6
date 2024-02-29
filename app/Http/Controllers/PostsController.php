@@ -151,7 +151,8 @@ class PostsController extends Controller
                 ->select('id', 'id_post', 'id_user', 'comment');
         }, 'user' => function ($query) { // Carga el usuario que creó el post
             $query->select('id', 'username');
-        }])->findOrFail($id_post);
+        }, 'likes']) // Asegúrate de cargar la relación de likes aquí
+            ->findOrFail($id_post);
 
         $community = null;
         if ($post->community_id) {
@@ -173,12 +174,16 @@ class PostsController extends Controller
         // Añade el username del creador del post a la respuesta
         $post->creator_username = $post->user ? $post->user->username : null;
 
+        // Calcula el conteo de likes
+        $post->likes_count = $post->likes->count();
+
+        // Opcional: Eliminar la colección de likes para no enviarla en la respuesta
+        unset($post->likes);
+
         return response()->json([
             'post' => $post,
         ]);
     }
-
-
 
     /**
      * Show the form for editing the specified resource.
