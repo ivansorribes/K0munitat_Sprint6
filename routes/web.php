@@ -47,6 +47,9 @@ Route::get('/register', [AuthController::class, 'RegisterView'])->name('Register
 Route::view('/privada', 'login.secret')->middleware('auth')->name('privada');
 Route::get('/resetPassword', [AuthController::class, 'resetPasswordView'])->name('resetPasswordView');
 Route::get('passwordReset/{token}', [AuthController::class, 'resetFormView'])->name('resetFormView');
+Route::get('/editPersonalProfile', [UserController::class, 'EditProfileView'])->name('EditProfileView')->middleware('auth');
+Route::post('/updateUserInfo', [UserController::class, 'updateUserInfo'])->name('updateUserInfo')->middleware('auth');
+
 
 // FORGOT PASSWORD / PASSWORD-RESET
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
@@ -56,7 +59,12 @@ Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('
 Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-sesion');
 Route::post('/validate-register', [AuthController::class, 'register'])->name('validate-register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
+//FACEBOOK AUTH
+Route::get('/auth/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
+Route::get('/auth/callback', [AuthController::class, 'callback'])->name('auth.callback');
+//GOOGLE AUTH
+Route::get('/auth/Redirect1', [AuthController::class, 'Redirect1'])->name('auth.redirect1');
+Route::get('/auth/Callback1', [AuthController::class, 'Callback1'])->name('auth.callback1');
 Route::middleware(['auth'])->group(function () {
     //Rutas de comunidades
     Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');

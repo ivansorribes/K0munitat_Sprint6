@@ -1,6 +1,6 @@
 import './bootstrap';
 
-
+import './components/buttons.jsx';
 import './components/Exchanges.jsx';
 import './PersonalProfile.jsx';
 import './AboutUs.jsx';
@@ -17,4 +17,6 @@ import './Sidebar.jsx';
 import './Taula.jsx';
 
 
+import './EditPersonalProfile.jsx';
+import './events/events.jsx';
 

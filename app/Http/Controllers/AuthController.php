@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 use Carbon\Carbon;
+use Laravel\Socialite\Facades\Socialite;
 
 
 class AuthController extends Controller
@@ -173,5 +174,46 @@ class AuthController extends Controller
 
             return redirect()->route('LoginView')->with('info', 'Your password has been changed! You can login with new password');
         }
+    }
+
+    public function redirect()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    public function callback()
+    {
+        $user = Socialite::driver('facebook')->user();
+        $user = User::firstOrCreate(
+            ['email' => $user->email],
+            [
+                'username' => $user->name,
+            ]
+        );
+
+
+        auth()->login($user);
+
+        return redirect()->to('/');
+    }
+
+    public function Redirect1()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function Callback1()
+    {
+        $user_google = Socialite::driver('google')->user();
+
+        $user = User::firstOrCreate(
+            [
+                'username' => $user_google->name,
+                'email' => $user_google->email,
+            ]);
+
+        Auth::login($user);
+
+        return redirect('/');
     }
 }
