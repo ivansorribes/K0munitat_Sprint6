@@ -8,11 +8,16 @@ use Illuminate\Http\Request;
 
 class CommunitiesController extends Controller
 {
+
     public function retornarComunitats()
     {
-        $communities = communities::all();
+        // Obtener todas las comunidades con los usuarios asociados
+        $communities = communities::with('admin')->get();
         return view('adminPanel.paneladminComunitats', compact('communities'));
     }
+
+
+
     public function stateChange($id)
     {
         $community = communities::findOrFail($id);

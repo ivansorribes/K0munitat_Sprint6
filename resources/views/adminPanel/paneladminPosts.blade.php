@@ -41,7 +41,9 @@
                                 <textarea form="editForm" name="description">{{ $post->description }}</textarea>
                             </td>
                             <td class="border border-gray-200 px-4 py-2">{{ $post->created_at }}</td>
-                            <td class="border border-gray-200 px-4 py-2"><button class="btn btn-sm bg-green-500 text-white px-2 py-1 rounded" type="submit">Save</button></td>
+                            <td class="border border-gray-200 px-4 py-2">
+                                <button class="btn btn-sm bg-green-500 text-white px-2 py-1 rounded" type="submit">Save</button>
+                            </td>
                         </form>
                         @endif
                     </tr>

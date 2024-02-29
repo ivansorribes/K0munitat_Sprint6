@@ -3,8 +3,8 @@ import { createRoot } from "react-dom/client";
 
 const Sidebar = () => {
     return (
-        <div className="bg-gray-800 text-white w-64 flex-none h-full">
-            <div className="p-4 h-full flex flex-col justify-between">
+        <div className="bg-gray-800 text-white w-64 flex-none h-screen sticky top-0">
+            <div className="p-4 flex flex-col justify-between h-full">
                 <div>
                     <h2 className="text-lg font-bold mb-4">Panel Administrativo</h2>
                     <ul className="space-y-2">

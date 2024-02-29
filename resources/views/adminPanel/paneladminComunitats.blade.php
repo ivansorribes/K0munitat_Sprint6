@@ -25,8 +25,10 @@
             <table class="w-full border-collapse border border-gray-200">
                 <thead>
                     <tr>
+                        <th class="border border-gray-200 px-4 py-2">Community Admin</th>
                         <th class="border border-gray-200 px-4 py-2">Nombre</th>
                         <th class="border border-gray-200 px-4 py-2">Descripción</th>
+                        <th class="border border-gray-200 px-4 py-2">Data de creació</th>
                         <th class="border border-gray-200 px-4 py-2">Activo</th>
                         <th class="border border-gray-200 px-4 py-2">Acciones</th>
                     </tr>
@@ -37,8 +39,10 @@
                         <form action="{{ route('stateChange', $community->id) }}" method="POST">
                             @csrf
                             @method('PUT')
+                            <td class="border border-gray-200 px-4 py-2">{{ $community->admin->username }}</td>
                             <td class="border border-gray-200 px-4 py-2">{{ $community->name }}</td>
                             <td class="border border-gray-200 px-4 py-2">{{ $community->description }}</td>
+                            <td class="border border-gray-200 px-4 py-2">{{ $community->created_at }}</td>
                             <td class="border border-gray-200 px-4 py-2">{{ $community->isActive ? 'Activo' : 'Inactivo' }}</td>
                             <td class="border border-gray-200 px-4 py-2">
 
