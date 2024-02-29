@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
+import { HeartButton } from "../components/HeartButton";
 
 export default function AdvertisementDetails() {
     const [post, setPost] = useState(null);
@@ -47,10 +48,14 @@ export default function AdvertisementDetails() {
                                 })}</time>
                             </span>
                         </div>
-                        <span className="px-2 py-1 bg-primary text-neutral rounded-full text-xs">
-                            {post.type}
-                        </span>
+                        <div className="flex items-center gap-2">
+                            <span className="px-2 py-1 bg-primary text-neutral rounded-full text-xs flex items-center">
+                                {post.type}
+                            </span>
+                            <HeartButton />
+                        </div>
                     </div>
+
 
                     <h3 className="mb-4 font-extrabold text-2xl text-neutral">
                         {post.title}
