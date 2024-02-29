@@ -188,6 +188,8 @@ class AuthController extends Controller
             ['email' => $user->email],
             [
                 'username' => $user->name,
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+
             ]
         );
 
@@ -215,7 +217,7 @@ class AuthController extends Controller
             $user = User::create([
                 'username' => $user_google->name,
                 'email' => $user_google->email,
-                'p'
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             ]);
         }
 
