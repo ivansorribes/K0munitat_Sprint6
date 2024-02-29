@@ -59,7 +59,12 @@ Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('
 Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-sesion');
 Route::post('/validate-register', [AuthController::class, 'register'])->name('validate-register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
+//FACEBOOK AUTH
+Route::get('/auth/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
+Route::get('/auth/callback', [AuthController::class, 'callback'])->name('auth.callback');
+//GOOGLE AUTH
+Route::get('/auth/Redirect1', [AuthController::class, 'Redirect1'])->name('auth.redirect1');
+Route::get('/auth/Callback1', [AuthController::class, 'Callback1'])->name('auth.callback1');
 Route::middleware(['auth'])->group(function () {
     //Rutas de comunidades
     Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
@@ -112,4 +117,16 @@ Route::get('/events', function () {
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
+Route::get('/admin', function () {
+    return view('panelAdmin');
+})->name('admin');
+
+Route::get('/paneladmin', function () {
+    return view('panel-admin');
+})->name('panel-admin');
+
+Route::get('/paneladminAdvertisements', function () {
+    return view('paneladminAdvertisements');
+})->name('paneladminAdvertisements');
+//Header
 //Header

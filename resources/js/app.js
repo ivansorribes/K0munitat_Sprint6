@@ -1,6 +1,6 @@
 import './bootstrap';
 
-
+import './components/buttons.jsx';
 import './components/Exchanges.jsx';
 import './PersonalProfile.jsx';
 import './AboutUs.jsx';
@@ -15,6 +15,10 @@ import './communities/CommunityCard.jsx';
 import './communities/CommunitiesList.jsx';
 import './advertisements-posts/AdvertisementDetails.jsx';
 import './advertisements-posts/AdvertisementComments.jsx';
+import './Sidebar.jsx';
+import './Taula.jsx';
+
+
 import './EditPersonalProfile.jsx';
 import './events/events.jsx';
 
