@@ -15,8 +15,6 @@
             cursor: pointer;
         }
     </style>
-
-
 </head>
 
 <body class="min-h-screen flex items-center justify-center bg-white-500">
@@ -63,13 +61,15 @@
                     </div>
                 </div>
                 <div class="mb-4">
-                    <a href="{{route('auth.redirect1')}}" class="w-full bg-red-600 text-white rounded-md px-2 py-1">
+                    <a href="{{ route('auth.redirect1') }}"
+                        class="w-full bg-red-600 text-white rounded-md px-2 py-1 block">
                         <i class="fab fa-google mr-2"></i> Log in with Google
                     </a>
                 </div>
                 <!-- Botón de iniciar sesión con Facebook -->
                 <div class="mb-4">
-                    <a href="{{route('auth.redirect')}}" class="w-full bg-blue-600 text-white rounded-md px-2 py-1">
+                    <a href="{{ route('auth.redirect') }}"
+                        class="w-full bg-blue-600 text-white rounded-md px-2 py-1 block">
                         <i class="fab fa-facebook-square mr-2"></i> Log in with Facebook
                     </a>
                 </div>
@@ -90,7 +90,6 @@
                     <button type="submit" class="w-full bg-yellow-500 text-white rounded-md px-2 py-1">Submit</button>
                 </div>
             </form>
-
 
             <!-- Enlace para registrarse -->
             <p class="text-gray-600 text-sm mt-4">
@@ -121,13 +120,5 @@
     </script>
 
 </body>
-
-
-
-
-
-
-
-
 
 </html>
