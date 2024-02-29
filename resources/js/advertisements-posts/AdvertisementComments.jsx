@@ -50,23 +50,23 @@ export default function AdvertisementComments() {
     return (
         <section className="bg-white py-8 lg:py-16 antialiased">
             <div className="max-w-2xl mx-auto px-4">
-                <h2 className="text-lg lg:text-2xl font-bold text-black mb-6">
+                <h2 className="text-lg lg:text-2xl font-extrabold text-neutral mb-6">
                     Comments
                 </h2>
                 {comments.map((comment) => (
-                    <article key={comment.id} className="p-6 mb-4 text-base bg-white rounded-lg  border border-gray-200 dark:border-gray-700">
+                    <article key={comment.id} className="p-6 mb-4 text-base bg-white rounded-lg  border border-neutral">
                         <footer className="mb-2">
                             <div className="flex items-center justify-between">
-                                <p className="text-sm text-black font-semibold">
+                                <p className="text-sm text-neutral font-extrabold">
                                     {/* Aquí puedes agregar el nombre del usuario o cualquier identificador */}
                                     {comment.username}
                                 </p>
-                                <p className="text-sm text-black">
+                                <p className="text-sm text-neutral">
                                     {/* Opcional: fecha del comentario */}
                                 </p>
                             </div>
                         </footer>
-                        <p className="text-black">
+                        <p className="text-neutral">
                             {comment.comment}
                         </p>
                     </article>
