@@ -50,15 +50,13 @@ export default function AdvertisementList() {
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                         </svg>
-                                        Created: {new Date(post.created_at).toLocaleDateString('es-ES', {
+                                        <time dateTime={post.created_at}>{new Date(post.created_at).toLocaleDateString('es-ES', {
                                             year: 'numeric',
-                                            month: '2-digit',
+                                            month: 'long',
                                             day: '2-digit',
                                             hour: '2-digit',
                                             minute: '2-digit',
-                                            second: '2-digit',
-                                            hour12: false
-                                        })}
+                                        })}</time>
                                     </span>
                                     <span>
                                         <HeartButton />
