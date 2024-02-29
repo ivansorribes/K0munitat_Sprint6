@@ -4,11 +4,14 @@ import { createRoot } from "react-dom/client";
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [postId, setPostId] = useState(null);
+    const id_user = document.getElementById("id_user").value;
 
     useEffect(() => {
         const pathParts = window.location.pathname.split('/');
         const communityId = pathParts[pathParts.length - 2];
         const postId = pathParts[pathParts.length - 1];
+        setPostId(postId);
 
         fetch(`http://localhost/api/communities/${communityId}/${postId}`)
             .then(response => response.json())
@@ -18,14 +21,10 @@ export default function AdvertisementComments() {
             .catch(error => console.error('Error fetching post data:', error));
     }, []);
 
-    if (comments.length === 0) {
-        return <div>No comments yet.</div>;
-    }
-
     const handlePostComment = async () => {
         const formData = new FormData();
-        formData.append('id_post', '1'); // Asume que este valor es obtenido de alguna manera relevante
-        formData.append('id_user', '1'); // Este valor debe ser dinámico basado en el usuario autenticado
+        formData.append('id_post', postId);
+        formData.append('id_user', id_user);
         formData.append('comment', newComment);
 
         try {
@@ -39,7 +38,6 @@ export default function AdvertisementComments() {
             }
 
             const data = await response.json();
-            console.log(data);
             setComments([...comments, data]);
             setNewComment('');
         } catch (error) {
@@ -59,7 +57,7 @@ export default function AdvertisementComments() {
                             <div className="flex items-center justify-between">
                                 <p className="text-sm text-gray-900 dark:text-white font-semibold">
                                     {/* Aquí puedes agregar el nombre del usuario o cualquier identificador */}
-                                    User: {comment.id_user}
+                                    {comment.username}
                                 </p>
                                 <p className="text-sm text-gray-600 dark:text-gray-400">
                                     {/* Opcional: fecha del comentario */}

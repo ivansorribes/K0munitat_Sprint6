@@ -147,7 +147,11 @@ class PostsController extends Controller
         $post = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
         }, 'comments' => function ($query) {
-            $query->select('id', 'id_post', 'id_user', 'comment');
+            // Asegúrate de tener una relación 'user' en tu modelo Comment
+            $query->with(['user' => function ($q) {
+                $q->select('id', 'username'); // Ajusta esto según tu estructura de base de datos
+            }])
+                ->select('id', 'id_post', 'id_user', 'comment');
         }])->findOrFail($id_post);
 
         $community = null;
@@ -159,10 +163,21 @@ class PostsController extends Controller
             $image->url = URL::to('storage/posts/' . $image->name);
         });
 
+        // Aquí puedes ajustar la estructura de tu respuesta para incluir el username del usuario
+        // Por ejemplo, ajustando cada comentario para incluir el username del usuario relacionado.
+        $post->comments->each(function ($comment) {
+            // Asegura que 'user' sea cargado correctamente con 'with' en la consulta
+            if ($comment->user) {
+                $comment->username = $comment->user->username; // Agrega el username directamente en la estructura del comentario
+                unset($comment->id_user); // Opcional: Eliminar id_user si ya no lo necesitas
+            }
+        });
+
         return response()->json([
             'post' => $post,
         ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

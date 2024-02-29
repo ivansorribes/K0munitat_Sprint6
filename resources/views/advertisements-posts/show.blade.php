@@ -13,6 +13,7 @@
 @include('header.header')
 
 <body>
+    <input id="id_user" type="hidden" value="{{ Auth()->user()->id}}">
     <div id="advertisementDetails"></div>
     <div id="advertisementComments"></div>
 </body>
