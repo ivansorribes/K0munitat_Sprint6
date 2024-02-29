@@ -1,6 +1,6 @@
 import './bootstrap';
 
-
+import './components/buttons.jsx';
 import './components/Exchanges.jsx';
 import './PersonalProfile.jsx';
 import './AboutUs.jsx';
