@@ -13,6 +13,9 @@ import './communities/communitiesFormCreate.jsx';
 import './communities/communitiesFormEdit.jsx';
 import './communities/CommunityCard.jsx';
 import './communities/CommunitiesList.jsx';
+import './Sidebar.jsx';
+import './Taula.jsx';
+
 
 import './EditPersonalProfile.jsx';
 import './events/events.jsx';
