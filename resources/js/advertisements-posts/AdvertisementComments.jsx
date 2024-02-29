@@ -75,15 +75,15 @@ export default function AdvertisementComments() {
                     <textarea
                         id="comment"
                         rows="4"
-                        className="w-full p-2 text-sm text-black border-2 border-gray-200 dark:border-gray-700 rounded-lg"
+                        className="w-full p-2 text-sm text-black border-2 border-neutral rounded-lg"
                         placeholder="Write a comment..."
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         required
                     />
                     <button
-                        type="button" // Cambiado a type="button" para evitar la recarga de la página
-                        className="mt-2 py-2 px-4 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                        type="button"
+                        className="mt-2 py-2 px-4 text-xs font-bold text-neutral bg-secondary rounded-lg hover:bg-accent"
                         onClick={handlePostComment}
                     >
                         Post comment
