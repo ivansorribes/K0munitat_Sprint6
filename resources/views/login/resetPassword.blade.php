@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title>Forgot Password</title>
     @viteReactRefresh
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
@@ -39,7 +39,7 @@
                     @enderror
                 </div>
                 <div class="relative mb-4">
-                    <button type="submit" class="w-full bg-yellow-500 text-white rounded-md px-2 py-1">Send Reset Link.</button>
+                    <button type="submit" class="w-full bg-yellow-500 text-white rounded-md px-2 py-1">Send Reset Link</button>
                 </div>
                 @if (Session::has('success'))
                     <div class="text-green-500">
@@ -55,12 +55,4 @@
         </div>
     </div>
 </body>
-
-
-
-
-
-
-
-
 </html>
