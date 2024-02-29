@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Login</title>
+    <title>Forgot Password</title>
     @viteReactRefresh
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
@@ -16,7 +16,7 @@
         <div class="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div class="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full max-w-md text-center">
             <!-- Logo -->
-            <img src="{{ asset('img/Logo_K0munitat-removebg-preview.png') }}" alt="K0munitat Logo" class="mx-auto mb-10" style="max-width: 250px;">
+            <img src="{{ asset('img/logo.png') }}" alt="K0munitat Logo" class="mx-auto mb-10" style="max-width: 250px;">
 
             <!-- Forgot Password Content -->
             <div class="mb-8 text-gray-900">
@@ -26,31 +26,26 @@
 
             <!-- Forgot Password Form -->
             <form method="POST" action="{{route('forgot.password.link')}}" autocomplete="off">
-                @if (Session::get('fail'))
-                    <div class="alert alert-danger">
-                        {{Session::get('fail')}}
-                    </div>
-                @endif
-
-                @if (Session::get('success'))
-                    <div class="alert alert-success" style="color: green;">
-                        {{Session::get('success')}}
-                    </div>
-                @endif
-
                 @csrf
                 <div class="mb-4 relative">
                     <input autocomplete="off" id="email" name="email" type="text"
                         class="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                        placeholder="Email address" value="{{old('email')}}" />
-                        <span class="alert alert-danger mt-5" style="color: red;">@error('email') {{ $message }} @enderror</span>
+                        placeholder="Email address" value="{{ old('email') }}" />
                     <label for="email"
                         class="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm">Email
                         Address</label>
+                    @error('email')
+                        <span class="text-red-500 text-sm">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="relative mb-4">
-                    <button type="submit" class="w-full bg-yellow-500 text-white rounded-md px-2 py-1">Send Reset Link.</button>
+                    <button type="submit" class="w-full bg-yellow-500 text-white rounded-md px-2 py-1">Send Reset Link</button>
                 </div>
+                @if (Session::has('success'))
+                    <div class="text-green-500">
+                        {{ Session::get('success') }}
+                    </div>
+                @endif
             </form>
 
             <!-- Back to Login Link -->
@@ -60,9 +55,4 @@
         </div>
     </div>
 </body>
-
-
-
-
-
 </html>

@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\comments;
 use App\Models\posts;
+use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Model>
@@ -18,13 +19,10 @@ class commentsPostsFactory extends Factory
      */
     public function definition(): array
     {
-        $id_post= posts::all()->pluck('id')->toArray();
-        $id_comment= comments::all()->pluck('id')->toArray();
-
-
         return [
-            'id_post' => $this->faker->randomElement($id_post),
-            'id_comment' => $this->faker->randomElement($id_comment),
+            'id_post' => posts::inRandomOrder()->first()->id, // Obtiene un id_post al azar
+            'id_user' => User::inRandomOrder()->first()->id, // Obtiene un id_user al azar
+            'comment' => $this->faker->text(),
         ];
     }
 }

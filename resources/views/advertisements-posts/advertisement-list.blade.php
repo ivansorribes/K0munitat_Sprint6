@@ -15,6 +15,7 @@
     <div id="advertisementList"></div>
     <script type="text/javascript">
         window.postsData = @json($posts);
+        window.communityData = @json($community);
     </script>
 </body>
 @include('footer.footer')

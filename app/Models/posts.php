@@ -23,9 +23,15 @@ class posts extends Model
         'type',
     ];
 
-    public function user(): BelongsTo
+
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'id_user');
+    }
+
+    public function community()
+    {
+        return $this->belongsTo(communities::class, 'id_community');
     }
 
     public function categories(): BelongsTo
@@ -33,13 +39,13 @@ class posts extends Model
         return $this->belongsTo(categories::class);
     }
 
-    public function community(): BelongsTo
-    {
-        return $this->belongsTo(communities::class);
-    }
-
     public function images()
     {
         return $this->hasMany(imagePost::class, 'id_post');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(commentsPosts::class, 'id_post');
     }
 }

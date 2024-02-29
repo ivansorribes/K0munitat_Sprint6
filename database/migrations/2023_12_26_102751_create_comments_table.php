@@ -8,14 +8,14 @@ class CreateCommentsTable extends Migration
 {
     public function up()
     {
-        Schema::create('comments', function (Blueprint $table) {
+        // Schema::create('comments', function (Blueprint $table) {
 
-        $table->id();
-        $table->foreignId('id_user')->references('id')->on('users');
-        $table->string('comment');
-        $table->timestamps();
+        // $table->id();
+        // $table->foreignId('id_user')->references('id')->on('users');
+        // $table->string('comment');
+        // $table->timestamps();
 
-        });
+        // });
     }
 
     public function down()

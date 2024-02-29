@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\posts;
@@ -26,6 +26,10 @@ class UserController extends Controller
     {
         return view('profile.personalProfile');
     }
+    public function EditProfileView()
+    {
+        return view('profile.editPersonalProfile');
+    }
 
     public function updateProfileDescription(Request $request)
     {
@@ -47,7 +51,24 @@ class UserController extends Controller
             return response()->json(['error' => 'Error al actualizar la descripción'], 500);
         }
     }
-
+    public function userInfo()
+    {
+        $users = User::select('id', 'firstname', 'email', 'username', 'telephone', 'city', 'role', 'isActive')->get();
+        return view('adminPanel.paneladminUsers', compact('users'));
+    }
+    public function toggleIsActive($id)
+    {
+        $user = User::findOrFail($id);
+        $user->isActive = !$user->isActive;
+        $user->save();
+        return back();
+    }
+    public function update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $user->update($request->all());
+        return back();
+    }
     public function postUser()
     {
         $user = Auth::user();
@@ -66,6 +87,10 @@ class UserController extends Controller
                 'lastname' => $user->lastname,
                 'profile_image' => $user->profile_image,
                 'profile_description' => $user->profile_description,
+                'email' => $user->email,
+                'telephone' => $user->telephone,
+                'city' => $user->city,
+                'postcode' => $user->postcode,
             ];
 
             // Adjuntar la información del usuario a cada publicación
@@ -122,16 +147,16 @@ class UserController extends Controller
 
             // Actualizar imagen del post si está presente en la solicitud
             if ($request->hasFile('image')) {
-                // Guardar la nueva imagen en el directorio public/profile/images
+                // Guardar la nueva imagen en el directorio /storage/app/public/posts/
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('profile/images'), $imageName);
+                $image->move(public_path('/storage/app/public/posts/'), $imageName);
 
                 // Actualizar la ruta de la imagen en la base de datos
                 DB::table('imagePost')->where('id_post', $id_post)->update(['name' => $imageName]);
 
                 // Obtener la URL completa de la imagen actualizada
-                $imageUrl = asset('profile/images/' . $imageName);
+                $imageUrl = asset('/storage/app/public/posts/' . $imageName);
             }
 
             // Obtener el post actualizado
@@ -161,4 +186,30 @@ class UserController extends Controller
             return response()->json(['error' => 'Ha ocurrido un error al marcar el post como inactivo'], 500);
         }
     }
+
+    public function updateUserInfo(Request $request)
+{
+    try {
+        // Obtén el usuario autenticado
+        $user = Auth::user();
+
+        // Actualiza la información del usuario con los datos proporcionados en la solicitud
+        DB::table('users')
+            ->where('id', $user->id)
+            ->update([
+                'firstname' => $request->input('firstname'),
+                'lastname' => $request->input('lastname'),
+                'username' => $request->input('username'),
+                'email' => $request->input('email'),
+                'telephone' => $request->input('telephone'),
+                'city' => $request->input('city'),
+                'postcode' => $request->input('postcode'),
+            ]);
+
+        return response()->json(['message' => 'Información de usuario actualizada correctamente'], 200);
+    } catch (\Exception $e) {
+        return response()->json(['error' => 'Ha ocurrido un error al actualizar la información del usuario'], 500);
+    }
+}
+
 }
