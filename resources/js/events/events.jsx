@@ -85,7 +85,6 @@ const customStyles = {
                     start: '',
                     end: '',
                     id_user: 7,
-                    id_community: '',
                 });
                 window.location.reload();
             })
@@ -110,7 +109,6 @@ const customStyles = {
                             start: '',
                             end: '',
                             id_user: 7,
-                            id_community:'',
                         }
                     }
                     onSubmit={handleFormSubmit}
@@ -129,19 +127,7 @@ const customStyles = {
                             />
                             <ErrorMessage name="title" component="p" className="text-red-500 text-xs italic" />
                         </div>
-                        <div className="mb-4">
-                            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
-                                Community:
-                            </label>
-                            <Field
-                                type="text"
-                                name="id_community"
-                                id="id_community"
-                                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                                required
-                            />
-                            <ErrorMessage name="title" component="p" className="text-red-500 text-xs italic" />
-                        </div>
+                        
                         <div className="mb-4">
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="start">
                             Init date:
