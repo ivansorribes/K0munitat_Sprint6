@@ -9,9 +9,9 @@ module.exports = {
 
           "secondary": "#f4971e",
 
-          "accent": "#155b2a",
+          "accent": "#e08c1a",
 
-          "neutral": "#3d3c3b",
+          "neutral": "#155b2a",
 
           "base-100": "#fffdf9",
         },
@@ -29,23 +29,23 @@ module.exports = {
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif'],
       },
-      screens:{
-        'tallscreen' :  {'raw': '(min-aspect-ratio: 13/20)'},
+      screens: {
+        'tallscreen': { 'raw': '(min-aspect-ratio: 13/20)' },
       },
-      keyframes:{
-        'open-menu':{
-          '0%': {transform: 'scaleY(0)'},
-          '80%': {transform: 'scaleY(1,2)'},
-          '100%': {transform: 'scaleY(1)'},
+      keyframes: {
+        'open-menu': {
+          '0%': { transform: 'scaleY(0)' },
+          '80%': { transform: 'scaleY(1,2)' },
+          '100%': { transform: 'scaleY(1)' },
         }
       },
-      animation:{
+      animation: {
         'open-menu': 'open-menu 0.5s ease-in-out forwards',
       }
     },
   },
 
-  
+
 
 
 

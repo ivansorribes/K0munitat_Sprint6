@@ -11,18 +11,20 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\communities;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use App\Models\commentsPosts;
 
 class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $communityId = null, $type = 'post')
+    public function index(Request $request, $communityId = null)
     {
         $query = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
         }]);
-        $query->where('type', $type);
+        // $query->where('type', $type);
 
         if ($communityId) {
             $community = communities::findOrFail($communityId);
@@ -37,10 +39,9 @@ class PostsController extends Controller
                 $image->url = URL::to('storage/posts/' . $image->name);
             });
         });
-        return view('advertisements-posts.post-list', [
+        return view('communities.show', [
             'posts' => $posts,
             'community' => $community ?? null,
-            'type' => $type,
         ]);
     }
 
@@ -98,9 +99,9 @@ class PostsController extends Controller
             ]);
 
             $post = posts::create([
-                'id_user' => 1, // Asume un valor estático o ajusta según tu lógica de autenticación
+                'id_user' => Auth::id(),
                 'id_category' => $validatedData['category_id'],
-                'id_community' => $communityId, // Ajusta según necesites
+                'id_community' => $communityId,
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'isActive' => true,
@@ -139,10 +140,42 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(posts $posts)
+    public function show(Request $request, $community, $id_post)
     {
-        //
+        $post = posts::with(['images' => function ($query) {
+            $query->select('id', 'id_post', 'name');
+        }, 'comments' => function ($query) {
+            // Asegúrate de tener una relación 'user' en tu modelo Comment
+            $query->with(['user' => function ($q) {
+                $q->select('id', 'username'); // Ajusta esto según tu estructura de base de datos
+            }])
+                ->select('id', 'id_post', 'id_user', 'comment');
+        }])->findOrFail($id_post);
+
+        $community = null;
+        if ($post->community_id) {
+            $community = communities::findOrFail($post->community_id);
+        }
+
+        $post->images->each(function ($image) {
+            $image->url = URL::to('storage/posts/' . $image->name);
+        });
+
+        // Aquí puedes ajustar la estructura de tu respuesta para incluir el username del usuario
+        // Por ejemplo, ajustando cada comentario para incluir el username del usuario relacionado.
+        $post->comments->each(function ($comment) {
+            // Asegura que 'user' sea cargado correctamente con 'with' en la consulta
+            if ($comment->user) {
+                $comment->username = $comment->user->username; // Agrega el username directamente en la estructura del comentario
+                unset($comment->id_user); // Opcional: Eliminar id_user si ya no lo necesitas
+            }
+        });
+
+        return response()->json([
+            'post' => $post,
+        ]);
     }
+
 
     /**
      * Show the form for editing the specified resource.

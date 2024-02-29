@@ -43,4 +43,9 @@ class posts extends Model
     {
         return $this->hasMany(imagePost::class, 'id_post');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(commentsPosts::class, 'id_post');
+    }
 }
