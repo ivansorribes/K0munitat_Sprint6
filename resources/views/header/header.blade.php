@@ -1,3 +1,4 @@
+
 @if(Auth::check())
 <!--Header para un usuario Autenticado-->
 <header class="bg-[#fffdf9]  px-6  shadow">
@@ -160,4 +161,3 @@
 </script>
 
 
-</body>
