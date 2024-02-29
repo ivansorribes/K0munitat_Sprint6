@@ -4,6 +4,6 @@
 
 @section('content')
         @csrf
-        <div id = "MyCalendar"></div>
+        <div id = "MyCalendar" ></div>
 
 @endsection
