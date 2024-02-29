@@ -28,26 +28,34 @@ export default function AdvertisementDetails() {
 
             <div className="bg-white w-full rounded-lg shadow-md flex flex-col transition-all overflow-hidden hover:shadow-2xl">
                 <div className="p-6">
-                    <div className="pb-3 mb-4 border-b border-stone-200 text-xs font-medium flex justify-between text-blue-900">
+                    <div className="pb-3 mb-4 border-b border-stone-200 text-xs font-medium flex justify-between text-neutral">
                         <span className="flex items-center gap-1">
-                            {post.created_at}
+                            Created: {new Date(post.created_at).toLocaleDateString('es-ES', {
+                                year: 'numeric',
+                                month: '2-digit',
+                                day: '2-digit',
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                hour12: false
+                            })}
                         </span>
                         <span>
                             {post.type}
                         </span>
                     </div>
-                    <h3 className="mb-4 font-semibold text-2xl">
+                    <h3 className="mb-4 font-extrabold text-2xl text-neutral">
                         {post.title}
                     </h3>
-                    <p className="text-sky-800 text-sm mb-0">
+                    {post.images.map((image) => (
+                        <div key={image.id} className="mt-auto">
+                            <img src={image.url} alt="" className="max-w-md max-h-96 w-auto h-auto object-cover mx-auto" />
+                        </div>
+                    ))}
+                    <p className="text-neutral text-sm mb-0 mt-5">
                         {post.description}
                     </p>
                 </div>
-                {post.images.map((image) => (
-                    <div key={image.id} className="mt-auto">
-                        <img src={image.url} alt="" className="w-full h-48 object-cover" />
-                    </div>
-                ))}
             </div>
         </div>
     );
