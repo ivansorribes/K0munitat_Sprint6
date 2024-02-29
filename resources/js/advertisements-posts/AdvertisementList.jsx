@@ -27,7 +27,7 @@ export default function AdvertisementList() {
                     <p className="text-gray-700">{community.description}</p>
                 </div>
                 <div className="flex justify-between w-full mb-5">
-                    <select onChange={handleFilterChange} value={filter} className="bg-secondary hover:bg-accent text-black py-2 px-4 rounded-lg text-base no-underline min-w-[200px] text-center transition-colors duration-300 ease-in-out font-bold mr-5">
+                    <select onChange={handleFilterChange} value={filter} className="bg-secondary hover:bg-accent text-black py-2 px-4 rounded-lg text-base no-underline min-w-[200px] text-center transition-colors duration-300 ease-in-out font-bold mr-5 cursor-pointer">
                         <option value="all">All</option>
                         <option value="advertisement">Advertisements</option>
                         <option value="post">Posts</option>
@@ -44,12 +44,20 @@ export default function AdvertisementList() {
                     {filteredPosts.map((post, index) => (
                         <div key={index} className="bg-white w-full rounded-lg shadow-md flex flex-col transition-all overflow-hidden hover:shadow-2xl">
                             <div className="p-6">
-                                <div className="pb-3 mb-4 border-b border-stone-200 text-xs font-medium flex justify-between text-blue-900">
+                                <div className="pb-3 mb-4 border-b border-stone-200 text-xs font-medium flex justify-between text-neutral">
                                     <span className="flex items-center gap-1">
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
                                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                                         </svg>
-                                        {post.created_at}
+                                        Created: {new Date(post.created_at).toLocaleDateString('es-ES', {
+                                            year: 'numeric',
+                                            month: '2-digit',
+                                            day: '2-digit',
+                                            hour: '2-digit',
+                                            minute: '2-digit',
+                                            second: '2-digit',
+                                            hour12: false
+                                        })}
                                     </span>
                                     <span>
                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="w-6 h-6">
@@ -57,12 +65,12 @@ export default function AdvertisementList() {
                                         </svg>
                                     </span>
                                 </div>
-                                <h3 className="mb-4 font-semibold text-2xl">
-                                    <a href={`/communities/${community.id}/${post.id}`} className="transition-all text-blue-900 hover:text-blue-600">
+                                <h3 className="mb-4 font-extrabold text-2xl">
+                                    <a href={`/communities/${community.id}/${post.id}`} className="transition-all text-neutral hover:text-secondary">
                                         {post.title}
                                     </a>
                                 </h3>
-                                <p className="text-sky-800 text-sm mb-0">
+                                <p className="text-neutral text-sm mb-0">
                                     {post.description}
                                 </p>
                             </div>
