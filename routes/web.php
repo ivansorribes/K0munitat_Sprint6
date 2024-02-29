@@ -47,6 +47,9 @@ Route::get('/register', [AuthController::class, 'RegisterView'])->name('Register
 Route::view('/privada', 'login.secret')->middleware('auth')->name('privada');
 Route::get('/resetPassword', [AuthController::class, 'resetPasswordView'])->name('resetPasswordView');
 Route::get('passwordReset/{token}', [AuthController::class, 'resetFormView'])->name('resetFormView');
+Route::get('/editPersonalProfile', [UserController::class, 'EditProfileView'])->name('EditProfileView')->middleware('auth');
+Route::post('/updateUserInfo', [UserController::class, 'updateUserInfo'])->name('updateUserInfo')->middleware('auth');
+
 
 // FORGOT PASSWORD / PASSWORD-RESET
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
