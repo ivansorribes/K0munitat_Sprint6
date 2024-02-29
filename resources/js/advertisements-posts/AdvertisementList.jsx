@@ -27,14 +27,18 @@ export default function AdvertisementList() {
                     <p className="text-gray-700">{community.description}</p>
                 </div>
                 <div className="flex justify-between w-full mb-5">
-                    <select onChange={handleFilterChange} value={filter} className="button-card view-button">
+                    <select onChange={handleFilterChange} value={filter} className="bg-secondary hover:bg-accent text-black py-2 px-4 rounded-lg text-base no-underline min-w-[200px] text-center transition-colors duration-300 ease-in-out font-bold mr-5">
                         <option value="all">All</option>
                         <option value="advertisement">Advertisements</option>
                         <option value="post">Posts</option>
                     </select>
-                    <a href={`/communities/${community.id}/form-create-advertisement-post`} className="button-card view-button">
+                    <a
+                        href={`/communities/${community.id}/form-create-advertisement-post`}
+                        className="bg-secondary hover:bg-accent text-black py-2 px-4 rounded-lg text-base no-underline min-w-[200px] text-center transition-colors duration-300 ease-in-out font-bold mr-5"
+                    >
                         Create Advertisement / Post
                     </a>
+
                 </div>
                 <div className="grid w-full gap-10 grid-cols-3">
                     {filteredPosts.map((post, index) => (
