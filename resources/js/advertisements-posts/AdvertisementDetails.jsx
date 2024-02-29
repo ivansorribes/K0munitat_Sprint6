@@ -4,7 +4,6 @@ import { createRoot } from "react-dom/client";
 export default function AdvertisementDetails() {
     const [post, setPost] = useState(null);
     const community = window.communityData;
-    console.log(post)
 
     useEffect(() => {
         const pathParts = window.location.pathname.split('/');
@@ -23,27 +22,36 @@ export default function AdvertisementDetails() {
         return <div>Loading...</div>;
     }
 
+    const pathParts = window.location.pathname.split('/');
+    const communityId = pathParts[pathParts.length - 2];
+
     return (
         <div className="flex flex-col items-center mx-auto max-w-screen-lg m-10">
-
+            <div className="self-start mb-4">
+                <a href={`/communities/${communityId}`} className="inline-block bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded">
+                    Back
+                </a>
+            </div>
             <div className="bg-white w-full rounded-lg shadow-md flex flex-col transition-all overflow-hidden hover:shadow-2xl">
                 <div className="p-6">
-                    <div className="pb-3 mb-4 border-b border-stone-200 text-xs font-medium flex justify-between text-neutral">
-                        <span className="flex items-center gap-1">
-                            Created: {new Date(post.created_at).toLocaleDateString('es-ES', {
-                                year: 'numeric',
-                                month: '2-digit',
-                                day: '2-digit',
-                                hour: '2-digit',
-                                minute: '2-digit',
-                                second: '2-digit',
-                                hour12: false
-                            })}
-                        </span>
-                        <span>
+                    <div className="pb-3 mb-4 border-b border-stone-200 text-sm flex justify-between items-center text-neutral">
+                        <div className="flex items-center gap-4">
+                            <span className="font-bold">{post.creator_username}</span>
+                            <span className="text-xs">
+                                Created: <time dateTime={post.created_at}>{new Date(post.created_at).toLocaleDateString('es-ES', {
+                                    year: 'numeric',
+                                    month: 'long',
+                                    day: '2-digit',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })}</time>
+                            </span>
+                        </div>
+                        <span className="px-2 py-1 bg-primary text-neutral rounded-full text-xs">
                             {post.type}
                         </span>
                     </div>
+
                     <h3 className="mb-4 font-extrabold text-2xl text-neutral">
                         {post.title}
                     </h3>

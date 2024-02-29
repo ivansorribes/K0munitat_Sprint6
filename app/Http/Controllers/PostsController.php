@@ -145,11 +145,12 @@ class PostsController extends Controller
         $post = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
         }, 'comments' => function ($query) {
-            // Asegúrate de tener una relación 'user' en tu modelo Comment
             $query->with(['user' => function ($q) {
-                $q->select('id', 'username'); // Ajusta esto según tu estructura de base de datos
+                $q->select('id', 'username');
             }])
                 ->select('id', 'id_post', 'id_user', 'comment');
+        }, 'user' => function ($query) { // Carga el usuario que creó el post
+            $query->select('id', 'username');
         }])->findOrFail($id_post);
 
         $community = null;
@@ -161,20 +162,22 @@ class PostsController extends Controller
             $image->url = URL::to('storage/posts/' . $image->name);
         });
 
-        // Aquí puedes ajustar la estructura de tu respuesta para incluir el username del usuario
-        // Por ejemplo, ajustando cada comentario para incluir el username del usuario relacionado.
+        // Ajusta la estructura de los comentarios como antes
         $post->comments->each(function ($comment) {
-            // Asegura que 'user' sea cargado correctamente con 'with' en la consulta
             if ($comment->user) {
-                $comment->username = $comment->user->username; // Agrega el username directamente en la estructura del comentario
-                unset($comment->id_user); // Opcional: Eliminar id_user si ya no lo necesitas
+                $comment->username = $comment->user->username;
+                unset($comment->id_user);
             }
         });
+
+        // Añade el username del creador del post a la respuesta
+        $post->creator_username = $post->user ? $post->user->username : null;
 
         return response()->json([
             'post' => $post,
         ]);
     }
+
 
 
     /**
