@@ -15,5 +15,6 @@ import './communities/CommunityCard.jsx';
 import './communities/CommunitiesList.jsx';
 import './advertisements-posts/AdvertisementDetails.jsx';
 import './advertisements-posts/AdvertisementComments.jsx';
+import './EditPersonalProfile.jsx';
 import './events/events.jsx';
 
