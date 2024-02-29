@@ -42,6 +42,7 @@
                 @if(Auth::check() && Auth::user()->role === 'superAdmin')
                     <div id="user-menu" style="z-index: 30" class="hidden absolute top-full right-0 mt-2 bg-white border rounded-md shadow-lg w-48">
                         <a href="{{ route('AdminPanel') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Admin Panel</a>
+                        <a href="{{ route('ProfileView') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Profile</a>
                         <a href="{{ route('logout') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log out</a>
                     </div>
                 @else
