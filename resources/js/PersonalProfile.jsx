@@ -93,7 +93,7 @@ export default function PersonalProfile() {
     const openEditModal = (post) => {
         setSelectedEditPost(post);
         setEditModalOpen(true);
-        setSelectedImageURL(`/profile/images/${post.image.name}`); // Establecer la URL de la imagen seleccionada
+        setSelectedImageURL(`/storage/app/public/posts/${post.image.name}`); // Establecer la URL de la imagen seleccionada
         // Cerrar cualquier menú desplegable abierto al abrir el modal de edición
         setMenuOpen(Array(posts.length).fill(false));
     };
@@ -212,9 +212,10 @@ export default function PersonalProfile() {
             <div className="bg-white shadow-md rounded p-8 mb-4">
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-3xl font-bold">{`${user.username}`}</h1>
-                    <button className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                    <a href='/editPersonalProfile'><button className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                         Edit profile
-                    </button>
+                    </button></a>
+
                 </div>
 
                 <div className="flex items-center">
@@ -274,7 +275,7 @@ export default function PersonalProfile() {
                             >
                                 <img
                                     className="w-full h-32 object-cover rounded"
-                                    src={`/profile/images/${post.image.name}`}
+                                    src={`/storage/app/public/posts/${post.image.name}`}
                                     alt={`Publicación ${post.id}`}
                                     style={{ width: '800px', height: '350px' }}
                                     onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
