@@ -37,7 +37,7 @@ Route::get('/about-us', function () {
 // ADMIN PANEL
 Route::get('/adminPanel', function () {
     return view('login.panelAdmin');
-});
+})->name('AdminPanel');
 
 // USER RELATED
 Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
