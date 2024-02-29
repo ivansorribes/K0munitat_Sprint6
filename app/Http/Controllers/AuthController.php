@@ -204,16 +204,25 @@ class AuthController extends Controller
 
     public function Callback1()
     {
+        // Obtén los datos del usuario de Google
         $user_google = Socialite::driver('google')->user();
 
-        $user = User::firstOrCreate(
-            [
+        // Busca un usuario existente en la base de datos por su correo electrónico
+        $user = User::where('email', $user_google->email)->first();
+
+        // Si el usuario no existe, créalo
+        if (!$user) {
+            $user = User::create([
                 'username' => $user_google->name,
                 'email' => $user_google->email,
+                'p'
             ]);
+        }
 
+        // Inicia sesión con el usuario
         Auth::login($user);
 
+        // Redirige a la página principal
         return redirect('/');
     }
 }
