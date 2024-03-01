@@ -19,6 +19,28 @@ export default function AdvertisementDetails() {
             .catch(error => console.error('Error fetching post data:', error));
     }, []);
 
+    const toggleLike = (postId) => {
+        fetch(`http://localhost/posts/${postId}/likes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ id_post: postId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    setPost(prevPost => ({
+                        ...prevPost,
+                        liked: !prevPost.liked,
+                        likes_count: prevPost.liked ? prevPost.likes_count - 1 : prevPost.likes_count + 1,
+                    }));
+                }
+            });
+    };
+
     if (!post) {
         return <div>Loading...</div>;
     }
@@ -52,11 +74,9 @@ export default function AdvertisementDetails() {
                             <span className="px-2 py-1 bg-primary text-neutral rounded-full text-xs flex items-center">
                                 {post.type}
                             </span>
-                            <HeartButton liked={post.liked} likesCount={post.likes_count} onToggleLike={() => {/* Aquí deberías manejar el cambio de like */ }} />
+                            <HeartButton liked={post.liked} likesCount={post.likes_count} onToggleLike={() => toggleLike(post.id)} />
                         </div>
                     </div>
-
-
                     <h3 className="mb-4 font-extrabold text-2xl text-neutral">
                         {post.title}
                     </h3>

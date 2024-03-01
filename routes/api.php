@@ -31,6 +31,3 @@ Route::post('/events', [EventController::class, 'store'])->name('api.events.stor
 Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show']);
 
 Route::post('/comments', [commentsPostsController::class, 'store']);
-
-Route::post('/posts/{post}/likes', [PostsController::class, 'like'])->middleware('auth');
-Route::delete('/posts/{post}/likes', [PostsController::class, 'unlike'])->middleware('auth');

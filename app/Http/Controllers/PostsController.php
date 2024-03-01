@@ -153,6 +153,8 @@ class PostsController extends Controller
         }, 'likes']) // Asegúrate de cargar la relación de likes aquí
             ->findOrFail($id_post);
 
+        $post->liked = $post->likes->contains('user_id', Auth::id());
+
         $community = null;
         if ($post->community_id) {
             $community = communities::findOrFail($post->community_id);

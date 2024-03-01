@@ -12,6 +12,7 @@ use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -128,5 +129,5 @@ Route::get('/paneladmin', function () {
 Route::get('/paneladminAdvertisements', function () {
     return view('paneladminAdvertisements');
 })->name('paneladminAdvertisements');
-//Header
-//Header
+
+Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
