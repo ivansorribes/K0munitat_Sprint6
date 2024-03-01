@@ -7,7 +7,6 @@ export default function AdvertisementComments() {
     const [postId, setPostId] = useState(null);
     const id_user = document.getElementById("id_user").value;
     const username = document.getElementById("username").value;
-    console.log(username)
 
     useEffect(() => {
         const pathParts = window.location.pathname.split('/');
@@ -39,13 +38,16 @@ export default function AdvertisementComments() {
                 throw new Error('Network response was not ok');
             }
 
-            const data = await response.json();
-            setComments([...comments, data]);
+            const newCommentData = await response.json();
+            const commentWithUsername = { ...newCommentData, username: username };
+
+            setComments([...comments, commentWithUsername]);
             setNewComment('');
         } catch (error) {
             console.error('Error posting the comment:', error);
         }
     };
+
 
     return (
         <section className="bg-white py-8 lg:py-16 antialiased">
@@ -75,7 +77,7 @@ export default function AdvertisementComments() {
                     <textarea
                         id="comment"
                         rows="4"
-                        className="w-full p-2 text-sm text-black border-2 border-neutral rounded-lg"
+                        className="w-full p-2 text-sm text-neutral border-2 border-neutral rounded-lg focus:border-neutral focus:ring-0"
                         placeholder="Write a comment..."
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
