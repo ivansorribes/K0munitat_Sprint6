@@ -12,6 +12,34 @@ export default function AdvertisementList() {
         }
     }, []);
 
+    const toggleLike = (postId) => {
+        fetch(`http://localhost/posts/${postId}/likes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            },
+            body: JSON.stringify({ id_post: postId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    setPosts(posts => posts.map(post => {
+                        if (post.id === postId) {
+                            return {
+                                ...post,
+                                liked: !post.liked,
+                                likes_count: post.liked ? post.likes_count - 1 : post.likes_count + 1,
+                            };
+                        }
+                        return post;
+                    }));
+                }
+            });
+    };
+
+
     const handleFilterChange = (e) => {
         setFilter(e.target.value);
     };
@@ -59,7 +87,7 @@ export default function AdvertisementList() {
                                         })}</time>
                                     </span>
                                     <span>
-                                        <HeartButton liked={post.liked} likesCount={post.likes_count} onToggleLike={() => {/* Aquí deberías manejar el cambio de like */ }} />
+                                        <HeartButton liked={post.liked} likesCount={post.likes_count} onToggleLike={() => toggleLike(post.id)} />
                                     </span>
                                 </div>
                                 <h3 className="mb-4 font-extrabold text-2xl">

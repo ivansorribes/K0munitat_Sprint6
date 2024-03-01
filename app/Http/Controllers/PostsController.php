@@ -37,6 +37,7 @@ class PostsController extends Controller
             $post->images->each(function ($image) {
                 $image->url = URL::to('storage/posts/' . $image->name);
             });
+            $post->liked = $post->likes()->where('id_user', Auth::id())->exists();
         });
         return view('communities.show', [
             'posts' => $posts,
