@@ -1,142 +1,69 @@
 <!DOCTYPE html>
-
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-
     <meta charset="utf-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <title>Laravel 10 - REACT 18</title>
-
     @viteReactRefresh
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
-
 </head>
 
 <body class="flex">
     <div id="sidebar-container"></div>
 
     <div class="flex-1">
+        <div class="container mx-auto p-8 mr-5">
+            <h1 class="text-2xl font-bold mb-4">Listado de Advertisements</h1>
+            <table class="w-full border-collapse border border-gray-200">
+                <thead>
+                    <tr>
+                        <th class="border border-gray-200 px-4 py-2">Community</th>
+                        <th class="border border-gray-200 px-4 py-2">User</th>
+                        <th class="border border-gray-200 px-4 py-2">Title</th>
+                        <th class="border border-gray-200 px-4 py-2">Description</th>
+                        <th class="border border-gray-200 px-4 py-2">Category</th>
+                        <th class="border border-gray-200 px-4 py-2">State</th>
+                        <th class="border border-gray-200 px-4 py-2">Creation Date</th>
+                        <th class="border border-gray-200 px-4 py-2">Save State</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($posts as $advertisement)
+                    @if($advertisement->type == 'advertisement')
+                    <tr>
+                        <form id="editAdvertisementForm{{$advertisement->id}}" action="{{ route('update.advertisement', [$advertisement->id]) }}" method="POST">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="type" value="advertisement">
+                            <td class="border border-gray-200 px-4 py-2">{{ $advertisement->community->name }}</td>
+                            <td class="border border-gray-200 px-4 py-2">{{ $advertisement->user->username }}</td>
+                            <td class="border border-gray-200 px-4 py-2"><input type="text" name="title" value="{{ $advertisement->title }}"></td>
+                            <td class="border border-gray-200 px-4 py-2">
+                                <textarea form="editAdvertisementForm{{$advertisement->id}}" name="description">{{ $advertisement->description }}</textarea>
+                            </td>
+                            <td class="border border-gray-200 px-4 py-2">{{ $advertisement->id_category }}</td>
+                            <td class="border border-gray-200 px-4 py-2" style="white-space: nowrap;">
+                                @if($advertisement->isActive)
+                                <span style="color: green; display: inline-block; vertical-align: middle;">Active &#10004;</span>
+                                @else
+                                <span style="color: red; display: inline-block; vertical-align: middle;">Inactive &#10008;</span>
+                                @endif
+                            </td>
+                            <td class="border border-gray-200 px-4 py-2">{{ $advertisement->created_at }}</td>
+                            <td class="border border-gray-200 px-4 py-2">
+                                <button class="btn btn-sm bg-green-500 text-white px-2 py-1 rounded" type="submit">Save</button>
+                            </td>
+                        </form>
+                    </tr>
+                    @endif
+                    @endforeach
 
-        <!-- component -->
-        <!-- This is an example component -->
-        <div class="max-w-2xl mx-auto">
-
-            <div class="flex flex-col">
-                <div class="overflow-x-auto shadow-md sm:rounded-lg">
-                    <div class="inline-block min-w-full align-middle">
-                        <div class="overflow-hidden ">
-                            <table class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-700">
-                                <thead class="bg-gray-100 dark:bg-gray-700">
-                                    <tr>
-                                        <th scope="col" class="p-4">
-                                            <div class="flex items-center">
-                                                <input id="checkbox-all" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="checkbox-all" class="sr-only">checkbox</label>
-                                            </div>
-                                        </th>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Product Name
-                                        </th>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Category
-                                        </th>
-                                        <th scope="col" class="py-3 px-6 text-xs font-medium tracking-wider text-left text-gray-700 uppercase dark:text-gray-400">
-                                            Price
-                                        </th>
-                                        <th scope="col" class="p-4">
-                                            <span class="sr-only">Edit</span>
-                                        </th>
-                                    </tr>
-                                </thead>
-                                <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700">
-                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td class="p-4 w-4">
-                                            <div class="flex items-center">
-                                                <input id="checkbox-table-1" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="checkbox-table-1" class="sr-only">checkbox</label>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Apple Imac 27"</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">Desktop PC</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">$1999</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                            <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td class="p-4 w-4">
-                                            <div class="flex items-center">
-                                                <input id="checkbox-table-2" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="checkbox-table-2" class="sr-only">checkbox</label>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Apple MacBook Pro 17"</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">Laptop</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">$2999</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                            <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td class="p-4 w-4">
-                                            <div class="flex items-center">
-                                                <input id="checkbox-table-3" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="checkbox-table-3" class="sr-only">checkbox</label>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">iPhone 13 Pro</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">Phone</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">$999</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                            <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td class="p-4 w-4">
-                                            <div class="flex items-center">
-                                                <input id="checkbox-table-4" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="checkbox-table-4" class="sr-only">checkbox</label>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Apple Magic Mouse 2</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">Accessories</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">$99</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                            <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                        </td>
-                                    </tr>
-                                    <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
-                                        <td class="p-4 w-4">
-                                            <div class="flex items-center">
-                                                <input id="checkbox-table-5" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 rounded border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                                <label for="checkbox-table-5" class="sr-only">checkbox</label>
-                                            </div>
-                                        </td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">Apple Watch Series 7</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-500 whitespace-nowrap dark:text-white">Accessories</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-gray-900 whitespace-nowrap dark:text-white">$599</td>
-                                        <td class="py-4 px-6 text-sm font-medium text-right whitespace-nowrap">
-                                            <a href="#" class="text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <p class="mt-5">This table component is part of a larger, open-source library of Tailwind CSS components. Learn
-                more
-                by going to the official <a class="text-blue-600 hover:underline" href="#" target="_blank">Flowbite Documentation</a>.
-            </p>
+                </tbody>
+            </table>
         </div>
     </div>
-
 </body>
 
 </html>

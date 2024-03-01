@@ -104,21 +104,30 @@ Route::get('/communities/{community}/post-list', function (Request $request, $co
 })->name('post-list');
 
 
+
 Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
+Route::put('/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
 
-Route::get('/paneladminPosts', [PostsController::class, 'getComunnities'])->name('getComunnities');
-Route::put('/posts/{post}', [PostsController::class, 'update'])->name('update.post');
+Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');
+Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
 Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
+
+Route::get('/paneladminAdvertisements', [PostsController::class, 'getAdvertisements'])->name('paneladminAdvertisements');
+Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAdvertisement'])->name('update.advertisement');
+
+
+
 
 Route::get('/events', function () {
     return view('events.calendar');
 })->name('calendar');
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+
 
 Route::get('/admin', function () {
     return view('panelAdmin');
@@ -128,8 +137,6 @@ Route::get('/paneladmin', function () {
     return view('panel-admin');
 })->name('panel-admin');
 
-Route::get('/paneladminAdvertisements', function () {
-    return view('paneladminAdvertisements');
-})->name('paneladminAdvertisements');
+
 //Header
 //Header
