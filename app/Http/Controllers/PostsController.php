@@ -23,8 +23,7 @@ class PostsController extends Controller
     {
         $query = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
-        }]);
-        // $query->where('type', $type);
+        }])->withCount('likes');
 
         if ($communityId) {
             $community = communities::findOrFail($communityId);

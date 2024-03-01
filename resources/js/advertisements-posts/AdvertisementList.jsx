@@ -59,7 +59,7 @@ export default function AdvertisementList() {
                                         })}</time>
                                     </span>
                                     <span>
-                                        <HeartButton />
+                                        <HeartButton liked={post.liked} likesCount={post.likes_count} onToggleLike={() => {/* Aquí deberías manejar el cambio de like */ }} />
                                     </span>
                                 </div>
                                 <h3 className="mb-4 font-extrabold text-2xl">

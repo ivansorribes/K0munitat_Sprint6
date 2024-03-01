@@ -52,7 +52,7 @@ export default function AdvertisementDetails() {
                             <span className="px-2 py-1 bg-primary text-neutral rounded-full text-xs flex items-center">
                                 {post.type}
                             </span>
-                            <HeartButton />
+                            <HeartButton liked={post.liked} likesCount={post.likes_count} onToggleLike={() => {/* Aquí deberías manejar el cambio de like */ }} />
                         </div>
                     </div>
 
