@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\Rule;
 use App\Models\User;
 use Carbon\Carbon;
+use Laravel\Socialite\Facades\Socialite;
 
 
 class AuthController extends Controller
@@ -173,5 +174,57 @@ class AuthController extends Controller
 
             return redirect()->route('LoginView')->with('info', 'Your password has been changed! You can login with new password');
         }
+    }
+
+    public function redirect()
+    {
+        return Socialite::driver('facebook')->redirect();
+    }
+
+    public function callback()
+    {
+        $user = Socialite::driver('facebook')->user();
+        $user = User::firstOrCreate(
+            ['email' => $user->email],
+            [
+                'username' => $user->name,
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+
+            ]
+        );
+
+
+        auth()->login($user);
+
+        return redirect()->to('/');
+    }
+
+    public function Redirect1()
+    {
+        return Socialite::driver('google')->redirect();
+    }
+
+    public function Callback1()
+    {
+        // Obtén los datos del usuario de Google
+        $user_google = Socialite::driver('google')->user();
+
+        // Busca un usuario existente en la base de datos por su correo electrónico
+        $user = User::where('email', $user_google->email)->first();
+
+        // Si el usuario no existe, créalo
+        if (!$user) {
+            $user = User::create([
+                'username' => $user_google->name,
+                'email' => $user_google->email,
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+            ]);
+        }
+
+        // Inicia sesión con el usuario
+        Auth::login($user);
+
+        // Redirige a la página principal
+        return redirect('/');
     }
 }

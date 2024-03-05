@@ -10,11 +10,11 @@ class CreateCommentsPostsTable extends Migration
     {
         Schema::create('commentsPosts', function (Blueprint $table) {
 
-        $table->id();
-        $table->foreignId('id_post')->references('id')->on('posts');
-		$table->foreignId('id_comment')->references('id')->on('comments');
-        $table->timestamps();
-
+            $table->id();
+            $table->foreignId('id_post')->references('id')->on('posts');
+            $table->foreignId('id_user')->references('id')->on('users');
+            $table->string('comment');
+            $table->timestamps();
         });
     }
 

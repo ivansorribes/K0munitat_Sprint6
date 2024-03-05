@@ -86,7 +86,7 @@ export default function AdminPanel() {
                         </span>
                         <h3>Dashboard</h3>
                     </a>
-                    <a href="#">
+                    <a href="/paneladminUsers">
                         <span className="material-icons-sharp">
                             person_outline
                         </span>

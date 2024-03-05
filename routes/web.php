@@ -12,6 +12,7 @@ use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,7 +38,7 @@ Route::get('/about-us', function () {
 // ADMIN PANEL
 Route::get('/adminPanel', function () {
     return view('login.panelAdmin');
-});
+})->name('AdminPanel');
 
 // USER RELATED
 Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
@@ -62,7 +63,12 @@ Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('
 Route::post('/inicia-sesion', [AuthController::class, 'login'])->name('inicia-sesion');
 Route::post('/validate-register', [AuthController::class, 'register'])->name('validate-register');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
-
+//FACEBOOK AUTH
+Route::get('/auth/redirect', [AuthController::class, 'redirect'])->name('auth.redirect');
+Route::get('/auth/callback', [AuthController::class, 'callback'])->name('auth.callback');
+//GOOGLE AUTH
+Route::get('/auth/Redirect1', [AuthController::class, 'Redirect1'])->name('auth.redirect1');
+Route::get('/auth/Callback1', [AuthController::class, 'Callback1'])->name('auth.callback1');
 Route::middleware(['auth'])->group(function () {
     //Rutas de comunidades
     Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
@@ -70,7 +76,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
     Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
-    Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
+
+    // Show community with posts & ads
+    Route::get('/communities/{community}', [PostsController::class, 'index'])->name('communities.show');
     Route::post('/communities', [CommunitiesController::class, 'store']);
     Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
     Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
@@ -92,15 +100,10 @@ Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->nam
 // POSTS - ADVERTISEMENTS
 Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
 Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
-
-Route::get('/communities/{community}/advertisement-list', function (Request $request, $communityId) {
-    return app(PostsController::class)->index($request, $communityId, 'advertisement');
-})->name('advertisement-list');
-
-Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
-    return app(PostsController::class)->index($request, $communityId, 'post');
-})->name('post-list');
-
+// Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show'])->name('advertisements-posts.show');
+Route::get('/communities/{community}/{id_post}', function () {
+    return view('advertisements-posts.show');
+})->name('advertisements-posts.show');
 
 Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
@@ -118,4 +121,16 @@ Route::get('/events', function () {
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
-//Header
+Route::get('/admin', function () {
+    return view('panelAdmin');
+})->name('admin');
+
+Route::get('/paneladmin', function () {
+    return view('panel-admin');
+})->name('panel-admin');
+
+Route::get('/paneladminAdvertisements', function () {
+    return view('paneladminAdvertisements');
+})->name('paneladminAdvertisements');
+
+Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
