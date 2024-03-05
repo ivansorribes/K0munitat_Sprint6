@@ -49,6 +49,9 @@ Route::get('/resetPassword', [AuthController::class, 'resetPasswordView'])->name
 Route::get('passwordReset/{token}', [AuthController::class, 'resetFormView'])->name('resetFormView');
 Route::get('/editPersonalProfile', [UserController::class, 'EditProfileView'])->name('EditProfileView')->middleware('auth');
 Route::post('/updateUserInfo', [UserController::class, 'updateUserInfo'])->name('updateUserInfo')->middleware('auth');
+Route::post('/changePassword', [UserController::class, 'changePassword'])->name('changePassword')->middleware('auth');
+Route::post('/deleteUserImage', [UserController::class, 'deleteUserImage'])->name('deleteUserImage')->middleware('auth');
+
 
 
 // FORGOT PASSWORD / PASSWORD-RESET
