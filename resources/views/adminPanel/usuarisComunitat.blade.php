@@ -14,11 +14,11 @@
     <div id="sidebar-container"></div>
 
     <div class="flex-1">
-        <div class="container mx-auto p-8">
-            <h1 class="text-2xl font-bold mb-4">Listado de Usuarios de la Comunidad {{ $community->name }}</h1>
+        <div class="container mx-auto p-8 pl-64">
+            <h1 class="text-2xl font-bold mb-4 ml-4">Listado de Usuarios de la Comunidad {{ $community->name }}</h1>
             <ul>
                 @foreach($users as $user)
-                <li>{{ $user->name }}</li>
+                <li>{{ $user->username }}</li>
                 @endforeach
             </ul>
         </div>

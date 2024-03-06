@@ -12,7 +12,7 @@ class CommunitiesController extends Controller
     public function retornarComunitats()
     {
         // Obtener todas las comunidades con los usuarios asociados
-        $communities = communities::with('admin')->get();
+        $communities = communities::with('admin', 'categories')->get();
         return view('adminPanel.paneladminComunitats', compact('communities'));
     }
 
