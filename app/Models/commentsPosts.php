@@ -30,4 +30,8 @@ class commentsPosts extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
+    public function comment()
+{
+    return $this->belongsTo('App\Models\comments', 'id_comment');
+}
 }
