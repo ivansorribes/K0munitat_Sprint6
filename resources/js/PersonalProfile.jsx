@@ -216,9 +216,7 @@ export default function PersonalProfile() {
                         Edit profile
                     </button></a>
 
-                </div>
-
-                <div className="flex items-center">
+                </div><div className="flex items-center">
                     <div className="w-1/4 text-center">
                         <div className="flex flex-col items-center">
                             <img
@@ -226,58 +224,58 @@ export default function PersonalProfile() {
                                 src={user.profile_image ? `/profile/images/${user.profile_image}` : '/profile/images/DefaultImage.png'}
                                 id="userImage"
                             />
-
                             <p className="font-bold">{`${user.firstname} ${user.lastname}`}</p>
                         </div>
                     </div>
-                    <div className="flex items-center relative w-3/4">
-                        <p className="font-bold mb-2 text-left w-full">Description:</p>
-                        <div className="relative w-full">
-                            {editingDescription ? (
-                                <div className="w-full h-48 border rounded p-2 mb-4" style={{ width: '800px', height: '120px', marginBottom: '10px' }}>
-                                    <textarea
-                                        className="w-full h-full outline-none"
-                                        value={newDescription}
-                                        onChange={(e) => setNewDescription(e.target.value)}
-                                    />
-                                    <div className="flex items-end justify-end absolute bottom-0 right-0 mb-2 mr-2">
-                                        <button className="bg-green-500 text-white px-2 py-1 rounded mr-2" onClick={saveDescription} style={{ marginBottom: '15px' }}>
-                                            <FontAwesomeIcon icon={faSave} size="xs" />
-                                        </button>
-                                        <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={cancelEditingDescription} style={{ marginBottom: '15px' }}>
-                                            <FontAwesomeIcon icon={faTimes} size="xs" />
-                                        </button>
-                                    </div>
+                    <div className="w-3/4">
+                        <p className="font-bold mb-2 text-left">Description:</p>
+                        {editingDescription ? (
+                            <div className="border rounded p-2 mb-4">
+                                <textarea
+                                    className="w-full h-50 outline-none"
+                                    value={newDescription}
+                                    onChange={(e) => setNewDescription(e.target.value)}
+                                />
+                                <div className="flex items-end justify-end">
+                                    <button className="bg-green-500 text-white px-2 py-1 rounded mr-2" onClick={saveDescription}>
+                                        <FontAwesomeIcon icon={faSave} size="xs" />
+                                    </button>
+                                    <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={cancelEditingDescription}>
+                                        <FontAwesomeIcon icon={faTimes} size="xs" />
+                                    </button>
                                 </div>
-                            ) : (
-                                <div className="border rounded p-2 relative" style={{ width: '800px', height: '120px', marginBottom: '10px' }}>
-                                    {user.profile_description ? (
-                                        <p>{user.profile_description}</p>
-                                    ) : (
-                                        <p>No description available</p>
-                                    )}
-                                    <button className="bg-blue-500 text-white px-2 py-1 rounded absolute bottom-0 right-0 mb-2 mr-2" onClick={() => { startEditingDescription(); setNewDescription(user.profile_description); }}>
+                            </div>
+                        ) : (
+                            <div className="border rounded p-2 mb-4">
+                                {user.profile_description ? (
+                                    <p>{user.profile_description}</p>
+                                ) : (
+                                    <p>No description available</p>
+                                )}
+                                <div className="flex items-end justify-end">
+
+                                    <button className="bg-blue-500 text-white px-2 py-1 rounded" onClick={() => { startEditingDescription(); setNewDescription(user.profile_description); }}>
                                         <FontAwesomeIcon icon={faEdit} size="xs" />
                                     </button>
                                 </div>
-                            )}
-                        </div>
+                            </div>
+                        )}
                     </div>
                 </div>
 
+
                 <div className="mt-6">
                     <h2 className="text-2xl text-center font-bold mb-4">Publications</h2>
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         {posts.map((post, index) => (
                             <div
                                 key={post.id}
                                 className="post-card border border-gray-300 p-4 bg-gray-100 cursor-pointer relative"
                             >
                                 <img
-                                    className="w-full h-32 object-cover rounded"
+                                    className="w-full h-50 object-cover rounded"
                                     src={`/storage/app/public/posts/${post.image.name}`}
                                     alt={`Publicación ${post.id}`}
-                                    style={{ width: '800px', height: '350px' }}
                                     onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
                                 />
                                 {/* Botón desplegable */}
