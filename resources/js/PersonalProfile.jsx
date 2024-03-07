@@ -25,6 +25,7 @@ export default function PersonalProfile() {
                     const data = await response.json();
                     setUser(data.user || {});
                     setPosts(data.posts || []);
+                    console.log(data.posts)
                     // Inicializar menuOpen con un array de falsos del mismo tamaño que posts
                     setMenuOpen(Array(data.posts.length).fill(false));
                 } else {
@@ -37,7 +38,6 @@ export default function PersonalProfile() {
 
         fetchUserData();
     }, []);
-
     const startEditingDescription = () => {
         setNewDescription(user.description || '');
         setEditingDescription(true);
@@ -93,7 +93,7 @@ export default function PersonalProfile() {
     const openEditModal = (post) => {
         setSelectedEditPost(post);
         setEditModalOpen(true);
-        setSelectedImageURL(`/storage/app/public/posts/${post.image.name}`); // Establecer la URL de la imagen seleccionada
+        setSelectedImageURL(`/storage/posts/${image.url}`); // Establecer la URL de la imagen seleccionada
         // Cerrar cualquier menú desplegable abierto al abrir el modal de edición
         setMenuOpen(Array(posts.length).fill(false));
     };
@@ -274,7 +274,7 @@ export default function PersonalProfile() {
                             >
                                 <img
                                     className="w-full h-50 object-cover rounded"
-                                    src={`/storage/app/public/posts/${post.image.name}`}
+                                    src={`/storage/posts/${post.image.name}`}
                                     alt={`Publicación ${post.id}`}
                                     onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
                                 />
