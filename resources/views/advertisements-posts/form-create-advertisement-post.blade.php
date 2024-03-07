@@ -39,9 +39,13 @@
                     errors.push("<li>Description is required.</li>");
                     isValid = false;
                 }
-                var categoryId = $("#category_id").val();
+                var categoryId = $('select[name="category_id"]').val();
                 if (categoryId === "") {
                     errors.push("<li>Please select a category.</li>");
+                    isValid = false;
+                }
+                if (!$('#image')[0].files.length) {
+                    errors.push("<li>Please upload an image.</li>");
                     isValid = false;
                 }
                 if (!isValid) {
