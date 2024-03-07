@@ -23,8 +23,7 @@ class PostsController extends Controller
     {
         $query = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
-        }]);
-        // $query->where('type', $type);
+        }])->withCount('likes');
 
         if ($communityId) {
             $community = communities::findOrFail($communityId);
@@ -38,6 +37,7 @@ class PostsController extends Controller
             $post->images->each(function ($image) {
                 $image->url = URL::to('storage/posts/' . $image->name);
             });
+            $post->liked = $post->likes()->where('id_user', Auth::id())->exists();
         });
         return view('communities.show', [
             'posts' => $posts,
@@ -145,12 +145,16 @@ class PostsController extends Controller
         $post = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
         }, 'comments' => function ($query) {
-            // Asegúrate de tener una relación 'user' en tu modelo Comment
             $query->with(['user' => function ($q) {
-                $q->select('id', 'username'); // Ajusta esto según tu estructura de base de datos
+                $q->select('id', 'username');
             }])
                 ->select('id', 'id_post', 'id_user', 'comment');
-        }])->findOrFail($id_post);
+        }, 'user' => function ($query) { // Carga el usuario que creó el post
+            $query->select('id', 'username');
+        }, 'likes']) // Asegúrate de cargar la relación de likes aquí
+            ->findOrFail($id_post);
+
+        $post->liked = $post->likes->contains('user_id', Auth::id());
 
         $community = null;
         if ($post->community_id) {
@@ -161,21 +165,27 @@ class PostsController extends Controller
             $image->url = URL::to('storage/posts/' . $image->name);
         });
 
-        // Aquí puedes ajustar la estructura de tu respuesta para incluir el username del usuario
-        // Por ejemplo, ajustando cada comentario para incluir el username del usuario relacionado.
+        // Ajusta la estructura de los comentarios como antes
         $post->comments->each(function ($comment) {
-            // Asegura que 'user' sea cargado correctamente con 'with' en la consulta
             if ($comment->user) {
-                $comment->username = $comment->user->username; // Agrega el username directamente en la estructura del comentario
-                unset($comment->id_user); // Opcional: Eliminar id_user si ya no lo necesitas
+                $comment->username = $comment->user->username;
+                unset($comment->id_user);
             }
         });
+
+        // Añade el username del creador del post a la respuesta
+        $post->creator_username = $post->user ? $post->user->username : null;
+
+        // Calcula el conteo de likes
+        $post->likes_count = $post->likes->count();
+
+        // Opcional: Eliminar la colección de likes para no enviarla en la respuesta
+        unset($post->likes);
 
         return response()->json([
             'post' => $post,
         ]);
     }
-
 
     /**
      * Show the form for editing the specified resource.

@@ -17,7 +17,7 @@ import './advertisements-posts/AdvertisementDetails.jsx';
 import './advertisements-posts/AdvertisementComments.jsx';
 import './Sidebar.jsx';
 import './Taula.jsx';
-
+import './components/HeartButton.jsx';
 
 import './EditPersonalProfile.jsx';
 import './events/events.jsx';

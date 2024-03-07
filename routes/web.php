@@ -12,6 +12,7 @@ use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
+use App\Http\Controllers\LikeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,6 +50,9 @@ Route::get('/resetPassword', [AuthController::class, 'resetPasswordView'])->name
 Route::get('passwordReset/{token}', [AuthController::class, 'resetFormView'])->name('resetFormView');
 Route::get('/editPersonalProfile', [UserController::class, 'EditProfileView'])->name('EditProfileView')->middleware('auth');
 Route::post('/updateUserInfo', [UserController::class, 'updateUserInfo'])->name('updateUserInfo')->middleware('auth');
+Route::post('/changePassword', [UserController::class, 'changePassword'])->name('changePassword')->middleware('auth');
+Route::post('/deleteUserImage', [UserController::class, 'deleteUserImage'])->name('deleteUserImage')->middleware('auth');
+
 
 
 // FORGOT PASSWORD / PASSWORD-RESET
@@ -128,5 +132,5 @@ Route::get('/paneladmin', function () {
 Route::get('/paneladminAdvertisements', function () {
     return view('paneladminAdvertisements');
 })->name('paneladminAdvertisements');
-//Header
-//Header
+
+Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
