@@ -39,7 +39,17 @@ class LoginController extends Controller
     	], 200);
 	}
 
-    public function logoutApi(Request $request)
+    function tokenReturn(Request $request) {
+         /** @var \App\Models\User $user **/
+        $user = Auth::user();
+
+        return response()->json([
+            'token' => $user->createToken("API ACCESS TOKEN")->plainTextToken
+        ], 200);
+
+    }
+
+    public function logoutApi()
     {
         $request->user()->currentAccessToken()->delete();
 

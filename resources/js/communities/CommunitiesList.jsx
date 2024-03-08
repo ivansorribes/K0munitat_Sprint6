@@ -14,7 +14,12 @@ const CommunitiesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost/api/communities');
+        const token = '13|HNVCz0AXwU2DZtkhy39Z9B4st70Wdclcl8SPOO92f298ef1b'; 
+        const response = await axios.get('http://localhost/api/communities',{
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setCommunities(response.data);
       } catch (error) {
         console.error('Error loading communities:', error.message);
