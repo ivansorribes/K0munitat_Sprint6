@@ -13,7 +13,6 @@ const CommunitiesList = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const perPage = 9;
 
-  console.log(token, userId);
   useEffect(() => {
     const fetchData = async () => {
       try {

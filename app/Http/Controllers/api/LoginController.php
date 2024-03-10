@@ -35,20 +35,20 @@ class LoginController extends Controller
 
     	return response()->json([
         	'message' => 'Login correcto',
-        	'token' => $user->createToken("API ACCESS TOKEN")->plainTextToken
+        	'token' => $user->createToken("token")->plainTextToken
     	], 200);
 	}
 
     function tokenReturn(Request $request) {
 		if (Auth::check()) {
         	/** @var \App\Models\User $user **/
-        	$user = Auth::user();
-			
+			$user = Auth::user();
+			$token = $request->bearerToken();
+			//$token=$user->tokens->first();
+			//$token = $user->currentAccessToken();
+			//$token = $token->tokenable_id;
 			$user->tokens()->delete();
-
-        	return response()->json([
-        	    'token' => $user->createToken("API ACCESS TOKEN")->plainTextToken
-        	], 200);
+			return response()->json(['token' => $token]);
 		}
 
     }

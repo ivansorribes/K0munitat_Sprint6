@@ -114,11 +114,14 @@ class AuthController extends Controller
 
     function logout(Request $request)
     {
+        /** @var \App\Models\User $user **/
+        $user = Auth::user();
+        $user->tokens()->delete(); //borramos todos los tokens del usuario
+
         Auth::logout();
 
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-
         return redirect(route('LoginView'));
     }
 

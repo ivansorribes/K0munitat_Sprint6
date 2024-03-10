@@ -34,31 +34,30 @@ class CommunitiesController extends Controller
 
     public function index(Request $request)
     {
-        $token = null;
-        $userId = null;
-    
         if (Auth::check()) {
             /** @var \App\Models\User $user **/
             $user = Auth::user();
-    
+            
             // Verificar si el usuario ya tiene un token activo
-            $existingToken =  $request->user()->currentAccessToken();
+            $existingToken = $user->tokens->first();
+            
             if ($existingToken) {
                 // Utilizar el token existente
-                $token = $existingToken;
+                $token = $existingToken->plainTextToken;
             } else {
                 // Si no hay un token existente, crear uno nuevo
                 $tokenData = [
                     'id' => $user->id,
                 ];
-    
+            
                 // Crear un token con información adicional
                 $newToken = $user->createToken('token', $tokenData);
                 $token = $newToken->plainTextToken;
             }
-    
+        
             $userId = $user->id;
-        }
+    }
+
     
         return view('communities.CommunitiesList')->with(['token' => $token, 'userId' => $userId]);
     }

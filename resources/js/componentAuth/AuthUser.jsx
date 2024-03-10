@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const useAuth = () => {
-  const storedToken = localStorage.getItem('authToken');
-  const storedUserId = localStorage.getItem('userId');
+  const storedToken = sessionStorage.getItem('authToken');
+  const storedUserId = sessionStorage.getItem('userId');
   const [token, setToken] = useState(storedToken || (window.authData ? window.authData.token : null));
   const [userId, setUserId] = useState(storedUserId || (window.authData ? window.authData.userId : null));
 
 
   useEffect(() => {
     if (token && !storedToken) {
-      localStorage.setItem('authToken', token);
+      sessionStorage.setItem('authToken', token);
     }
 
     if (userId && !storedUserId) {
-      localStorage.setItem('userId', userId);
+      sessionStorage.setItem('userId', userId);
     }
   }, [token, userId, storedToken, storedUserId]);
 
@@ -26,8 +26,8 @@ const useAuth = () => {
   const clearAuth = () => {
     setToken(null);
     setUserId(null);
-    localStorage.removeItem('authToken');
-    localStorage.removeItem('userId');
+    sessionStorage.removeItem('authToken');
+    sessionStorage.removeItem('userId');
   };
 
   const getNewToken = async () => {
