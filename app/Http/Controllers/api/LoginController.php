@@ -40,12 +40,16 @@ class LoginController extends Controller
 	}
 
     function tokenReturn(Request $request) {
-         /** @var \App\Models\User $user **/
-        $user = Auth::user();
+		if (Auth::check()) {
+        	/** @var \App\Models\User $user **/
+        	$user = Auth::user();
+			
+			$user->tokens()->delete();
 
-        return response()->json([
-            'token' => $user->createToken("API ACCESS TOKEN")->plainTextToken
-        ], 200);
+        	return response()->json([
+        	    'token' => $user->createToken("API ACCESS TOKEN")->plainTextToken
+        	], 200);
+		}
 
     }
 

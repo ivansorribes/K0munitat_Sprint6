@@ -38,8 +38,7 @@ Route::post('/comments', [commentsPostsController::class, 'store']);
 
 Route::post('/loginApi', [LoginController::class, 'loginUser'])->name('loginApi');
 Route::post('/logoutApi', [LoginController::class, 'logoutApi'])->name('logoutApi');
-Route::get('/token', [LoginController::class, 'takeToken'])->name('token');
-
+Route::middleware('auth:sanctum')->get('/token-return', [LoginController::class, 'tokenReturn']);
 
 
 

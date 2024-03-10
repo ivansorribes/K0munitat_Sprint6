@@ -4,18 +4,20 @@ import { createRoot } from 'react-dom/client';
 import ReactPaginate from 'react-paginate';
 import CommunityCard from './CommunityCard';
 import 'tailwindcss/tailwind.css';
-import '../../css/community.css'
+import '../../css/community.css';
+import useAuth from '../componentAuth/AuthUser.jsx';
 
 const CommunitiesList = () => {
+  const { token, userId, updateAuth, getNewToken } = useAuth();
   const [communities, setCommunities] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const perPage = 9; // Número de comunidades por página
+  const perPage = 9;
 
+  console.log(token, userId);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = '13|HNVCz0AXwU2DZtkhy39Z9B4st70Wdclcl8SPOO92f298ef1b'; 
-        const response = await axios.get('http://localhost/api/communities',{
+        const response = await axios.get('http://localhost/api/communities', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -27,7 +29,7 @@ const CommunitiesList = () => {
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -64,7 +66,7 @@ const CommunitiesList = () => {
           </div>
         </div>
         <div className="flex justify-center mt-5 py-2">
-        <ReactPaginate
+          <ReactPaginate
             previousLabel={'previous'}
             nextLabel={'next'}
             breakLabel={'...'}
@@ -76,7 +78,7 @@ const CommunitiesList = () => {
             activeClassName={'active'}
             pageClassName={'bg-white text-black px-4 py-2 rounded-lg text-lg cursor-pointer'}
             breakClassName={'bg-white text-black px-4 py-2 rounded-lg text-lg'}
-        />
+          />
         </div>
       </div>
     </div>

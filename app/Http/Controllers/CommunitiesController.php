@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Validation\ValidationException;
 use App\Models\communities;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class CommunitiesController extends Controller
 {
@@ -15,7 +17,6 @@ class CommunitiesController extends Controller
         $communities = communities::with('admin')->get();
         return view('adminPanel.paneladminComunitats', compact('communities'));
     }
-
 
 
     public function stateChange($id)
@@ -31,11 +32,36 @@ class CommunitiesController extends Controller
         return view('communities.createForm');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('communities.CommunitiesList');
+        $token = null;
+        $userId = null;
+    
+        if (Auth::check()) {
+            /** @var \App\Models\User $user **/
+            $user = Auth::user();
+    
+            // Verificar si el usuario ya tiene un token activo
+            $existingToken =  $request->user()->currentAccessToken();
+            if ($existingToken) {
+                // Utilizar el token existente
+                $token = $existingToken;
+            } else {
+                // Si no hay un token existente, crear uno nuevo
+                $tokenData = [
+                    'id' => $user->id,
+                ];
+    
+                // Crear un token con información adicional
+                $newToken = $user->createToken('token', $tokenData);
+                $token = $newToken->plainTextToken;
+            }
+    
+            $userId = $user->id;
+        }
+    
+        return view('communities.CommunitiesList')->with(['token' => $token, 'userId' => $userId]);
     }
-
 
     public function store(Request $request)
     {

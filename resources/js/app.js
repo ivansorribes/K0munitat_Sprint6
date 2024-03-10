@@ -22,3 +22,4 @@ import './components/HeartButton.jsx';
 import './EditPersonalProfile.jsx';
 import './events/events.jsx';
 
+import './componentAuth/AuthUser.jsx'
