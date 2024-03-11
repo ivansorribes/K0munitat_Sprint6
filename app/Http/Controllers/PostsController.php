@@ -94,7 +94,7 @@ class PostsController extends Controller
                 'description' => 'required|max:1000',
                 'category_id' => 'required|exists:categories,id',
                 'private' => 'sometimes|boolean',
-                'image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
                 'type' => 'required|in:advertisement,post',
             ]);
 

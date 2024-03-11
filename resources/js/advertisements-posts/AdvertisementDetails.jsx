@@ -11,7 +11,7 @@ export default function AdvertisementDetails() {
         const communityId = pathParts[pathParts.length - 2];
         const postId = pathParts[pathParts.length - 1];
 
-        fetch(`http://localhost/api/communities/${communityId}/${postId}`)
+        fetch(`/api/communities/${communityId}/${postId}`)
             .then(response => response.json())
             .then(data => {
                 setPost(data.post);
@@ -20,7 +20,7 @@ export default function AdvertisementDetails() {
     }, []);
 
     const toggleLike = (postId) => {
-        fetch(`http://localhost/posts/${postId}/likes`, {
+        fetch(`/posts/${postId}/likes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

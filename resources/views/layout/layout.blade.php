@@ -22,13 +22,12 @@
     @vite('resources/css/app.css')
 </head>
 <body>
-    @include('header.header')
 
     <main>
         @yield('content')
     </main>
 
-    @include('footer.footer')
-      <script src="{{ asset('js/app.js') }}"></script>
+  
+<script src="{{ asset('js/app.js') }}"></script>
 </body>
 </html>
