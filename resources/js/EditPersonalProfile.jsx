@@ -30,7 +30,7 @@ export default function EditPersonalProfile() {
                     console.error('Error al obtener datos del usuario');
                 }
             } catch (error) {
-                console.error('Error inesperado', error);
+                console.error('Unespected Error', error);
             }
         };
 
@@ -39,7 +39,9 @@ export default function EditPersonalProfile() {
 
     const handleChange = (e, field) => {
         setUser({ ...user, [field]: e.target.value });
+        setError({ ...error, [field]: null }); // Clear error when user starts typing
     };
+
     const saveUserInfo = async () => {
         try {
             const formData = new FormData();
@@ -53,26 +55,31 @@ export default function EditPersonalProfile() {
             formData.append('telephone', user.telephone);
             formData.append('city', user.city);
             formData.append('postcode', user.postcode);
-    
+
             // Verificar si algún campo está vacío
-            const emptyFields = Object.values(user).some(value => value === '');
+            const emptyFields = Object.entries(user).some(([key, value]) => {
+                if (value === '') {
+                    setError({ ...error, [key]: 'This field cannot be empty' });
+                    return true;
+                }
+                return false;
+            });
             if (emptyFields) {
-                setError('Todos los campos son obligatorios');
                 return;
             }
-    
+
             const phonePattern = /^\d+$/;
             if (!phonePattern.test(user.telephone)) {
-                setError('El teléfono debe contener solo números');
+                setError({ ...error, telephone: 'The phone can only contain numbers' });
                 return;
             }
-    
+
             const postcodePattern = /^\d+$/;
             if (!postcodePattern.test(user.postcode)) {
-                setError('El código postal debe contener solo números');
+                setError({ ...error, postcode: 'The podt code can only contain numbers' });
                 return;
             }
-    
+
             const response = await fetch('/updateUserInfo', {
                 method: 'POST',
                 body: formData,
@@ -80,7 +87,7 @@ export default function EditPersonalProfile() {
                     'X-CSRF-TOKEN': window.csrf_token,
                 },
             });
-    
+
             const responseData = await response.json();
             if (response.ok) {
                 setShowMessage(true);
@@ -97,7 +104,7 @@ export default function EditPersonalProfile() {
             console.error('Error inesperado', error);
         }
     };
-    
+
 
     const handleTogglePasswordModal = () => {
         setPasswordModalOpen(!passwordModalOpen);
@@ -298,19 +305,22 @@ export default function EditPersonalProfile() {
                                     <tr>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-solid border"><strong>First Name:</strong></td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-solid border">
-                                            <input type="text" value={user.firstname || ''} onChange={(e) => handleChange(e, 'firstname')} className={`border rounded p-2 ${error && !user.firstname && 'border-red-500'}`} />
+                                            <input type="text" value={user.firstname || ''} onChange={(e) => handleChange(e, 'firstname')} className={`border rounded p-2 ${error && error.firstname && 'border-red-500'}`} />
+                                            {error && error.firstname && <p className="text-red-500 text-xs mt-1">{error.firstname}</p>}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-solid border"><strong>Last Name:</strong></td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-solid border">
-                                            <input type="text" value={user.lastname || ''} onChange={(e) => handleChange(e, 'lastname')} className={`border rounded p-2 ${error && !user.lastname && 'border-red-500'}`} />
+                                            <input type="text" value={user.lastname || ''} onChange={(e) => handleChange(e, 'lastname')} className={`border rounded p-2 ${error && error.lastname && 'border-red-500'}`} />
+                                            {error && error.lastname && <p className="text-red-500 text-xs mt-1">{error.lastname}</p>}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-solid border"><strong>User Name:</strong></td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-solid border">
-                                            <input type="text" value={user.username || ''} onChange={(e) => handleChange(e, 'username')} className={`border rounded p-2 ${error && !user.username && 'border-red-500'}`} />
+                                            <input type="text" value={user.username || ''} onChange={(e) => handleChange(e, 'username')} className={`border rounded p-2 ${error && error.username && 'border-red-500'}`} />
+                                            {error && error.username && <p className="text-red-500 text-xs mt-1">{error.username}</p>}
                                         </td>
                                     </tr>
                                     <tr>
@@ -322,19 +332,22 @@ export default function EditPersonalProfile() {
                                     <tr>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-solid border"><strong>Telephone:</strong></td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-solid border">
-                                            <input type="tel" value={user.telephone || ''} onChange={(e) => handleChange(e, 'telephone')} className={`border rounded p-2 ${error && !user.telephone && 'border-red-500'}`} />
+                                            <input type="tel" value={user.telephone || ''} onChange={(e) => handleChange(e, 'telephone')} className={`border rounded p-2 ${error && error.telephone && 'border-red-500'}`} />
+                                            {error && error.telephone && <p className="text-red-500 text-xs mt-1">{error.telephone}</p>}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-solid border"><strong>City:</strong></td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-solid border">
-                                            <input type="text" value={user.city || ''} onChange={(e) => handleChange(e, 'city')} className={`border rounded p-2 ${error && !user.city && 'border-red-500'}`} />
+                                            <input type="text" value={user.city || ''} onChange={(e) => handleChange(e, 'city')} className={`border rounded p-2 ${error && error.city && 'border-red-500'}`} />
+                                            {error && error.city && <p className="text-red-500 text-xs mt-1">{error.city}</p>}
                                         </td>
                                     </tr>
                                     <tr>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-solid border"><strong>Postcode:</strong></td>
                                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-solid border">
-                                            <input type="text" value={user.postcode || ''} onChange={(e) => handleChange(e, 'postcode')} className={`border rounded p-2 ${error && !user.postcode && 'border-red-500'}`} />
+                                            <input type="text" value={user.postcode || ''} onChange={(e) => handleChange(e, 'postcode')} className={`border rounded p-2 ${error && error.postcode && 'border-red-500'}`} />
+                                            {error && error.postcode && <p className="text-red-500 text-xs mt-1">{error.postcode}</p>}
                                         </td>
                                     </tr>
                                 </tbody>
@@ -342,7 +355,7 @@ export default function EditPersonalProfile() {
                         </div>
                         <div className="flex justify-end mt-4 sm:justify-start">
                             <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-2 sm:mb-0 sm:mr-4" onClick={saveUserInfo}>Save</button>
-                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2 sm:mb-0 sm:mr-4" onClick={handleOpenPasswordModal}>Edit Password</button>
+                            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-2 sm:mb-0 sm:mr-4" onClick={handleOpenPasswordModal}>Change Password</button>
                             <button className="bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded mb-2 sm:mb-0" onClick={handleOpenImageModal}>Change Image</button>
                         </div>
                     </div>
@@ -359,9 +372,10 @@ export default function EditPersonalProfile() {
             {passwordModalOpen && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                     <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '600px', height: '400px' }}>
-                        <div className="flex flex-col">
-                            <h1>Change Password</h1>
+                        <div className="flex flex-col justify-between h-full">
+                            <h2 className="text-2xl font-bold mb-1 text-center">Change Password</h2>
                             {error && <span className="text-red-500">{error}</span>}
+                            <label>Current Password</label>
                             <div className="relative">
                                 <input
                                     type={showActualPassword ? "text" : "password"}
@@ -405,6 +419,7 @@ export default function EditPersonalProfile() {
                     </div>
                 </div>
             )}
+
 
             {imageModalOpen && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
