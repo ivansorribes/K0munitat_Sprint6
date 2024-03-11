@@ -76,52 +76,52 @@ class UserController extends Controller
     public function postUser()
     {
         $user = Auth::user();
-
+    
         if ($user) {
+            $userData = [
+                'id' => $user->id,
+                'username' => $user->username,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'profile_image' => $user->profile_image,
+                'profile_description' => $user->profile_description,
+                'email' => $user->email,
+                'telephone' => $user->telephone,
+                'city' => $user->city,
+                'postcode' => $user->postcode,
+            ];
+    
             // Obtener todas las publicaciones del usuario
             $posts = posts::where('id_user', $user->id)
                 ->where('isActive', 1)
                 ->get();
-
+    
             // Adjuntar la información del usuario a cada publicación
             foreach ($posts as $post) {
-                // Obtener la información del usuario
-                $userData = [
-                    'id' => $user->id,
-                    'username' => $user->username,
-                    'firstname' => $user->firstname,
-                    'lastname' => $user->lastname,
-                    'profile_image' => $user->profile_image,
-                    'profile_description' => $user->profile_description,
-                    'email' => $user->email,
-                    'telephone' => $user->telephone,
-                    'city' => $user->city,
-                    'postcode' => $user->postcode,
-                ];
-
                 // Obtener todos los comentarios asociados con el post actual
                 $postComments = commentsPosts::where('id_post', $post->id)
                     ->with(['comment.user'])
                     ->get();
-
+    
                 // Adjuntar los comentarios al post
                 $post->comments = $postComments;
-
+    
                 // Obtener los likes del post
                 $post->likes = likesPosts::where('id_post', $post->id)->with('user')->get();
-
+    
                 // Obtener la imagen del post
                 $post->image = imagePost::where('id_post', $post->id)->first();
-
+    
                 // Adjuntar la información del usuario a la publicación
                 $post->user = $userData;
             }
-
+    
             return response()->json(['user' => $userData, 'posts' => $posts], 200);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
+    
 
 
 
@@ -249,12 +249,12 @@ class UserController extends Controller
 
             // Verifica si la nueva contraseña y la repetición coinciden
             if ($request->input('new_password') !== $request->input('confirm_password')) {
-                return response()->json(['error' => 'Las contraseñas no coinciden'], 400);
+                return response()->json(['error' => 'The passwords do not match'], 400);
             }
 
             // Verifica si la contraseña actual del usuario es válida
             if (!Hash::check($request->input('actual_password'), $user->password)) {
-                return response()->json(['error' => 'La contraseña actual es incorrecta'], 400);
+                return response()->json(['error' => 'The current password is incorrect'], 400);
             }
 
             // Actualiza la contraseña del usuario directamente en la base de datos
@@ -263,7 +263,7 @@ class UserController extends Controller
                 ->update(['password' => Hash::make($request->input('new_password'))]);
 
             // Envía una respuesta de éxito
-            return response()->json(['message' => 'Contraseña actualizada correctamente'], 200);
+            return response()->json(['message' => 'Password updated correctly'], 200);
         } catch (\Exception $e) {
             // Maneja cualquier otro error que pueda ocurrir durante el proceso
             return response()->json(['error' => 'Ha ocurrido un error al actualizar la contraseña'], 500);

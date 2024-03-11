@@ -310,34 +310,6 @@ export default function PersonalProfile() {
                     </div>
                 </div>
             </div>
-
-            {/* Modal */}
-            {modalImage && (
-                <div className="modal fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center" onClick={closeModal}>
-                    <div className="modal-content max-w-3/4 bg-white p-4 rounded overflow-hidden">
-                        <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={closeModal}>&times;</span>
-                        <img
-                            className="w-full h-auto"
-                            src={`/profile/images/${modalImage.imageSrc}`}
-                            alt="Imagen Ampliada"
-                            style={{ width: '600px', height: '600px' }}
-                        />
-                        <div className="mt-2">
-                            <p className="text-center font-bold">Detalles</p>
-                            <div className="flex justify-between mt-2">
-                                <div className="flex items-center">
-                                    <FontAwesomeIcon icon={faHeart} className="text-red-500 mr-1" />
-                                    {modalImage.likes}
-                                </div>
-                                <div className="flex items-center">
-                                    <FontAwesomeIcon icon={faComment} className="text-blue-500 mr-1" />
-                                    {modalImage.comments}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
             {/* Comments Modal */}
             {commentsModalOpen && selectedPostComments && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
