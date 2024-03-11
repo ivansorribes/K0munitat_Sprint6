@@ -14,7 +14,7 @@ export default function AdvertisementComments() {
         const postId = pathParts[pathParts.length - 1];
         setPostId(postId);
 
-        fetch(`http://localhost/api/communities/${communityId}/${postId}`)
+        fetch(`/api/communities/${communityId}/${postId}`)
             .then(response => response.json())
             .then(data => {
                 setComments(data.post.comments || []);
@@ -29,7 +29,7 @@ export default function AdvertisementComments() {
         formData.append('comment', newComment);
 
         try {
-            const response = await fetch('http://localhost/api/comments', {
+            const response = await fetch('/api/comments', {
                 method: 'POST',
                 body: formData,
             });

@@ -74,56 +74,56 @@ class UserController extends Controller
     }
 
     public function postUser()
-{
-    $user = Auth::user();
+    {
+        $user = Auth::user();
 
-    if ($user) {
-        // Obtener todas las publicaciones del usuario
-        $posts = posts::where('id_user', $user->id)
-            ->where('isActive', 1)
-            ->get();
-
-        // Adjuntar la información del usuario a cada publicación
-        foreach ($posts as $post) {
-            // Obtener la información del usuario
-            $userData = [
-                'id' => $user->id,
-                'username' => $user->username,
-                'firstname' => $user->firstname,
-                'lastname' => $user->lastname,
-                'profile_image' => $user->profile_image,
-                'profile_description' => $user->profile_description,
-                'email' => $user->email,
-                'telephone' => $user->telephone,
-                'city' => $user->city,
-                'postcode' => $user->postcode,
-            ];
-
-            // Obtener todos los comentarios asociados con el post actual
-            $postComments = commentsPosts::where('id_post', $post->id)
-                ->with(['comment.user'])
+        if ($user) {
+            // Obtener todas las publicaciones del usuario
+            $posts = posts::where('id_user', $user->id)
+                ->where('isActive', 1)
                 ->get();
 
-            // Adjuntar los comentarios al post
-            $post->comments = $postComments;
+            // Adjuntar la información del usuario a cada publicación
+            foreach ($posts as $post) {
+                // Obtener la información del usuario
+                $userData = [
+                    'id' => $user->id,
+                    'username' => $user->username,
+                    'firstname' => $user->firstname,
+                    'lastname' => $user->lastname,
+                    'profile_image' => $user->profile_image,
+                    'profile_description' => $user->profile_description,
+                    'email' => $user->email,
+                    'telephone' => $user->telephone,
+                    'city' => $user->city,
+                    'postcode' => $user->postcode,
+                ];
 
-            // Obtener los likes del post
-            $post->likes = likesPosts::where('id_post', $post->id)->with('user')->get();
+                // Obtener todos los comentarios asociados con el post actual
+                $postComments = commentsPosts::where('id_post', $post->id)
+                    ->with(['comment.user'])
+                    ->get();
 
-            // Obtener la imagen del post
-            $post->image = imagePost::where('id_post', $post->id)->first();
+                // Adjuntar los comentarios al post
+                $post->comments = $postComments;
 
-            // Adjuntar la información del usuario a la publicación
-            $post->user = $userData;
+                // Obtener los likes del post
+                $post->likes = likesPosts::where('id_post', $post->id)->with('user')->get();
+
+                // Obtener la imagen del post
+                $post->image = imagePost::where('id_post', $post->id)->first();
+
+                // Adjuntar la información del usuario a la publicación
+                $post->user = $userData;
+            }
+
+            return response()->json(['user' => $userData, 'posts' => $posts], 200);
+        } else {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
-
-        return response()->json(['user' => $userData, 'posts' => $posts], 200);
-    } else {
-        return response()->json(['error' => 'Unauthorized'], 401);
     }
-}
 
-    
+
 
 
     public function CommentsUser($id_post)
@@ -137,9 +137,8 @@ class UserController extends Controller
 
         // Obtén los comentarios asociados con el post
         $comments = DB::table('commentsPosts')
-            ->join('comments', 'commentsPosts.id_comment', '=', 'comments.id')
-            ->join('users', 'comments.id_user', '=', 'users.id')
-            ->select('comments.id', 'comments.comment', 'comments.id_user', 'users.username', 'users.profile_image')
+            ->join('users', 'commentsPosts.id_user', '=', 'users.id')
+            ->select('commentsPosts.id', 'commentsPosts.comment', 'commentsPosts.id_user', 'users.username', 'users.profile_image')
             ->where('commentsPosts.id_post', '=', $id_post)
             ->get();
 
@@ -169,13 +168,13 @@ class UserController extends Controller
                 // Guardar la nueva imagen en el directorio /storage/app/public/posts/
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('/storage/app/public/posts/'), $imageName);
+                $image->move(public_path('/storage/posts/'), $imageName);
 
                 // Actualizar la ruta de la imagen en la base de datos
                 DB::table('imagePost')->where('id_post', $id_post)->update(['name' => $imageName]);
 
                 // Obtener la URL completa de la imagen actualizada
-                $imageUrl = asset('/storage/app/public/posts/' . $imageName);
+                $imageUrl = asset('/storage/posts/' . $imageName);
             }
 
             // Obtener el post actualizado
@@ -211,7 +210,7 @@ class UserController extends Controller
         try {
             // Obtén el usuario autenticado
             $user = Auth::user();
-    
+
             // Construye la consulta para actualizar la información del usuario
             DB::table('users')
                 ->where('id', $user->id)
@@ -224,18 +223,18 @@ class UserController extends Controller
                     'city' => $request->input('city'),
                     'postcode' => $request->input('postcode'),
                 ]);
-    
+
             // Si se proporcionó una nueva imagen, actualiza la ruta de la imagen en la base de datos
             if ($request->hasFile('profile_image')) {
                 $image = $request->file('profile_image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
                 $image->move(public_path('/profile/images/'), $imageName);
-    
+
                 DB::table('users')
                     ->where('id', $user->id)
                     ->update(['profile_image' => $imageName]);
             }
-    
+
             return response()->json(['message' => 'Información de usuario actualizada correctamente'], 200);
         } catch (\Exception $e) {
             return response()->json(['error' => 'Ha ocurrido un error al actualizar la información del usuario'], 500);
