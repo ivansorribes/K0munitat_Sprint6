@@ -43,7 +43,7 @@ const ButtonCancel = ({ onClick, label }) => {
 
 const ButtonChangePage = ({ onClick, label }) => {
     return (
-        <button className="text-white px-4 py-2 rounded" style={{ background: '#a03269'}} onClick={onClick}>
+        <button className="text-white px-4 py-2 rounded" style={{ background: '#808080'}} onClick={onClick}>
             {label}
         </button>
     );
