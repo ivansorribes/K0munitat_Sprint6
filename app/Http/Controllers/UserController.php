@@ -188,28 +188,27 @@ class UserController extends Controller
     }
 
     public function updateUserInfo(Request $request)
-{
-    try {
-        // Obtén el usuario autenticado
-        $user = Auth::user();
+    {
+        try {
+            // Obtén el usuario autenticado
+            $user = Auth::user();
 
-        // Actualiza la información del usuario con los datos proporcionados en la solicitud
-        DB::table('users')
-            ->where('id', $user->id)
-            ->update([
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'username' => $request->input('username'),
-                'email' => $request->input('email'),
-                'telephone' => $request->input('telephone'),
-                'city' => $request->input('city'),
-                'postcode' => $request->input('postcode'),
-            ]);
+            // Actualiza la información del usuario con los datos proporcionados en la solicitud
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update([
+                    'firstname' => $request->input('firstname'),
+                    'lastname' => $request->input('lastname'),
+                    'username' => $request->input('username'),
+                    'email' => $request->input('email'),
+                    'telephone' => $request->input('telephone'),
+                    'city' => $request->input('city'),
+                    'postcode' => $request->input('postcode'),
+                ]);
 
-        return response()->json(['message' => 'Información de usuario actualizada correctamente'], 200);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Ha ocurrido un error al actualizar la información del usuario'], 500);
+            return response()->json(['message' => 'Información de usuario actualizada correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ha ocurrido un error al actualizar la información del usuario'], 500);
+        }
     }
-}
-
 }

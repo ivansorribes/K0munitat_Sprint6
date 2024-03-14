@@ -137,6 +137,13 @@ Route::get('/paneladmin', function () {
     return view('panel-admin');
 })->name('panel-admin');
 
+Route::get('/dashboard', function () {
+    return view('adminPanel.dashboard');
+})->name('dashboard');
+
+Route::get('/aaaa', function () {
+    return view('adminPanel.aaaa');
+})->name('aaaa');
 
 //Header
 //Header
