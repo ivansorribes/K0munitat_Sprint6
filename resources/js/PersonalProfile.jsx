@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes, faHeart, faComment, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
-import { ButtonEdit, ButtonCancel, ButtonDelete, ButtonChangePage, ButtonChangePassword, ButtonSave, ButtonChangeImage } from './components/buttons';
+import { ButtonEdit, ButtonCancel, ButtonDelete, ButtonChangePage, ButtonIconSave, ButtonSave, ButtonChangeImage } from './components/buttons';
 
 export default function PersonalProfile() {
     const [user, setUser] = useState({});
@@ -209,6 +209,7 @@ export default function PersonalProfile() {
     };
 
     return (
+
         <div className="container mx-auto mt-8">
             <div className="bg-white shadow-md rounded p-8 mb-4">
                 <div className="flex items-center justify-between mb-4">
@@ -239,12 +240,14 @@ export default function PersonalProfile() {
                                     onChange={(e) => setNewDescription(e.target.value)}
                                 />
                                 <div className="flex items-end justify-end">
-                                    <button className="bg-green-500 text-white px-2 py-1 rounded mr-2" onClick={saveDescription}>
+                                    <button className="bg-customColor text-white px-2 py-1 rounded mr-2" onClick={saveDescription}>
                                         <FontAwesomeIcon icon={faSave} size="xs" />
                                     </button>
-                                    <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={cancelEditingDescription}>
+                                    <button className="bg-customColor2 text-white px-2 py-1 rounded" onClick={cancelEditingDescription}>
                                         <FontAwesomeIcon icon={faTimes} size="xs" />
                                     </button>
+
+
                                 </div>
                             </div>
                         ) : (
@@ -256,7 +259,7 @@ export default function PersonalProfile() {
                                 )}
                                 <div className="flex items-end justify-end">
 
-                                    <button className="bg-blue-500 text-white px-2 py-1 rounded" onClick={() => { startEditingDescription(); setNewDescription(user.profile_description); }}>
+                                    <button className="bg-customColor1 text-white px-2 py-1 rounded" onClick={() => { startEditingDescription(); setNewDescription(user.profile_description); }}>
                                         <FontAwesomeIcon icon={faEdit} size="xs" />
                                     </button>
                                 </div>
@@ -291,7 +294,7 @@ export default function PersonalProfile() {
                                             <button className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => openDeleteConfirmation(post)}>Delete</button>
                                             {/* Eliminar el botón de eliminar post */}
                                         </div>
-                                        
+
                                     </div>
                                 </div>
                                 {/* Resto del contenido de la publicación */}
@@ -399,20 +402,33 @@ export default function PersonalProfile() {
                             <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={() => handleDeletePost(postToDelete.id)}>Yes</button>
                             <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={closeDeleteConfirmation}>No</button>
                         </div>
-                        <div className="flex justify- space-x-2 mb-4 mt-2">        
-                                <ButtonDelete  onClick={() => handleDeletePost(postToDelete.id)}label="Yes"/>
-                                <ButtonCancel onClick={closeDeleteConfirmation}label="No"/>
+                        <div className="flex justify- space-x-2 mb-4 mt-2">
+                            <ButtonDelete onClick={() => handleDeletePost(postToDelete.id)} label="Yes" />
+                            <ButtonCancel onClick={closeDeleteConfirmation} label="No" />
 
 
-                            </div>
+                        </div>
                     </div>
                 </div>
             )}
-
+            <style>
+                {`
+                    .bg-customColor {
+                        background-color: #64a858;
+                    }
+                    .bg-customColor1 {
+                        background-color: #62adde;
+                    } 
+                    .bg-customColor2 {
+                        background-color: #3d3c3b;
+                    } 
+                    `}
+            </style>
 
         </div>
     );
 }
+
 
 if (document.getElementById('personalProfile')) {
     createRoot(document.getElementById('personalProfile')).render(<PersonalProfile />);
