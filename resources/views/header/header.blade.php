@@ -1,7 +1,7 @@
 
 @if(Auth::check())
 <!--Header para un usuario Autenticado-->
-<header class="bg-[#fffdf9]  px-6  shadow">
+<header class="bg-[#fffdf9]  px-6  shadow fixed top-0 z-50 w-full">
     <div class="flex h-20 max-w-6xl mx-auto items-center justify-between">
         <!--Logo-->
         <div>
@@ -77,7 +77,7 @@
 </header>
 @else
 <!--Header para un usuario no autenticado-->
-<header class="bg-[#fffdf9]  px-6  shadow">
+<header class="bg-[#fffdf9]  px-6  shadow fixed top-0 z-50 w-full">
     <div class="flex h-20 max-w-6xl mx-auto items-center justify-between">
         <div class="flex cursor-pointer -mr-4 ml-8">
             <!--Logo-->
