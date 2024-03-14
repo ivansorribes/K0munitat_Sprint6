@@ -95,10 +95,11 @@
                                 <th scope="col" class="px-6 py-4">Title</th>
                                 <th scope="col" class="px-6 py-4">Description</th>
                                 <th scope="col" class="px-6 py-4">Category</th>
+                                <th scope="col" class="px-6 py-4">Creation Date</th>
+                                <th scope="col" class="px-6 py-4">Edit</th>
                                 <th scope="col" class="px-6 py-4">State</th>
                                 <th scope="col" class="px-6 py-4">Change State</th>
-                                <th scope="col" class="px-6 py-4">Creation Date</th>
-                                <th scope="col" class="px-6 py-4">Save State</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -116,6 +117,14 @@
                                         <textarea form="editAdvertisementForm{{$advertisement->id}}" name="description">{{ $advertisement->description }}</textarea>
                                     </td>
                                     <td class="whitespace-nowrap px-6 py-4">{{ $advertisement->category->name }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">{{ $advertisement->created_at }}</td>
+                                    <td class="whitespace-nowrap px-6 py-4">
+                                        <button class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Edit">
+                                            <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                                                <path d="M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z"></path>
+                                            </svg>
+                                        </button>
+                                    </td>
                                     <td class="whitespace-nowrap px-6 py-4">
                                         @if($advertisement->isActive)
                                         <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-700">
@@ -124,16 +133,16 @@
                                         <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">Inactive &#10008;</span>
                                         @endif
                                     </td>
+
+
+
+
+
                                     <td class="whitespace-nowrap px-6 py-4">
 
                                         <button type="submit" class="btn btn-sm {{ $advertisement->isActive ? 'bg-red-500' : 'bg-green-500' }} text-white px-2 py-1 rounded-md">
                                             {{ $advertisement->isActive ? 'Deactivate' : 'Activate' }}
                                         </button>
-                                    </td>
-                                    <td class="whitespace-nowrap px-6 py-4">{{ $advertisement->created_at }}</td>
-                                    <td class="whitespace-nowrap px-6 py-4">
-                                        <button type="submit" class="btn btn-sm px-2 py-1 text-white bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                            Save</button>
                                     </td>
                                 </form>
                             </tr>
