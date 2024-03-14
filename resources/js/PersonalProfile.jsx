@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes, faHeart, faComment, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { ButtonEdit, ButtonCancel, ButtonDelete, ButtonChangePage, ButtonChangePassword, ButtonSave, ButtonChangeImage } from './components/buttons';
 
 export default function PersonalProfile() {
     const [user, setUser] = useState({});
@@ -212,9 +213,10 @@ export default function PersonalProfile() {
             <div className="bg-white shadow-md rounded p-8 mb-4">
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-3xl font-bold">{`${user.username}`}</h1>
-                    <a href='/editPersonalProfile'><button className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Edit profile
-                    </button></a>
+                    <a href='/editPersonalProfile'>
+                        <ButtonChangePage label="Edit Profile" />
+
+                    </a>
 
                 </div><div className="flex items-center">
                     <div className="w-1/4 text-center">
@@ -289,6 +291,7 @@ export default function PersonalProfile() {
                                             <button className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => openDeleteConfirmation(post)}>Delete</button>
                                             {/* Eliminar el botón de eliminar post */}
                                         </div>
+                                        
                                     </div>
                                 </div>
                                 {/* Resto del contenido de la publicación */}
@@ -396,6 +399,12 @@ export default function PersonalProfile() {
                             <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={() => handleDeletePost(postToDelete.id)}>Yes</button>
                             <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={closeDeleteConfirmation}>No</button>
                         </div>
+                        <div className="flex justify- space-x-2 mb-4 mt-2">        
+                                <ButtonDelete  onClick={() => handleDeletePost(postToDelete.id)}label="Yes"/>
+                                <ButtonCancel onClick={closeDeleteConfirmation}label="No"/>
+
+
+                            </div>
                     </div>
                 </div>
             )}
