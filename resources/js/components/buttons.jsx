@@ -56,4 +56,12 @@ const ButtonChangePassword = ({ onClick, label }) => {
         </button>
     );
 }
-export { ButtonEdit, ButtonCreate, ButtonDelete, ButtonSave, ButtonCancel, ButtonChangePage, ButtonChangePassword };
+
+const ButtonChangeImage  = ({ onClick, label }) => {
+    return (
+        <button className="text-white px-4 py-2 rounded" style={{ background: '#be7a49'}} onClick={onClick}>
+            {label}
+        </button>
+    );
+}
+export { ButtonEdit, ButtonCreate, ButtonDelete, ButtonSave, ButtonCancel, ButtonChangePage, ButtonChangePassword, ButtonChangeImage };
