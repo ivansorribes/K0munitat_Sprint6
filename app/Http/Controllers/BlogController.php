@@ -19,7 +19,6 @@ class BlogController extends Controller
             return view('blog')->with('error', 'No hay registros en la base de datos.');
         }
 
-    
         return view('blog', [
             'blog' => $blog,
             ]
@@ -27,76 +26,93 @@ class BlogController extends Controller
         //return response()->json($posts);
     }
 
-//     /**
-//      * Show the form for creating a new resource.
-//      */
-//     public function create()
-//     {
-//         return view('posts.create');
-//     }
+    public function adminPanel()
+    {
+    $blogs = post_admin_blog::all();
 
-//     /**
-//      * Store a newly created resource in storage.
-//      */
-//     public function store(Request $request)
-//     {
-//         $request->validate([
-//             'title' => 'required',
-//             'description' => 'required',
-//             // Add validation for other fields as needed
-//         ]);
+    return view('adminPanel.paneladminBlog', ['blogs' => $blogs]);
+    }
 
-//         blog::create($request->all());
+    public function createBlog()
+    {
+        return view('blog.createForm');
+    }
 
-//         return redirect()->route('posts.index')
-//             ->with('success', 'Post created successfully');
-//     }
+    public function store(Request $request)
+{
+    // Validar los datos del formulario
+    $request->validate([
+        'title' => 'required|string|max:50',
+        'description' => 'required|string|max:1000',
+        'post_image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Validar la imagen
+    ]);
 
-//     /**
-//      * Display the specified resource.
-//      */
-//     public function show($id)
-//     {
-//         $post =blog::find($id);
-//         return view('posts.show', compact('post'));
-//     }
+    // Procesar la imagen y almacenarla en el almacenamiento (storage)
+    if ($request->hasFile('post_image')) {
+        // Obtener el nombre de la imagen
+        $imageName = time() . '.' . $request->post_image->getClientOriginalExtension();
+        
+        // Guardar la imagen en el directorio "public/images"
+        $request->post_image->storeAs('public/images', $imageName);
+    } else {
+        // Si no se proporciona ninguna imagen, establecer el nombre de la imagen como nulo
+        $imageName = null;
+    }
 
-//     /**
-//      * Show the form for editing the specified resource.
-//      */
-//     public function edit($id)
-//     {
-//         $post = blog::find($id);
-//         return view('posts.edit', compact('post'));
-//     }
+    // Crear una nueva instancia del modelo de blog y asignar los datos del formulario
+    $blog = new post_admin_blog();
+    $blog->title = $request->title;
+    $blog->description = $request->description;
+    $blog->post_image = $imageName; // Asignar el nombre de la imagen
+    $blog->save();
 
-//     /**
-//      * Update the specified resource in storage.
-//      */
-//     public function update(Request $request, $id)
-//     {
-//         $request->validate([
-//             'title' => 'required',
-//             'description' => 'required',
-//             // Add validation for other fields as needed
-//         ]);
+    // Redireccionar después de guardar
+    return redirect()->route('paneladminBlog')->with('success', 'Blog creado exitosamente.');
+    }
 
-//         $post = blog::find($id);
-//         $post->update($request->all());
+    public function destroy($id)
+    {
+    // Encuentra la entrada de blog por su ID
+    $blog = post_admin_blog::findOrFail($id);
 
-//         return redirect()->route('posts.index')
-//             ->with('success', 'Post updated successfully');
-//     }
+    // Elimina la entrada de blog
+    $blog->delete();
 
-//     /**
-//      * Remove the specified resource from storage.
-//      */
-//     public function destroy($id)
-//     {
-//         $post = blog::find($id);
-//         $post->delete();
+    // Redirige de vuelta a donde sea apropiado después de eliminar
+    return redirect()->route('paneladminBlog')->with('success', 'Entrada de blog eliminada exitosamente.');
+    }
 
-//         return redirect()->route('posts.index')
-//             ->with('success', 'Post deleted successfully');
-//     }
+    public function updateBlog($id)
+    {
+    // Encuentra la entrada de blog por su ID
+    $blog = post_admin_blog::findOrFail($id);
+
+    return view('blog.editForm', compact('blog'));
+    }
+
+
+    public function update(Request $request, $id)
+{
+    $request->validate([
+        'title' => 'required|string|max:50',
+        'description' => 'required|string|max:1000',
+        'post_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // validar que es una imagen
+    ]);
+
+    $blog = post_admin_blog::findOrFail($id);
+    $blog->title = $request->title;
+    $blog->description = $request->description;
+
+    // Guardar la imagen si se ha cargado
+    if ($request->hasFile('post_image')) {
+        $imageName = time().'.'.$request->post_image->extension();
+        $request->post_image->storeAs('public/images', $imageName); // Utiliza storeAs para almacenar la imagen
+        $blog->post_image = $imageName;
+    }
+
+    $blog->save();
+
+    return redirect()->route('paneladminBlog')->with('success', 'Blog actualizado correctamente.');
+}
+
 }
