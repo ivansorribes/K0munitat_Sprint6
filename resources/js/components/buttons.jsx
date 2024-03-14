@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const ButtonEdit = ({ onClick, label }) => {
 
@@ -43,7 +45,7 @@ const ButtonCancel = ({ onClick, label }) => {
 
 const ButtonChangePage = ({ onClick, label }) => {
     return (
-        <button className="text-white px-4 py-2 rounded" style={{ background: '#a03269'}} onClick={onClick}>
+        <button className="text-white px-4 py-2 rounded" style={{ background: '#808080'}} onClick={onClick}>
             {label}
         </button>
     );
@@ -64,4 +66,15 @@ const ButtonChangeImage  = ({ onClick, label }) => {
         </button>
     );
 }
-export { ButtonEdit, ButtonCreate, ButtonDelete, ButtonSave, ButtonCancel, ButtonChangePage, ButtonChangePassword, ButtonChangeImage };
+
+const ButtonIconSave = ({ onClick, label }) => {
+    return (
+      <button className="text-white px-4 py-2 rounded" style={{ background: '#64a858'}} onClick={onClick}>
+        <FontAwesomeIcon icon={faTimes} size="xs" style={{ marginRight: '5px' }} />
+        {label}
+      </button>
+    );
+  }
+  
+
+export { ButtonEdit, ButtonCreate, ButtonDelete, ButtonSave, ButtonCancel, ButtonChangePage, ButtonChangePassword, ButtonChangeImage,ButtonIconSave };
