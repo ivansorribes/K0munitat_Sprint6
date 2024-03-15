@@ -66,9 +66,6 @@ const ButtonChangeImage  = ({ onClick, label }) => {
         </button>
     );
 }
-<<<<<<< HEAD
-export { ButtonEdit, ButtonCreate, ButtonDelete, ButtonSave, ButtonCancel, ButtonChangePage, ButtonChangePassword, ButtonChangeImage };
-=======
 
 const ButtonIconSave = ({ onClick, label }) => {
     return (
@@ -81,4 +78,3 @@ const ButtonIconSave = ({ onClick, label }) => {
   
 
 export { ButtonEdit, ButtonCreate, ButtonDelete, ButtonSave, ButtonCancel, ButtonChangePage, ButtonChangePassword, ButtonChangeImage,ButtonIconSave };
->>>>>>> main
