@@ -34,11 +34,11 @@
         <div class="flex items-center ml-auto">
             <div class="relative">
                 @if(Auth::user()->profile_image)
-                <img id="user-icon" src="{{ asset('profile/images/' . Auth::user()->profile_image) }}" alt="Profile Image" class="h-10 w-10 rounded-full">
+                    <img id="userIcon" src="{{ asset('profile/images/' . Auth::user()->profile_image) }}" alt="Profile Image" class="h-10 w-10 rounded-full">
                 @else
-                <svg id="user-icon2" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#155b2a] fill-current cursor-pointer" viewBox="0 0 20 20">
-                    <path d="M10 0a6.671 6.671 0 00-6.667 6.667c0 3.817 3.115 6.667 6.667 6.667S16.667 10.484 16.667 6.667A6.671 6.671 0 0010 0zm0 10a3.333 3.333 0 010-6.667A3.333 3.333 0 0110 10zm7.887 7.887c-1.666-2.5-4.167-4.167-7.887-4.167s-6.221 1.666-7.887 4.167c-.276.415-.413.888-.413 1.416 0 .553.207 1.035.62 1.448.414.414.896.62 1.448.62.476 0 .96-.207 1.448-.62 1.084-1.084 2.5-1.667 4.246-1.667 1.747 0 3.163.583 4.246 1.667.487.414.972.62 1.448.62.476 0 .96-.207 1.448-.62.414-.414.62-.896.62-1.448 0-.528-.138-1.001-.413-1.416z" />
-                </svg>
+                    <svg id="userIconDefault" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-[#155b2a] fill-current cursor-pointer" viewBox="0 0 20 20">
+                        <path d="M10 0a6.671 6.671 0 00-6.667 6.667c0 3.817 3.115 6.667 6.667 6.667S16.667 10.484 16.667 6.667A6.671 6.671 0 0010 0zm0 10a3.333 3.333 0 010-6.667A3.333 3.333 0 0110 10zm7.887 7.887c-1.666-2.5-4.167-4.167-7.887-4.167s-6.221 1.666-7.887 4.167c-.276.415-.413.888-.413 1.416 0 .553.207 1.035.62 1.448.414.414.896.62 1.448.62.476 0 .96-.207 1.448-.62 1.084-1.084 2.5-1.667 4.246-1.667 1.747 0 3.163.583 4.246 1.667.487.414.972.62 1.448.62.476 0 .96-.207 1.448-.62.414-.414.62-.896.62-1.448 0-.528-.138-1.001-.413-1.416z" />
+                    </svg>
                 @endif
                 <!-- Menú desplegable Dependiendo de si es Admin -->
                 @if(Auth::check() && Auth::user()->role === 'superAdmin')
@@ -155,11 +155,21 @@
     }
 
     document.addEventListener('DOMContentLoaded', initApp)
+    var userIcon = document.getElementById('userIcon');
+    var userIconDefault = document.getElementById('userIconDefault');
+    var userMenu = document.getElementById('user-menu');
 
-    document.getElementById('user-icon').addEventListener('click', function() {
-        var userMenu = document.getElementById('user-menu');
-        userMenu.classList.toggle('hidden');
-    });
+    if(userIcon){
+        userIcon.addEventListener('click', function() {
+            userMenu.classList.toggle('hidden');
+        });
+    }
+   
+    if(userIconDefault){
+        userIcon.addEventListener('click', function() {
+            userMenu.classList.toggle('hidden');
+        });
+    }
 </script>
 
 
