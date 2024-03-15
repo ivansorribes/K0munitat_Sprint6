@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\ContactController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +55,10 @@ Route::post('/updateUserInfo', [UserController::class, 'updateUserInfo'])->name(
 Route::post('/changePassword', [UserController::class, 'changePassword'])->name('changePassword')->middleware('auth');
 Route::post('/deleteUserImage', [UserController::class, 'deleteUserImage'])->name('deleteUserImage')->middleware('auth');
 
+//Contact
+Route::get('/contact', [ContactController::class, 'contactView'])->name('contact.view')->middleware('auth');
+//Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 
 // FORGOT PASSWORD / PASSWORD-RESET

@@ -31,6 +31,7 @@ class UserController extends Controller
         return view('profile.editPersonalProfile');
     }
 
+
     public function updateProfileDescription(Request $request)
     {
         try {

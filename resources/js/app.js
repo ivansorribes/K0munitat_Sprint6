@@ -3,6 +3,7 @@ import './bootstrap';
 import './components/buttons.jsx';
 import './components/Exchanges.jsx';
 import './PersonalProfile.jsx';
+import './Contact.jsx';
 import './AboutUs.jsx';
 import './components/Map.jsx';
 import './advertisements-posts/AdvertisementList.jsx';
