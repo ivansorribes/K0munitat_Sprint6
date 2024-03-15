@@ -28,6 +28,9 @@
                     <li class="mx-4 my-6 md:my-0">
                         <a href="{{ route('about-us') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500 {{ request()->routeIs('about-us') ? 'text-[#f4971e]' : '' }}">About Us</a>
                     </li>
+                    <li class="mx-4 my-6 md:my-0">
+                        <a href="{{ route('contact.view') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500 {{ request()->routeIs('about-us') ? 'text-[#f4971e]' : '' }}">Contact</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -106,6 +109,9 @@
                 <li class="mx-4 my-6 md:my-0">
                     <a href="{{ route('about-us') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500 {{ request()->routeIs('about-us') ? 'text-[#f4971e]' : '' }}">About Us</a>
                 </li>
+                <li class="mx-4 my-6 md:my-0">
+                    <a href="{{ route('contact.store') }}" class="block px-3 py-2 text-[#3d3c3b] transition-colors hover:text-[#f4971e] duration-500 {{ request()->routeIs('about-us') ? 'text-[#f4971e]' : '' }}">Contact</a>
+                </li>
                
             </ul>
         </div>
@@ -163,10 +169,8 @@
         userIcon.addEventListener('click', function() {
             userMenu.classList.toggle('hidden');
         });
-    }
-   
-    if(userIconDefault){
-        userIcon.addEventListener('click', function() {
+    }else if(userIconDefault){
+        userIconDefault.addEventListener('click', function() {
             userMenu.classList.toggle('hidden');
         });
     }
