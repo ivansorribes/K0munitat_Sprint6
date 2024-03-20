@@ -114,8 +114,7 @@ function Contact() {
                                 id="name"
                                 name="name"
                                 type="text"
-                                className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                                placeholder="Nombre"
+                                className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
                                 value={formData.name}
                                 onChange={handleChange}
                             />
@@ -132,8 +131,7 @@ function Contact() {
                                 id="phone"
                                 name="phone"
                                 type="tel"
-                                className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                                placeholder="Teléfono"
+                                className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
                                 value={formData.phone}
                                 onChange={handleChange}
                             />
@@ -150,8 +148,7 @@ function Contact() {
                                 id="email"
                                 name="email"
                                 type="email"
-                                className="peer placeholder-transparent h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                                placeholder="Correo electrónico"
+                                className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
                                 value={formData.email}
                                 onChange={handleChange}
                             />
@@ -166,8 +163,7 @@ function Contact() {
                             <textarea
                                 id="message"
                                 name="message"
-                                className="peer placeholder-transparent h-32 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600 resize-none"
-                                placeholder="Mensaje"
+                                className="peer h-32 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600 resize-none"
                                 value={formData.message}
                                 onChange={handleChange}
                             ></textarea>
