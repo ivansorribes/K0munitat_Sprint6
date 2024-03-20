@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
-import { ButtonCancel, ButtonDelete, ButtonChangePage, ButtonChangePassword, ButtonSave, ButtonChangeImage} from './components/buttons';
+import { ButtonCancel, ButtonDelete, ButtonChangePage, ButtonChangePassword, ButtonSave, ButtonChangeImage } from './components/buttons';
 
 
 
@@ -227,6 +227,13 @@ export default function EditPersonalProfile() {
         }
     };
 
+    const handleButtonClick = () => {
+        const fileInput = document.getElementById('imageInput');
+        if (fileInput) {
+            fileInput.click();
+        }
+    };
+
     const handleDeleteUserImage = async () => {
         try {
             const response = await fetch('/deleteUserImage', {
@@ -279,7 +286,7 @@ export default function EditPersonalProfile() {
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-3xl font-bold">{user.username}</h1>
                     <a href="/personalProfile">
-                        <ButtonChangePage label="Back to Profile"/>
+                        <ButtonChangePage label="Back to Profile" />
 
                     </a>
                 </div>
@@ -355,14 +362,14 @@ export default function EditPersonalProfile() {
                                 </tbody>
                             </table>
                         </div>
-                       
-                        <div className="flex justify- space-x-2 mb-4 mt-2">        
-                                <ButtonSave  onClick={saveUserInfo}label="Save"/>
-                                <ButtonChangePassword onClick={handleOpenPasswordModal}label="Change Password"/>
-                                <ButtonChangeImage  onClick={handleOpenImageModal}label="Change Image"/>
+
+                        <div className="flex justify- space-x-2 mb-4 mt-2">
+                            <ButtonSave onClick={saveUserInfo} label="Save" />
+                            <ButtonChangePassword onClick={handleOpenPasswordModal} label="Change Password" />
+                            <ButtonChangeImage onClick={handleOpenImageModal} label="Change Image" />
 
 
-                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -416,9 +423,9 @@ export default function EditPersonalProfile() {
                                 />
                                 <FontAwesomeIcon icon={showRepeatPassword ? faEye : faEyeSlash} onClick={handleToggleRepeatPasswordVisibility} className="absolute right-4 top-4 cursor-pointer" />
                             </div>
-                            <div className="flex justify-end space-x-2 mb-4">        
-                                <ButtonSave  onClick={changePassword}label="Save"/>
-                                <ButtonCancel onClick={handleClosePasswordModal}label="Cancel"/>
+                            <div className="flex justify-end space-x-2 mb-4">
+                                <ButtonSave onClick={changePassword} label="Save" />
+                                <ButtonCancel onClick={handleClosePasswordModal} label="Cancel" />
 
                             </div>
                         </div>
@@ -443,15 +450,22 @@ export default function EditPersonalProfile() {
                                 />
                             </div>
                             <div className="flex justify-center space-x-2">
-                                <label >
-                                <ButtonChangeImage onChange={handleImageChange} label="Select Image"/>
-                                    <input type="file" style={{ display: "none" }} onChange={handleImageChange} accept="image/*" />
+                                <label htmlFor="imageInput">
+                                    <ButtonChangeImage label="Select Image" onClick={handleButtonClick} />
+                                    <input
+                                        id="imageInput"
+                                        type="file"
+                                        style={{ display: "none" }}
+                                        onChange={handleImageChange}
+                                        accept="image/*"
+                                    />
                                 </label>
-                              
-                                <div className="flex justify-end space-x-2 mb-4">        
-                                <ButtonSave onClick={handleSaveImage}label="Save"/>
-                                <ButtonDelete  onClick={openDeleteUserImageConfirmation}label="Delete Image"/>
-                            </div>
+
+
+                                <div className="flex justify-end space-x-2 mb-4">
+                                    <ButtonSave onClick={handleSaveImage} label="Save" />
+                                    <ButtonDelete onClick={openDeleteUserImageConfirmation} label="Delete Image" />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -467,9 +481,9 @@ export default function EditPersonalProfile() {
                                 <h2 className="text-2xl font-bold mb-1 text-center">Delete Image</h2>
                                 <p className="text-gray-700 text-center">Are you sure you want to delete your profile image?</p>
                             </div>
-                                <div className="flex justify-center space-x-2 mb-4">        
-                                <ButtonDelete  onClick={handleDeleteUserImage}label="Delete"/>
-                                <ButtonCancel  onClick={closeDeleteUserImageConfirmation}label="Cancel"/>
+                            <div className="flex justify-center space-x-2 mb-4">
+                                <ButtonDelete onClick={handleDeleteUserImage} label="Delete" />
+                                <ButtonCancel onClick={closeDeleteUserImageConfirmation} label="Cancel" />
                             </div>
                         </div>
                     </div>
