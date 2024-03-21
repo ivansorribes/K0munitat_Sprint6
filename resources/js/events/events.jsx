@@ -169,7 +169,6 @@ const EventCalendar = () => {
     );
 };
 
-Modal.setAppElement('#MyCalendar'); 
 
 if (document.getElementById('MyCalendar')) {
     createRoot(document.getElementById('MyCalendar')).render(<EventCalendar />);
