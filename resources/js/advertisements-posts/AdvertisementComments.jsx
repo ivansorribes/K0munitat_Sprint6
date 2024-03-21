@@ -4,6 +4,8 @@ import { createRoot } from "react-dom/client";
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState('');
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editingCommentText, setEditingCommentText] = useState("");
     const [postId, setPostId] = useState(null);
     const id_user = document.getElementById("id_user").value;
     const username = document.getElementById("username").value;
@@ -48,6 +50,56 @@ export default function AdvertisementComments() {
         }
     };
 
+    // Iniciar la edición de un comentario
+    const handleEditComment = (comment) => {
+        setEditingCommentId(comment.id);
+        setEditingCommentText(comment.comment);
+    };
+
+    // Cancelar la edición
+    const handleCancelEdit = () => {
+        setEditingCommentId(null);
+        setEditingCommentText("");
+    };
+
+    const handleSaveEdit = async () => {
+        try {
+            const data = JSON.stringify({
+                comment: editingCommentText,
+            });
+
+            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+            const response = await fetch(`/comments/${editingCommentId}`, {
+                method: 'PUT',
+                body: data,
+                headers: {
+                    'Content-Type': 'application/json', // Asegúrate de establecer el tipo de contenido a JSON
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
+
+            const updatedComment = await response.json();
+
+            // Actualizar el comentario en el estado local
+            setComments(comments.map(comment => {
+                if (comment.id === editingCommentId) {
+                    return { ...comment, comment: editingCommentText };
+                }
+                return comment;
+            }));
+
+            // Resetear estado de edición
+            handleCancelEdit();
+        } catch (error) {
+            console.error('Error updating the comment:', error);
+        }
+    };
+
 
     return (
         <section className="bg-white py-8 lg:py-16 antialiased">
@@ -56,23 +108,41 @@ export default function AdvertisementComments() {
                     Comments
                 </h2>
                 {comments.map((comment) => (
-                    <article key={comment.id} className="p-6 mb-4 text-base bg-white rounded-lg  border border-neutral">
-                        <footer className="mb-2">
-                            <div className="flex items-center justify-between">
-                                <p className="text-sm text-neutral font-extrabold">
-                                    {/* Aquí puedes agregar el nombre del usuario o cualquier identificador */}
-                                    {comment.username}
-                                </p>
-                                <p className="text-sm text-neutral">
-                                    {/* Opcional: fecha del comentario */}
+                    <article key={comment.id} className="p-6 mb-4 text-base bg-white rounded-lg border border-neutral">
+                        {editingCommentId === comment.id ? (
+                            // Área de edición para el comentario actual
+                            <div>
+                                <textarea
+                                    className="w-full p-2 text-sm text-neutral border-2 border-neutral rounded-lg focus:border-neutral focus:ring-0"
+                                    value={editingCommentText}
+                                    onChange={(e) => setEditingCommentText(e.target.value)}
+                                />
+                                <button onClick={handleSaveEdit} className="mr-2 py-2 px-4 text-xs font-bold text-neutral bg-secondary rounded-lg hover:bg-accent">Save</button>
+                                <button onClick={handleCancelEdit} className="py-2 px-4 text-xs font-bold text-neutral bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                            </div>
+                        ) : (
+                            // Visualización normal del comentario
+                            <div>
+                                <footer className="mb-2">
+                                    <div className="flex items-center justify-between">
+                                        <p className="text-sm text-neutral font-extrabold">
+                                            {comment.username}
+                                        </p>
+
+                                        {/* Asegura que solo el usuario que creó el comentario pueda ver el botón de edición */}
+                                        {comment.user.id == id_user && (
+                                            <button onClick={() => handleEditComment(comment)} className="py-1 px-3 text-xs font-bold text-neutral bg-gray-200 rounded-lg hover:bg-gray-300">Edit</button>
+                                        )}
+                                    </div>
+                                </footer>
+                                <p className="text-neutral">
+                                    {comment.comment}
                                 </p>
                             </div>
-                        </footer>
-                        <p className="text-neutral">
-                            {comment.comment}
-                        </p>
+                        )}
                     </article>
                 ))}
+
                 <div className="mb-6">
                     <textarea
                         id="comment"
@@ -93,6 +163,7 @@ export default function AdvertisementComments() {
                 </div>
             </div>
         </section>
+
     );
 }
 

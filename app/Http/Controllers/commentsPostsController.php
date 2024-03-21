@@ -22,10 +22,31 @@ class commentsPostsController extends Controller
 
         $comment = new commentsPosts;
         $comment->id_post = $request->id_post;
-        $comment->id_user = $request->id_user; // Utiliza el valor de la solicitud
+        $comment->id_user = $request->id_user;
         $comment->comment = $request->comment;
         $comment->save();
 
         return response()->json($comment, 201);
+    }
+
+    public function edit(Request $request, $editingCommentId)
+    {
+        $validator = Validator::make($request->all(), [
+            'comment' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 400);
+        }
+
+        $comment = commentsPosts::find($editingCommentId);
+        if (!$comment) {
+            return response()->json(['message' => 'Comment not found'], 404);
+        }
+
+        $comment->comment = $request->comment;
+        $comment->save();
+
+        return response()->json($comment, 200);
     }
 }

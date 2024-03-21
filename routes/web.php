@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\commentsPostsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -134,3 +135,5 @@ Route::get('/paneladminAdvertisements', function () {
 })->name('paneladminAdvertisements');
 
 Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
+
+Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
