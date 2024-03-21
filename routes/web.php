@@ -12,6 +12,7 @@ use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
+use App\Models\communitiesUsers;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\ContactController;
 
@@ -111,21 +112,31 @@ Route::get('/communities/{community}/{id_post}', function () {
     return view('advertisements-posts.show');
 })->name('advertisements-posts.show');
 
+
 Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
+Route::put('/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
 
-Route::get('/paneladminPosts', [PostsController::class, 'getComunnities'])->name('getComunnities');
-Route::put('/posts/{post}', [PostsController::class, 'update'])->name('update.post');
+Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');
+Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
 Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
+
+Route::get('/paneladminAdvertisements', [PostsController::class, 'getAdvertisements'])->name('paneladminAdvertisements');
+Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAdvertisement'])->name('update.advertisement');
+
+Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
+
+
 
 Route::get('/events', function () {
     return view('events.calendar');
 })->name('calendar');
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+
 
 Route::get('/admin', function () {
     return view('panelAdmin');
@@ -135,6 +146,13 @@ Route::get('/paneladmin', function () {
     return view('panel-admin');
 })->name('panel-admin');
 
+Route::get('/dashboard', function () {
+    return view('adminPanel.dashboard');
+})->name('dashboard');
+
+
+//Header
+//Header
 Route::get('/paneladminAdvertisements', function () {
     return view('paneladminAdvertisements');
 })->name('paneladminAdvertisements');

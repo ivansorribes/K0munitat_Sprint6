@@ -10,6 +10,8 @@ use App\Models\posts;
 use App\Models\likesPosts;
 use App\Models\commentsPosts;
 use App\Models\imagePost;
+use App\Models\communitiesUsers;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\comments;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -77,7 +79,7 @@ class UserController extends Controller
     public function postUser()
     {
         $user = Auth::user();
-    
+
         if ($user) {
             $userData = [
                 'id' => $user->id,
@@ -91,38 +93,38 @@ class UserController extends Controller
                 'city' => $user->city,
                 'postcode' => $user->postcode,
             ];
-    
+
             // Obtener todas las publicaciones del usuario
             $posts = posts::where('id_user', $user->id)
                 ->where('isActive', 1)
                 ->get();
-    
+
             // Adjuntar la información del usuario a cada publicación
             foreach ($posts as $post) {
                 // Obtener todos los comentarios asociados con el post actual
                 $postComments = commentsPosts::where('id_post', $post->id)
                     ->with(['comment.user'])
                     ->get();
-    
+
                 // Adjuntar los comentarios al post
                 $post->comments = $postComments;
-    
+
                 // Obtener los likes del post
                 $post->likes = likesPosts::where('id_post', $post->id)->with('user')->get();
-    
+
                 // Obtener la imagen del post
                 $post->image = imagePost::where('id_post', $post->id)->first();
-    
+
                 // Adjuntar la información del usuario a la publicación
                 $post->user = $userData;
             }
-    
+
             return response()->json(['user' => $userData, 'posts' => $posts], 200);
         } else {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
-    
+
 
 
 
@@ -212,6 +214,7 @@ class UserController extends Controller
             // Obtén el usuario autenticado
             $user = Auth::user();
 
+            // Actualiza la información del usuario con los datos proporcionados en la solicitud
             // Construye la consulta para actualizar la información del usuario
             DB::table('users')
                 ->where('id', $user->id)
@@ -242,6 +245,15 @@ class UserController extends Controller
         }
     }
 
+    public function delUserFromCommunity($id, $id_community)
+    {
+        // Eliminar la entrada de la tabla donde id_user e id_community coinciden
+        communitiesUsers::where('id_user', $id)
+            ->where('id_community', $id_community)
+            ->delete();
+
+        return redirect()->route('showUsers', ['id' => $id_community]); //CONTINUAR DES DE AQUÍ ON ME DIU QUE NO ACCEPTA LA REDIRECCIÓ PER METODE GET
+    }
     public function changePassword(Request $request)
     {
         try {
