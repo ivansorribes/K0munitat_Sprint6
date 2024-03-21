@@ -1,21 +1,8 @@
-<!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+@extends('layout.basic')
 
-<head>
-    <!-- Otras etiquetas head ... -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>K0munitat</title>
-    @viteReactRefresh
-    @vite('resources/js/app.js')
-    @vite('resources/css/app.css')
-    <script src="{{ mix('js/app.js') }}" defer></script>
-    <header>
-        @include('header.header')
-    </header>
-</head>
+@section('title', 'K0munitat')
 
-
+@section('content')
 
 <body class="justify-center items-center" style="background-image: url('{{ asset('img/wallpaper.webp') }}'); background-size: cover; background-position: center;">
     <!-- Callout -->
@@ -36,6 +23,4 @@
     </div>
 
 </body>
-@include('footer.footer')
-
-</html>
+@endsection
