@@ -4,13 +4,28 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class EventController extends Controller
 {
     public function index()
     {
-        $event = Event::All();
-        return $event;
+        try {
+            // Obtener el usuario autenticado
+            $user = Auth::user();
+
+            // Obtener todos los eventos
+            $events = Event::all();
+
+            // Si hay un usuario autenticado, devolver los datos del usuario, de lo contrario, devolver un array vacío
+            $userData = $user ? $user : [];
+
+            // Devolver una respuesta JSON con los eventos y los datos del usuario (si está autenticado)
+            return response()->json(['message' => 'Datos recuperados exitosamente', 'user' => $userData, 'events' => $events], 200);
+        } catch (\Exception $e) {
+            // Manejar cualquier excepción y devolver una respuesta de error
+            return response()->json(['message' => 'Error al recuperar datos', 'error' => $e->getMessage()], 500);
+        }
     }
 
     public function store(Request $request)

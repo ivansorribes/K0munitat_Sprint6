@@ -18,27 +18,40 @@ const customStyles = {
         left: '50%',
         right: 'auto',
         bottom: 'auto',
-        marginRight: '-50%',
-        transform: 'translate(-70%, -70%)',
+        transform: 'translate(-50%, -50%)', // Centrar la modal horizontal y verticalmente
+        maxWidth: '90%', // Ancho máximo relativo al tamaño de la ventana
+        maxHeight: '90%', // Altura máxima relativa al tamaño de la ventana
+        width: 'auto', // Permitir que el ancho se ajuste al contenido
+        height: 'auto', // Permitir que la altura se ajuste al contenido
+        padding: '20px', // Espaciado interno
+        borderRadius: '8px', // Bordes redondeados
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.1)', // Sombra
+        overflow: 'auto' // Permitir desplazamiento si el contenido es demasiado grande
     },
-    overlay: { zIndex: 1000 },
+    overlay: { 
+        zIndex: 1000, 
+        backgroundColor: 'rgba(0, 0, 0, 0.5)' // Color de fondo del overlay
+    }
 };
-
 const EventCalendar = () => {
     const [events, setEvents] = useState([]);
+    const [user, setUser] = useState([]);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState(null);
     const [formValues, setFormValues] = useState({
         title: '',
         start: '',
         end: '',
-        id_user: 7,
+        id_user: null,
     });
 
     useEffect(() => {
         fetch('http://localhost/eventsList')
             .then(response => response.json())
-            .then(data => setEvents(data))
+            .then(data => {
+                setEvents(data.events);
+                setUser(data.user);
+            })
             .catch(error => console.error('Error fetching events:', error));
     }, []);
 
@@ -77,7 +90,7 @@ const EventCalendar = () => {
                     title: '',
                     start: '',
                     end: '',
-                    id_user: 7,
+                    id_user: user.id,
                 });
                 window.location.reload();
             })
@@ -96,7 +109,7 @@ const EventCalendar = () => {
             >
                 <h2>New Event</h2>
                 <Formik
-                    initialValues={{ title: '', start: '', end: '', id_user: 7 }}
+                    initialValues={{ title: '', start: '', end: '', id_user: user.id }}
                     onSubmit={handleFormSubmit}
                 >
                     <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">

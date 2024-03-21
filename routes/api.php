@@ -26,7 +26,6 @@ Route::get('/communities', [CommunitiesApiController::class, 'index'])->name('ap
 Route::get('/communities/{community}', [CommunitiesApiController::class, 'show'])->name('api.communities.show');
 
 
-
 Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show']);
 
 Route::post('/comments', [commentsPostsController::class, 'store']);
