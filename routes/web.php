@@ -137,3 +137,4 @@ Route::get('/paneladminAdvertisements', function () {
 Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
 
 Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
+Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);

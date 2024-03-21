@@ -41,14 +41,16 @@ export default function AdvertisementComments() {
             }
 
             const newCommentData = await response.json();
-            const commentWithUsername = { ...newCommentData, username: username };
+            // Asegúrate de que newCommentData incluya el 'id' y cualquier otro campo necesario.
+            const commentWithUsername = { ...newCommentData, username: username, user: { id: id_user } };
 
-            setComments([...comments, commentWithUsername]);
+            setComments(prevComments => [...prevComments, commentWithUsername]);
             setNewComment('');
         } catch (error) {
             console.error('Error posting the comment:', error);
         }
     };
+
 
     // Iniciar la edición de un comentario
     const handleEditComment = (comment) => {
@@ -62,6 +64,8 @@ export default function AdvertisementComments() {
         setEditingCommentText("");
     };
 
+
+
     const handleSaveEdit = async () => {
         try {
             const data = JSON.stringify({
@@ -74,7 +78,7 @@ export default function AdvertisementComments() {
                 method: 'PUT',
                 body: data,
                 headers: {
-                    'Content-Type': 'application/json', // Asegúrate de establecer el tipo de contenido a JSON
+                    'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': csrfToken,
                 },
             });
@@ -83,15 +87,13 @@ export default function AdvertisementComments() {
                 throw new Error(`Network response was not ok: ${response.status}`);
             }
 
-            const updatedComment = await response.json();
+            const updatedCommentData = await response.json();
 
-            // Actualizar el comentario en el estado local
-            setComments(comments.map(comment => {
-                if (comment.id === editingCommentId) {
-                    return { ...comment, comment: editingCommentText };
-                }
-                return comment;
-            }));
+            setComments(prevComments =>
+                prevComments.map(comment =>
+                    comment.id === editingCommentId ? { ...comment, comment: updatedCommentData.comment } : comment
+                )
+            );
 
             // Resetear estado de edición
             handleCancelEdit();
@@ -100,6 +102,27 @@ export default function AdvertisementComments() {
         }
     };
 
+    const handleDeleteComment = async (commentId) => {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+        try {
+            const response = await fetch(`/comments/${commentId}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
+
+            // Filtra el comentario eliminado del estado local
+            setComments(comments.filter(comment => comment.id !== commentId));
+        } catch (error) {
+            console.error('Error deleting the comment:', error);
+        }
+    };
 
     return (
         <section className="bg-white py-8 lg:py-16 antialiased">
@@ -131,7 +154,12 @@ export default function AdvertisementComments() {
 
                                         {/* Asegura que solo el usuario que creó el comentario pueda ver el botón de edición */}
                                         {comment.user.id == id_user && (
-                                            <button onClick={() => handleEditComment(comment)} className="py-1 px-3 text-xs font-bold text-neutral bg-gray-200 rounded-lg hover:bg-gray-300">Edit</button>
+                                            <div className="flex items-center justify-between">
+                                                <>
+                                                    <button onClick={() => handleEditComment(comment)} className="py-1 px-3 text-xs font-bold text-neutral bg-gray-200 rounded-lg hover:bg-gray-300">Edit</button>
+                                                    <button onClick={() => handleDeleteComment(comment.id)} className="ml-2 py-1 px-3 text-xs font-bold text-neutral bg-red-500 rounded-lg hover:bg-red-600">Delete</button>
+                                                </>
+                                            </div>
                                         )}
                                     </div>
                                 </footer>

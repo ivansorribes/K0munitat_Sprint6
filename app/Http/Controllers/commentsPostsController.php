@@ -49,4 +49,17 @@ class commentsPostsController extends Controller
 
         return response()->json($comment, 200);
     }
+
+    public function destroy($commentId)
+    {
+        $comment = commentsPosts::find($commentId);
+
+        if (!$comment) {
+            return response()->json(['message' => 'Comment not found'], 404);
+        }
+
+        $comment->delete();
+
+        return response()->json(['message' => 'Comment deleted'], 200);
+    }
 }
