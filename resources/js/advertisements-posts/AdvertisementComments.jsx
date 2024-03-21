@@ -7,7 +7,6 @@ export default function AdvertisementComments() {
     const [postId, setPostId] = useState(null);
     const id_user = document.getElementById("id_user").value;
     const username = document.getElementById("username").value;
-    console.log(username)
 
     useEffect(() => {
         const pathParts = window.location.pathname.split('/');
@@ -15,7 +14,7 @@ export default function AdvertisementComments() {
         const postId = pathParts[pathParts.length - 1];
         setPostId(postId);
 
-        fetch(`http://localhost/api/communities/${communityId}/${postId}`)
+        fetch(`/api/communities/${communityId}/${postId}`)
             .then(response => response.json())
             .then(data => {
                 setComments(data.post.comments || []);
@@ -30,7 +29,7 @@ export default function AdvertisementComments() {
         formData.append('comment', newComment);
 
         try {
-            const response = await fetch('http://localhost/api/comments', {
+            const response = await fetch('/api/comments', {
                 method: 'POST',
                 body: formData,
             });
@@ -39,34 +38,37 @@ export default function AdvertisementComments() {
                 throw new Error('Network response was not ok');
             }
 
-            const data = await response.json();
-            setComments([...comments, data]);
+            const newCommentData = await response.json();
+            const commentWithUsername = { ...newCommentData, username: username };
+
+            setComments([...comments, commentWithUsername]);
             setNewComment('');
         } catch (error) {
             console.error('Error posting the comment:', error);
         }
     };
 
+
     return (
         <section className="bg-white py-8 lg:py-16 antialiased">
             <div className="max-w-2xl mx-auto px-4">
-                <h2 className="text-lg lg:text-2xl font-bold text-black mb-6">
+                <h2 className="text-lg lg:text-2xl font-extrabold text-neutral mb-6">
                     Comments
                 </h2>
                 {comments.map((comment) => (
-                    <article key={comment.id} className="p-6 mb-4 text-base bg-white rounded-lg  border border-gray-200 dark:border-gray-700">
+                    <article key={comment.id} className="p-6 mb-4 text-base bg-white rounded-lg  border border-neutral">
                         <footer className="mb-2">
                             <div className="flex items-center justify-between">
-                                <p className="text-sm text-black font-semibold">
+                                <p className="text-sm text-neutral font-extrabold">
                                     {/* Aquí puedes agregar el nombre del usuario o cualquier identificador */}
                                     {comment.username}
                                 </p>
-                                <p className="text-sm text-black">
+                                <p className="text-sm text-neutral">
                                     {/* Opcional: fecha del comentario */}
                                 </p>
                             </div>
                         </footer>
-                        <p className="text-black">
+                        <p className="text-neutral">
                             {comment.comment}
                         </p>
                     </article>
@@ -75,15 +77,15 @@ export default function AdvertisementComments() {
                     <textarea
                         id="comment"
                         rows="4"
-                        className="w-full p-2 text-sm text-black border-2 border-gray-200 dark:border-gray-700 rounded-lg"
+                        className="w-full p-2 text-sm text-neutral border-2 border-neutral rounded-lg focus:border-neutral focus:ring-0"
                         placeholder="Write a comment..."
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         required
                     />
                     <button
-                        type="button" // Cambiado a type="button" para evitar la recarga de la página
-                        className="mt-2 py-2 px-4 text-xs font-medium text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+                        type="button"
+                        className="mt-2 py-2 px-4 text-xs font-bold text-neutral bg-secondary rounded-lg hover:bg-accent"
                         onClick={handlePostComment}
                     >
                         Post comment

@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 
 const ButtonEdit = ({ onClick, label }) => {
 
@@ -27,7 +29,7 @@ const ButtonDelete = ({ onClick, label }) => {
 
 const ButtonSave = ({ onClick, label }) => {
     return (
-        <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={onClick}>
+        <button className="text-white px-4 py-2 rounded" style={{ background: '#64a858'}} onClick={onClick}>
             {label}
         </button>
     );
@@ -35,7 +37,7 @@ const ButtonSave = ({ onClick, label }) => {
 
 const ButtonCancel = ({ onClick, label }) => {
     return (
-        <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={onClick}>
+        <button className="text-white px-4 py-2 rounded" style={{ background: '#3d3c3b'}} onClick={onClick}>
             {label}
         </button>
     );
@@ -43,7 +45,7 @@ const ButtonCancel = ({ onClick, label }) => {
 
 const ButtonChangePage = ({ onClick, label }) => {
     return (
-        <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={onClick}>
+        <button className="text-white px-4 py-2 rounded" style={{ background: '#808080'}} onClick={onClick}>
             {label}
         </button>
     );
@@ -51,9 +53,28 @@ const ButtonChangePage = ({ onClick, label }) => {
 
 const ButtonChangePassword = ({ onClick, label }) => {
     return (
-        <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={onClick}>
+        <button className="text-white px-4 py-2 rounded" style={{ background: '#af4f0a'}} onClick={onClick}>
             {label}
         </button>
     );
 }
-export { ButtonEdit, ButtonCreate, ButtonDelete, ButtonSave, ButtonCancel, ButtonChangePage, ButtonChangePassword };
+
+const ButtonChangeImage  = ({ onClick, label }) => {
+    return (
+        <button className="text-white px-4 py-2 rounded" style={{ background: '#be7a49'}} onClick={onClick}>
+            {label}
+        </button>
+    );
+}
+
+const ButtonIconSave = ({ onClick, label }) => {
+    return (
+      <button className="text-white px-4 py-2 rounded" style={{ background: '#64a858'}} onClick={onClick}>
+        <FontAwesomeIcon icon={faTimes} size="xs" style={{ marginRight: '5px' }} />
+        {label}
+      </button>
+    );
+  }
+  
+
+export { ButtonEdit, ButtonCreate, ButtonDelete, ButtonSave, ButtonCancel, ButtonChangePage, ButtonChangePassword, ButtonChangeImage,ButtonIconSave };

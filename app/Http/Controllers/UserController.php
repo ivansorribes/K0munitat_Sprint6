@@ -10,10 +10,11 @@ use App\Models\posts;
 use App\Models\likesPosts;
 use App\Models\commentsPosts;
 use App\Models\imagePost;
+use App\Models\communitiesUsers;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\comments;
 use Illuminate\Support\Facades\Storage;
-
-
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -26,10 +27,12 @@ class UserController extends Controller
     {
         return view('profile.personalProfile');
     }
+
     public function EditProfileView()
     {
         return view('profile.editPersonalProfile');
     }
+
 
     public function updateProfileDescription(Request $request)
     {
@@ -51,11 +54,13 @@ class UserController extends Controller
             return response()->json(['error' => 'Error al actualizar la descripción'], 500);
         }
     }
+
     public function userInfo()
     {
         $users = User::select('id', 'firstname', 'email', 'username', 'telephone', 'city', 'role', 'isActive')->get();
         return view('adminPanel.paneladminUsers', compact('users'));
     }
+
     public function toggleIsActive($id)
     {
         $user = User::findOrFail($id);
@@ -63,23 +68,19 @@ class UserController extends Controller
         $user->save();
         return back();
     }
+
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
         $user->update($request->all());
         return back();
     }
+
     public function postUser()
     {
         $user = Auth::user();
 
         if ($user) {
-            // Obtener todas las publicaciones del usuario
-            $posts = posts::where('id_user', $user->id)
-                ->where('isActive', 1)
-                ->get();
-
-            // Obtener la información del usuario
             $userData = [
                 'id' => $user->id,
                 'username' => $user->username,
@@ -93,12 +94,29 @@ class UserController extends Controller
                 'postcode' => $user->postcode,
             ];
 
+            // Obtener todas las publicaciones del usuario
+            $posts = posts::where('id_user', $user->id)
+                ->where('isActive', 1)
+                ->get();
+
             // Adjuntar la información del usuario a cada publicación
             foreach ($posts as $post) {
-                $post->comments = commentsPosts::where('id_post', $post->id)->with('comment')->get();
+                // Obtener todos los comentarios asociados con el post actual
+                $postComments = commentsPosts::where('id_post', $post->id)
+                    ->with(['comment.user'])
+                    ->get();
+
+                // Adjuntar los comentarios al post
+                $post->comments = $postComments;
+
+                // Obtener los likes del post
                 $post->likes = likesPosts::where('id_post', $post->id)->with('user')->get();
+
+                // Obtener la imagen del post
                 $post->image = imagePost::where('id_post', $post->id)->first();
-                $post->user = $userData; // Adjuntar la información del usuario a la publicación
+
+                // Adjuntar la información del usuario a la publicación
+                $post->user = $userData;
             }
 
             return response()->json(['user' => $userData, 'posts' => $posts], 200);
@@ -106,6 +124,10 @@ class UserController extends Controller
             return response()->json(['error' => 'Unauthorized'], 401);
         }
     }
+
+
+
+
 
     public function CommentsUser($id_post)
     {
@@ -118,9 +140,8 @@ class UserController extends Controller
 
         // Obtén los comentarios asociados con el post
         $comments = DB::table('commentsPosts')
-            ->join('comments', 'commentsPosts.id_comment', '=', 'comments.id')
-            ->join('users', 'comments.id_user', '=', 'users.id')
-            ->select('comments.id', 'comments.comment', 'comments.id_user', 'users.username', 'users.profile_image')
+            ->join('users', 'commentsPosts.id_user', '=', 'users.id')
+            ->select('commentsPosts.id', 'commentsPosts.comment', 'commentsPosts.id_user', 'users.username', 'users.profile_image')
             ->where('commentsPosts.id_post', '=', $id_post)
             ->get();
 
@@ -150,13 +171,13 @@ class UserController extends Controller
                 // Guardar la nueva imagen en el directorio /storage/app/public/posts/
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('/storage/app/public/posts/'), $imageName);
+                $image->move(public_path('/storage/posts/'), $imageName);
 
                 // Actualizar la ruta de la imagen en la base de datos
                 DB::table('imagePost')->where('id_post', $id_post)->update(['name' => $imageName]);
 
                 // Obtener la URL completa de la imagen actualizada
-                $imageUrl = asset('/storage/app/public/posts/' . $imageName);
+                $imageUrl = asset('/storage/posts/' . $imageName);
             }
 
             // Obtener el post actualizado
@@ -188,28 +209,103 @@ class UserController extends Controller
     }
 
     public function updateUserInfo(Request $request)
-{
-    try {
-        // Obtén el usuario autenticado
-        $user = Auth::user();
+    {
+        try {
+            // Obtén el usuario autenticado
+            $user = Auth::user();
 
-        // Actualiza la información del usuario con los datos proporcionados en la solicitud
-        DB::table('users')
-            ->where('id', $user->id)
-            ->update([
-                'firstname' => $request->input('firstname'),
-                'lastname' => $request->input('lastname'),
-                'username' => $request->input('username'),
-                'email' => $request->input('email'),
-                'telephone' => $request->input('telephone'),
-                'city' => $request->input('city'),
-                'postcode' => $request->input('postcode'),
-            ]);
+            // Actualiza la información del usuario con los datos proporcionados en la solicitud
+            // Construye la consulta para actualizar la información del usuario
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update([
+                    'firstname' => $request->input('firstname'),
+                    'lastname' => $request->input('lastname'),
+                    'username' => $request->input('username'),
+                    'email' => $request->input('email'),
+                    'telephone' => $request->input('telephone'),
+                    'city' => $request->input('city'),
+                    'postcode' => $request->input('postcode'),
+                ]);
 
-        return response()->json(['message' => 'Información de usuario actualizada correctamente'], 200);
-    } catch (\Exception $e) {
-        return response()->json(['error' => 'Ha ocurrido un error al actualizar la información del usuario'], 500);
+            // Si se proporcionó una nueva imagen, actualiza la ruta de la imagen en la base de datos
+            if ($request->hasFile('profile_image')) {
+                $image = $request->file('profile_image');
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                $image->move(public_path('/profile/images/'), $imageName);
+
+                DB::table('users')
+                    ->where('id', $user->id)
+                    ->update(['profile_image' => $imageName]);
+            }
+
+            return response()->json(['message' => 'Información de usuario actualizada correctamente'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ha ocurrido un error al actualizar la información del usuario'], 500);
+        }
     }
-}
 
+    public function delUserFromCommunity($id, $id_community)
+    {
+        // Eliminar la entrada de la tabla donde id_user e id_community coinciden
+        communitiesUsers::where('id_user', $id)
+            ->where('id_community', $id_community)
+            ->delete();
+
+        return redirect()->route('showUsers', ['id' => $id_community]); //CONTINUAR DES DE AQUÍ ON ME DIU QUE NO ACCEPTA LA REDIRECCIÓ PER METODE GET
+    }
+    public function changePassword(Request $request)
+    {
+        try {
+            // Obtén el usuario autenticado
+            $user = Auth::user();
+
+            // Verifica si la nueva contraseña y la repetición coinciden
+            if ($request->input('new_password') !== $request->input('confirm_password')) {
+                return response()->json(['error' => 'The passwords do not match'], 400);
+            }
+
+            // Verifica si la contraseña actual del usuario es válida
+            if (!Hash::check($request->input('actual_password'), $user->password)) {
+                return response()->json(['error' => 'The current password is incorrect'], 400);
+            }
+
+            // Actualiza la contraseña del usuario directamente en la base de datos
+            DB::table('users')
+                ->where('id', $user->id)
+                ->update(['password' => Hash::make($request->input('new_password'))]);
+
+            // Envía una respuesta de éxito
+            return response()->json(['message' => 'Password updated correctly'], 200);
+        } catch (\Exception $e) {
+            // Maneja cualquier otro error que pueda ocurrir durante el proceso
+            return response()->json(['error' => 'Ha ocurrido un error al actualizar la contraseña'], 500);
+        }
+    }
+
+
+    public function deleteUserImage(Request $request)
+    {
+        try {
+            // Obtén el usuario autenticado
+            $user = Auth::user();
+
+            // Verifica si el usuario tiene una imagen de perfil
+            if ($user->profile_image) {
+                // Elimina la imagen del directorio de almacenamiento
+                Storage::delete('public/profile/images/' . $user->profile_image);
+
+                // Actualiza la columna 'profile_image' del usuario a null utilizando DB
+                DB::table('users')
+                    ->where('id', $user->id)
+                    ->update(['profile_image' => null]);
+
+                return response()->json(['message' => 'Imagen de perfil eliminada correctamente'], 200);
+            } else {
+                return response()->json(['error' => 'El usuario no tiene una imagen de perfil'], 404);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Ha ocurrido un error al eliminar la imagen de perfil'], 500);
+        }
+    }
 }

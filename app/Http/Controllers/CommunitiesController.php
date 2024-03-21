@@ -26,6 +26,18 @@ class CommunitiesController extends Controller
 
         return redirect()->back()->with('success', 'Estado cambiado exitosamente');
     }
+
+    public function showUsers($communityId)
+    {
+        // Obtener la comunidad por su ID
+        $community = communities::findOrFail($communityId);
+
+        // Obtener la lista de usuarios asociados a esta comunidad
+        $users = $community->communityUsers()->get();
+
+        // Devolver la vista con la lista de usuarios
+        return view('adminPanel.usuarisComunitat', compact('users', 'community'));
+    }
     public function create()
     {
         return view('communities.createForm');
