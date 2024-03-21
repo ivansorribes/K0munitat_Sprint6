@@ -140,7 +140,8 @@ Route::get('/events', function () {
 })->name('calendar');
 
 
-Route::get('/eventsList', [EventController::class, 'index'])->name('events.list');
+//Route::get('/eventsList', [EventController::class, 'index'])->name('events.list');
+Route::middleware('allowAccesDates')->get('/eventsList', [EventController::class, 'index'])->name('events.list');
 Route::post('/eventsList', [EventController::class, 'store'])->name('events.store');
 
 // BLOG
