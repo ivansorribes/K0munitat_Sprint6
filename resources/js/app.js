@@ -3,6 +3,7 @@ import './bootstrap';
 import './components/buttons.jsx';
 import './components/Exchanges.jsx';
 import './PersonalProfile.jsx';
+import './Contact.jsx';
 import './AboutUs.jsx';
 import './components/Map.jsx';
 import './advertisements-posts/AdvertisementList.jsx';
@@ -16,9 +17,14 @@ import './communities/CommunitiesList.jsx';
 import './advertisements-posts/AdvertisementDetails.jsx';
 import './advertisements-posts/AdvertisementComments.jsx';
 import './Sidebar.jsx';
+
 import './Taula.jsx';
 import './components/HeartButton.jsx';
 
 import './EditPersonalProfile.jsx';
 import './events/events.jsx';
+
+
+
+
 

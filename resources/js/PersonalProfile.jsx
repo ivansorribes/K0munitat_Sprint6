@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faSave, faTimes, faHeart, faComment, faEllipsisV } from '@fortawesome/free-solid-svg-icons';
+import { ButtonEdit, ButtonCancel, ButtonDelete, ButtonChangePage, ButtonIconSave, ButtonSave, ButtonChangeImage } from './components/buttons';
 
 export default function PersonalProfile() {
     const [user, setUser] = useState({});
@@ -25,6 +26,7 @@ export default function PersonalProfile() {
                     const data = await response.json();
                     setUser(data.user || {});
                     setPosts(data.posts || []);
+                    console.log(data.posts)
                     // Inicializar menuOpen con un array de falsos del mismo tamaño que posts
                     setMenuOpen(Array(data.posts.length).fill(false));
                 } else {
@@ -37,7 +39,6 @@ export default function PersonalProfile() {
 
         fetchUserData();
     }, []);
-
     const startEditingDescription = () => {
         setNewDescription(user.description || '');
         setEditingDescription(true);
@@ -89,15 +90,19 @@ export default function PersonalProfile() {
             console.error('Error inesperado', error);
         }
     };
-
     const openEditModal = (post) => {
         setSelectedEditPost(post);
+        closeDeleteConfirmation(); // Cerrar el modal de confirmación de eliminación si está abierto
         setEditModalOpen(true);
-        setSelectedImageURL(`/storage/app/public/posts/${post.image.name}`); // Establecer la URL de la imagen seleccionada
+        setSelectedImageURL(`/storage/posts/${post.image.name}`); // Establecer la URL de la imagen seleccionada
+    
         // Cerrar cualquier menú desplegable abierto al abrir el modal de edición
         setMenuOpen(Array(posts.length).fill(false));
     };
-
+    
+    
+    
+    
     const closeCommentsModal = () => {
         setCommentsModalOpen(false);
         setSelectedPostComments(null);
@@ -208,13 +213,15 @@ export default function PersonalProfile() {
     };
 
     return (
+
         <div className="container mx-auto mt-8">
             <div className="bg-white shadow-md rounded p-8 mb-4">
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-3xl font-bold">{`${user.username}`}</h1>
-                    <a href='/editPersonalProfile'><button className="mt-6 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                        Edit profile
-                    </button></a>
+                    <a href='/editPersonalProfile'>
+                        <ButtonChangePage label="Edit Profile" />
+
+                    </a>
 
                 </div><div className="flex items-center">
                     <div className="w-1/4 text-center">
@@ -237,12 +244,14 @@ export default function PersonalProfile() {
                                     onChange={(e) => setNewDescription(e.target.value)}
                                 />
                                 <div className="flex items-end justify-end">
-                                    <button className="bg-green-500 text-white px-2 py-1 rounded mr-2" onClick={saveDescription}>
+                                    <button className="bg-customColor text-white px-2 py-1 rounded mr-2" onClick={saveDescription}>
                                         <FontAwesomeIcon icon={faSave} size="xs" />
                                     </button>
-                                    <button className="bg-red-500 text-white px-2 py-1 rounded" onClick={cancelEditingDescription}>
+                                    <button className="bg-customColor2 text-white px-2 py-1 rounded" onClick={cancelEditingDescription}>
                                         <FontAwesomeIcon icon={faTimes} size="xs" />
                                     </button>
+
+
                                 </div>
                             </div>
                         ) : (
@@ -254,7 +263,7 @@ export default function PersonalProfile() {
                                 )}
                                 <div className="flex items-end justify-end">
 
-                                    <button className="bg-blue-500 text-white px-2 py-1 rounded" onClick={() => { startEditingDescription(); setNewDescription(user.profile_description); }}>
+                                    <button className="bg-customColor1 text-white px-2 py-1 rounded" onClick={() => { startEditingDescription(); setNewDescription(user.profile_description); }}>
                                         <FontAwesomeIcon icon={faEdit} size="xs" />
                                     </button>
                                 </div>
@@ -274,7 +283,7 @@ export default function PersonalProfile() {
                             >
                                 <img
                                     className="w-full h-50 object-cover rounded"
-                                    src={`/storage/app/public/posts/${post.image.name}`}
+                                    src={`/storage/posts/${post.image.name}`}
                                     alt={`Publicación ${post.id}`}
                                     onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
                                 />
@@ -289,6 +298,7 @@ export default function PersonalProfile() {
                                             <button className="dropdown-item block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" onClick={() => openDeleteConfirmation(post)}>Delete</button>
                                             {/* Eliminar el botón de eliminar post */}
                                         </div>
+
                                     </div>
                                 </div>
                                 {/* Resto del contenido de la publicación */}
@@ -310,34 +320,6 @@ export default function PersonalProfile() {
                     </div>
                 </div>
             </div>
-
-            {/* Modal */}
-            {modalImage && (
-                <div className="modal fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center" onClick={closeModal}>
-                    <div className="modal-content max-w-3/4 bg-white p-4 rounded overflow-hidden">
-                        <span className="close absolute top-0 right-0 m-4 text-3xl cursor-pointer" onClick={closeModal}>&times;</span>
-                        <img
-                            className="w-full h-auto"
-                            src={`/profile/images/${modalImage.imageSrc}`}
-                            alt="Imagen Ampliada"
-                            style={{ width: '600px', height: '600px' }}
-                        />
-                        <div className="mt-2">
-                            <p className="text-center font-bold">Detalles</p>
-                            <div className="flex justify-between mt-2">
-                                <div className="flex items-center">
-                                    <FontAwesomeIcon icon={faHeart} className="text-red-500 mr-1" />
-                                    {modalImage.likes}
-                                </div>
-                                <div className="flex items-center">
-                                    <FontAwesomeIcon icon={faComment} className="text-blue-500 mr-1" />
-                                    {modalImage.comments}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
             {/* Comments Modal */}
             {commentsModalOpen && selectedPostComments && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
@@ -382,9 +364,13 @@ export default function PersonalProfile() {
             {/* Edit Modal */}
             {editModalOpen && selectedEditPost && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '600px', height: '600px' }}>
+                    <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '600px', height: '500px' }}>
                         <div className="flex flex-col">
-                            <h1>Edit Post</h1>
+                        <div className="mb-4">
+                                <h2 className="text-2xl font-bold mb-2 text-center">Edit Post</h2>
+                                {/* Línea negra debajo del título Comment */}
+                                <hr className="border-gray-800 my-0" />
+                            </div>
                             <div className="flex items-center mb-4">
                                 <img
                                     className="w-16 h-16 object-cover rounded mr-4"
@@ -408,10 +394,11 @@ export default function PersonalProfile() {
                                 className="border rounded p-2 mb-4 h-32"
                                 onChange={(e) => setSelectedEditPost({ ...selectedEditPost, description: e.target.value })}
                             />
-                            <div>
-                                <button className="bg-green-500 text-white px-4 py-2 rounded mr-2" onClick={handleSavePost}>Save</button>
-                                <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={closeEditModal}>Cancel</button>
-                            </div>
+                            <div className="flex justify-end space-x-2 mb-4 mt-2">
+                            <ButtonSave onClick={handleSavePost}label="Save"/>
+                            <ButtonCancel onClick={closeEditModal}label="Cancel"/>
+
+</div>
                         </div>
                     </div>
                 </div>
@@ -420,18 +407,34 @@ export default function PersonalProfile() {
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                     <div className="modal-content bg-white p-4 rounded-xl overflow-hidden">
                         <p className="text-center text-lg font-semibold mb-4">Are you sure you want to delete this post?</p>
-                        <div className="flex justify-center">
-                            <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={() => handleDeletePost(postToDelete.id)}>Yes</button>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={closeDeleteConfirmation}>No</button>
+                       
+                        <div className="flex justify-center space-x-2 mb-4 mt-2">
+                            <ButtonDelete onClick={() => handleDeletePost(postToDelete.id)} label="Yes" />
+                            <ButtonCancel onClick={closeDeleteConfirmation} label="No" />
+
+
                         </div>
                     </div>
                 </div>
             )}
-
+            <style>
+                {`
+                    .bg-customColor {
+                        background-color: #64a858;
+                    }
+                    .bg-customColor1 {
+                        background-color: #62adde;
+                    } 
+                    .bg-customColor2 {
+                        background-color: #3d3c3b;
+                    } 
+                    `}
+            </style>
 
         </div>
     );
 }
+
 
 if (document.getElementById('personalProfile')) {
     createRoot(document.getElementById('personalProfile')).render(<PersonalProfile />);

@@ -8,6 +8,15 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <!--Favicon-->
     <link rel="icon" href="{{ asset('img/k0munitat_imagotip.ico') }}" type="image/x-icon"/>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B54X46SNYZ"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-B54X46SNYZ');
+    </script>
     @viteReactRefresh
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')

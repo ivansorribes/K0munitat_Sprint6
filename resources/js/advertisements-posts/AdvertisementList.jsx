@@ -13,7 +13,7 @@ export default function AdvertisementList() {
     }, []);
 
     const toggleLike = (postId) => {
-        fetch(`http://localhost/posts/${postId}/likes`, {
+        fetch(`/posts/${postId}/likes`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
