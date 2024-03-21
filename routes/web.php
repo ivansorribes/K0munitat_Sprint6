@@ -119,7 +119,7 @@ Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::cla
 Route::put('/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
 
 Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');
-Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
+// Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
 Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
@@ -152,8 +152,6 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 
-//Header
-//Header
 Route::get('/paneladminAdvertisements', function () {
     return view('paneladminAdvertisements');
 })->name('paneladminAdvertisements');
@@ -162,3 +160,4 @@ Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware(
 
 Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
 Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);
+Route::put('/posts/{id_post}', [PostsController::class, 'update']);
