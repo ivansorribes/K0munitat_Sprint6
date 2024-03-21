@@ -90,15 +90,19 @@ export default function PersonalProfile() {
             console.error('Error inesperado', error);
         }
     };
-
     const openEditModal = (post) => {
         setSelectedEditPost(post);
+        closeDeleteConfirmation(); // Cerrar el modal de confirmación de eliminación si está abierto
         setEditModalOpen(true);
-        setSelectedImageURL(`/storage/posts/${image.url}`); // Establecer la URL de la imagen seleccionada
+        setSelectedImageURL(`/storage/posts/${post.image.name}`); // Establecer la URL de la imagen seleccionada
+    
         // Cerrar cualquier menú desplegable abierto al abrir el modal de edición
         setMenuOpen(Array(posts.length).fill(false));
     };
-
+    
+    
+    
+    
     const closeCommentsModal = () => {
         setCommentsModalOpen(false);
         setSelectedPostComments(null);
@@ -360,9 +364,13 @@ export default function PersonalProfile() {
             {/* Edit Modal */}
             {editModalOpen && selectedEditPost && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
-                    <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '600px', height: '600px' }}>
+                    <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '600px', height: '500px' }}>
                         <div className="flex flex-col">
-                            <h1>Edit Post</h1>
+                        <div className="mb-4">
+                                <h2 className="text-2xl font-bold mb-2 text-center">Edit Post</h2>
+                                {/* Línea negra debajo del título Comment */}
+                                <hr className="border-gray-800 my-0" />
+                            </div>
                             <div className="flex items-center mb-4">
                                 <img
                                     className="w-16 h-16 object-cover rounded mr-4"
@@ -386,10 +394,11 @@ export default function PersonalProfile() {
                                 className="border rounded p-2 mb-4 h-32"
                                 onChange={(e) => setSelectedEditPost({ ...selectedEditPost, description: e.target.value })}
                             />
-                            <div>
-                                <button className="bg-green-500 text-white px-4 py-2 rounded mr-2" onClick={handleSavePost}>Save</button>
-                                <button className="bg-red-500 text-white px-4 py-2 rounded" onClick={closeEditModal}>Cancel</button>
-                            </div>
+                            <div className="flex justify-end space-x-2 mb-4 mt-2">
+                            <ButtonSave onClick={handleSavePost}label="Save"/>
+                            <ButtonCancel onClick={closeEditModal}label="Cancel"/>
+
+</div>
                         </div>
                     </div>
                 </div>
@@ -398,11 +407,8 @@ export default function PersonalProfile() {
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-50">
                     <div className="modal-content bg-white p-4 rounded-xl overflow-hidden">
                         <p className="text-center text-lg font-semibold mb-4">Are you sure you want to delete this post?</p>
-                        <div className="flex justify-center">
-                            <button className="bg-red-500 text-white px-4 py-2 rounded mr-2" onClick={() => handleDeletePost(postToDelete.id)}>Yes</button>
-                            <button className="bg-blue-500 text-white px-4 py-2 rounded" onClick={closeDeleteConfirmation}>No</button>
-                        </div>
-                        <div className="flex justify- space-x-2 mb-4 mt-2">
+                       
+                        <div className="flex justify-center space-x-2 mb-4 mt-2">
                             <ButtonDelete onClick={() => handleDeletePost(postToDelete.id)} label="Yes" />
                             <ButtonCancel onClick={closeDeleteConfirmation} label="No" />
 
