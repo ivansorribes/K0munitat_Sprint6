@@ -10,6 +10,8 @@ use App\Models\posts;
 use App\Models\likesPosts;
 use App\Models\commentsPosts;
 use App\Models\imagePost;
+use App\Models\communitiesUsers;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\comments;
 use Illuminate\Support\Facades\Storage;
 
@@ -210,5 +212,15 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Ha ocurrido un error al actualizar la información del usuario'], 500);
         }
+    }
+
+    public function delUserFromCommunity($id, $id_community)
+    {
+        // Eliminar la entrada de la tabla donde id_user e id_community coinciden
+        communitiesUsers::where('id_user', $id)
+            ->where('id_community', $id_community)
+            ->delete();
+
+        return redirect()->route('showUsers', ['id' => $id_community]); //CONTINUAR DES DE AQUÍ ON ME DIU QUE NO ACCEPTA LA REDIRECCIÓ PER METODE GET
     }
 }

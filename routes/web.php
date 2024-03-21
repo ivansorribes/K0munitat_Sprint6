@@ -12,6 +12,7 @@ use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
+use App\Models\communitiesUsers;
 
 /*
 |--------------------------------------------------------------------------
@@ -119,6 +120,7 @@ Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser')
 Route::get('/paneladminAdvertisements', [PostsController::class, 'getAdvertisements'])->name('paneladminAdvertisements');
 Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAdvertisement'])->name('update.advertisement');
 
+Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
 
 
 
@@ -141,9 +143,6 @@ Route::get('/dashboard', function () {
     return view('adminPanel.dashboard');
 })->name('dashboard');
 
-Route::get('/aaaa', function () {
-    return view('adminPanel.aaaa');
-})->name('aaaa');
 
 //Header
 //Header
