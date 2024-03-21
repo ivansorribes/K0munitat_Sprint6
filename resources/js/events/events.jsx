@@ -7,6 +7,7 @@ import Modal from 'react-modal';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
+import '../../css/event.css';
 
 const localizer = momentLocalizer(moment);
 moment.tz.setDefault('Europe/Madrid');
@@ -181,6 +182,7 @@ const customStyles = {
                 </Formik>
             </Modal>
             <Calendar
+                className= "custom_background letter"
                 localizer={localizer}
                 events={events}
                 startAccessor="start"

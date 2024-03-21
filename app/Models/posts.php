@@ -47,4 +47,13 @@ class posts extends Model
     {
         return $this->belongsTo(categories::class, 'id_category');
     }
+    public function comments()
+    {
+        return $this->hasMany(commentsPosts::class, 'id_post');
+    }
+
+    public function likes()
+    {
+        return $this->hasMany(likesPosts::class, 'id_post');
+    }
 }

@@ -11,18 +11,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\communities;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Auth;
+use App\Models\commentsPosts;
 
 class PostsController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request, $communityId = null, $type = 'post')
+    public function index(Request $request, $communityId = null)
     {
         $query = posts::with(['images' => function ($query) {
             $query->select('id', 'id_post', 'name');
-        }]);
-        $query->where('type', $type);
+        }])->withCount('likes');
 
         if ($communityId) {
             $community = communities::findOrFail($communityId);
@@ -36,11 +37,11 @@ class PostsController extends Controller
             $post->images->each(function ($image) {
                 $image->url = URL::to('storage/posts/' . $image->name);
             });
+            $post->liked = $post->likes()->where('id_user', Auth::id())->exists();
         });
-        return view('advertisements-posts.post-list', [
+        return view('communities.show', [
             'posts' => $posts,
             'community' => $community ?? null,
-            'type' => $type,
         ]);
     }
 
@@ -125,14 +126,14 @@ class PostsController extends Controller
                 'description' => 'required|max:1000',
                 'category_id' => 'required|exists:categories,id',
                 'private' => 'sometimes|boolean',
-                'image' => 'image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
+                'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg,webp|max:2048',
                 'type' => 'required|in:advertisement,post',
             ]);
 
             $post = posts::create([
-                'id_user' => 1, // Asume un valor estático o ajusta según tu lógica de autenticación
+                'id_user' => Auth::id(),
                 'id_category' => $validatedData['category_id'],
-                'id_community' => $communityId, // Ajusta según necesites
+                'id_community' => $communityId,
                 'title' => $validatedData['title'],
                 'description' => $validatedData['description'],
                 'isActive' => true,
@@ -171,9 +172,51 @@ class PostsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(posts $posts)
+    public function show(Request $request, $community, $id_post)
     {
-        //
+        $post = posts::with(['images' => function ($query) {
+            $query->select('id', 'id_post', 'name');
+        }, 'comments' => function ($query) {
+            $query->with(['user' => function ($q) {
+                $q->select('id', 'username');
+            }])
+                ->select('id', 'id_post', 'id_user', 'comment');
+        }, 'user' => function ($query) { // Carga el usuario que creó el post
+            $query->select('id', 'username');
+        }, 'likes']) // Asegúrate de cargar la relación de likes aquí
+            ->findOrFail($id_post);
+
+        $post->liked = $post->likes->contains('user_id', Auth::id());
+
+        $community = null;
+        if ($post->community_id) {
+            $community = communities::findOrFail($post->community_id);
+        }
+
+        $post->images->each(function ($image) {
+            $image->url = URL::to('storage/posts/' . $image->name);
+        });
+
+        // Ajusta la estructura de los comentarios como antes
+        $post->comments->each(function ($comment) {
+            if ($comment->user) {
+                $comment->username = $comment->user->username;
+                unset($comment->id_user);
+            }
+        });
+
+        // Añade el username del creador del post a la respuesta
+        $post->creator_username = $post->user ? $post->user->username : null;
+
+        // Calcula el conteo de likes
+        $post->likes_count = $post->likes->count();
+
+        // Opcional: Eliminar la colección de likes para no enviarla en la respuesta
+        unset($post->likes);
+
+        return response()->json([
+            'post' => $post,
+        ]);
     }
 
     /**

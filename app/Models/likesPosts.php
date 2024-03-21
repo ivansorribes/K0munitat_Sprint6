@@ -15,16 +15,16 @@ class likesPosts extends Model
 
     protected $fillable = [
         'id_user',
-        'id_post'        
+        'id_post'
     ];
 
-    public function user(): BelongsTo
+    public function post()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(posts::class, 'id_post');
     }
 
-    public function post(): BelongsTo
+    public function user()
     {
-        return $this->belongsTo(posts::class);
+        return $this->belongsTo(User::class, 'id_user');
     }
 }

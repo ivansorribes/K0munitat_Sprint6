@@ -13,6 +13,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
+use App\Http\Controllers\LikeController;
+use App\Http\Controllers\ContactController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -38,7 +41,7 @@ Route::get('/about-us', function () {
 // ADMIN PANEL
 Route::get('/adminPanel', function () {
     return view('login.panelAdmin');
-});
+})->name('AdminPanel');
 
 // USER RELATED
 Route::get('/personalProfile', [UserController::class, 'ProfileView'])->name('ProfileView')->middleware('auth');
@@ -50,6 +53,13 @@ Route::get('/resetPassword', [AuthController::class, 'resetPasswordView'])->name
 Route::get('passwordReset/{token}', [AuthController::class, 'resetFormView'])->name('resetFormView');
 Route::get('/editPersonalProfile', [UserController::class, 'EditProfileView'])->name('EditProfileView')->middleware('auth');
 Route::post('/updateUserInfo', [UserController::class, 'updateUserInfo'])->name('updateUserInfo')->middleware('auth');
+Route::post('/changePassword', [UserController::class, 'changePassword'])->name('changePassword')->middleware('auth');
+Route::post('/deleteUserImage', [UserController::class, 'deleteUserImage'])->name('deleteUserImage')->middleware('auth');
+
+//Contact
+Route::get('/contact', [ContactController::class, 'contactView'])->name('contact.view')->middleware('auth');
+//Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
+Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
 
 // FORGOT PASSWORD / PASSWORD-RESET
@@ -73,7 +83,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
     Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
-    Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('communities.show');
+
+    // Show community with posts & ads
+    Route::get('/communities/{community}', [PostsController::class, 'index'])->name('communities.show');
     Route::post('/communities', [CommunitiesController::class, 'store']);
     Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
     Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
@@ -95,15 +107,10 @@ Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->nam
 // POSTS - ADVERTISEMENTS
 Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
 Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
-
-Route::get('/communities/{community}/advertisement-list', function (Request $request, $communityId) {
-    return app(PostsController::class)->index($request, $communityId, 'advertisement');
-})->name('advertisement-list');
-
-Route::get('/communities/{community}/post-list', function (Request $request, $communityId) {
-    return app(PostsController::class)->index($request, $communityId, 'post');
-})->name('post-list');
-
+// Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show'])->name('advertisements-posts.show');
+Route::get('/communities/{community}/{id_post}', function () {
+    return view('advertisements-posts.show');
+})->name('advertisements-posts.show');
 
 
 Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
@@ -146,3 +153,8 @@ Route::get('/dashboard', function () {
 
 //Header
 //Header
+Route::get('/paneladminAdvertisements', function () {
+    return view('paneladminAdvertisements');
+})->name('paneladminAdvertisements');
+
+Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');

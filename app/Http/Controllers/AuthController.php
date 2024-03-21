@@ -188,6 +188,8 @@ class AuthController extends Controller
             ['email' => $user->email],
             [
                 'username' => $user->name,
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+
             ]
         );
 
@@ -204,16 +206,25 @@ class AuthController extends Controller
 
     public function Callback1()
     {
+        // Obtén los datos del usuario de Google
         $user_google = Socialite::driver('google')->user();
 
-        $user = User::firstOrCreate(
-            [
+        // Busca un usuario existente en la base de datos por su correo electrónico
+        $user = User::where('email', $user_google->email)->first();
+
+        // Si el usuario no existe, créalo
+        if (!$user) {
+            $user = User::create([
                 'username' => $user_google->name,
                 'email' => $user_google->email,
+                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
             ]);
+        }
 
+        // Inicia sesión con el usuario
         Auth::login($user);
 
+        // Redirige a la página principal
         return redirect('/');
     }
 }
