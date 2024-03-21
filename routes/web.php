@@ -141,7 +141,7 @@ Route::get('/blog/create', [BlogController::class, 'createBlog'])->name('blog.cr
 Route::post('/blog/store', [BlogController::class, 'store'])->name('blog.store');
 Route::delete('/blog/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
 Route::get('/blog/{id}/edit', [BlogController::class, 'updateBlog'])->name('blog.edit');
-Route::get('/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
+Route::patch('/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
 
 
 Route::get('/admin', function () {

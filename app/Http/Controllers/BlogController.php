@@ -8,9 +8,10 @@ use App\Models\post_admin_blog;
 
 class BlogController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+
+
+
+
     public function index()
     {
         $blog = post_admin_blog::all();
@@ -23,8 +24,12 @@ class BlogController extends Controller
             'blog' => $blog,
             ]
         );
-        //return response()->json($posts);
     }
+
+
+
+
+
 
     public function adminPanel()
     {
@@ -33,13 +38,28 @@ class BlogController extends Controller
     return view('adminPanel.paneladminBlog', ['blogs' => $blogs]);
     }
 
+
+
+
+
+
+
+
     public function createBlog()
     {
         return view('blog.createForm');
     }
 
+
+
+
+
+
+
+
+
     public function store(Request $request)
-{
+    {
     // Validar los datos del formulario
     $request->validate([
         'title' => 'required|string|max:50',
@@ -52,8 +72,8 @@ class BlogController extends Controller
         // Obtener el nombre de la imagen
         $imageName = time() . '.' . $request->post_image->getClientOriginalExtension();
         
-        // Guardar la imagen en el directorio "public/images"
-        $request->post_image->storeAs('public/images', $imageName);
+        // Guardar la imagen en el directorio "/public/img/fotosblog"
+        $request->post_image->move(public_path('img/fotosblog'), $imageName);
     } else {
         // Si no se proporciona ninguna imagen, establecer el nombre de la imagen como nulo
         $imageName = null;
@@ -70,6 +90,13 @@ class BlogController extends Controller
     return redirect()->route('paneladminBlog')->with('success', 'Blog creado exitosamente.');
     }
 
+
+
+
+
+
+
+
     public function destroy($id)
     {
     // Encuentra la entrada de blog por su ID
@@ -82,6 +109,14 @@ class BlogController extends Controller
     return redirect()->route('paneladminBlog')->with('success', 'Entrada de blog eliminada exitosamente.');
     }
 
+
+
+
+
+
+
+
+
     public function updateBlog($id)
     {
     // Encuentra la entrada de blog por su ID
@@ -91,28 +126,45 @@ class BlogController extends Controller
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
     public function update(Request $request, $id)
 {
+
     $request->validate([
         'title' => 'required|string|max:50',
         'description' => 'required|string|max:1000',
-        'post_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // validar que es una imagen
+        'post_image' => 'image|mimes:jpeg,png,jpg,gif|max:2048', // Validar la imagen
     ]);
 
+    // Obtener el blog existente
     $blog = post_admin_blog::findOrFail($id);
+
+    // Actualizar los campos del blog
     $blog->title = $request->title;
     $blog->description = $request->description;
 
     // Guardar la imagen si se ha cargado
     if ($request->hasFile('post_image')) {
-        $imageName = time().'.'.$request->post_image->extension();
-        $request->post_image->storeAs('public/images', $imageName); // Utiliza storeAs para almacenar la imagen
+        $imageName = time() . '.' . $request->post_image->getClientOriginalExtension();
+        $request->post_image->move(public_path('img/fotosblog'), $imageName);
         $blog->post_image = $imageName;
     }
 
+    // Guardar los cambios en la base de datos
     $blog->save();
 
     return redirect()->route('paneladminBlog')->with('success', 'Blog actualizado correctamente.');
 }
-
 }
+

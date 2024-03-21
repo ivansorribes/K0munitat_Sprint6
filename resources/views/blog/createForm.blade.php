@@ -1,25 +1,15 @@
-
 <!DOCTYPE html>
-
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
 
-<head>
+<!-- otra_vista.blade.php -->
+@extends('adminPanel.layout')
 
-    <meta charset="utf-8">
+@section('title', 'Dashboard')
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+@section('content')
 
-    <title>Laravel 10 - REACT 18</title>
-
-    @viteReactRefresh
-    @vite('resources/js/app.js')
-    @vite('resources/css/app.css')
-
-</head>
-
-<body class="flex">
-    <div id="sidebar-container"></div>
-
+<body class="flex">    
     <div class="flex-1">
         <div class="container mx-auto p-8">
             <h1 class="text-2xl font-bold mb-4">Crear Publicacion En El Blog</h1>
@@ -41,5 +31,6 @@
 </form>
 
 </body>
+@endsection
 
 </html>

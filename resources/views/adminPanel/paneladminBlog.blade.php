@@ -1,24 +1,15 @@
-
 <!DOCTYPE html>
-
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
 
-<head>
+<!-- otra_vista.blade.php -->
+@extends('adminPanel.layout')
 
-    <meta charset="utf-8">
+@section('title', 'Dashboard')
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>Laravel 10 - REACT 18</title>
-
-    @viteReactRefresh
-    @vite('resources/js/app.js')
-    @vite('resources/css/app.css')
-
-</head>
+@section('content')
 
 <body class="flex">
-    <div id="sidebar-container"></div>
 
     <div class="flex-1">
         <div class="container mx-auto p-8">
@@ -60,7 +51,8 @@
                 </tbody>
             </table>
         </div>
-    </div>
+    @endsection
+
 
 </html>
 
