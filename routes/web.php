@@ -151,8 +151,7 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 
-//Header
-//Header
+
 Route::get('/paneladminAdvertisements', function () {
     return view('paneladminAdvertisements');
 })->name('paneladminAdvertisements');
