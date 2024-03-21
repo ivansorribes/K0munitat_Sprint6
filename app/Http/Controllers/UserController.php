@@ -10,6 +10,8 @@ use App\Models\posts;
 use App\Models\likesPosts;
 use App\Models\commentsPosts;
 use App\Models\imagePost;
+use App\Models\communitiesUsers;
+use Illuminate\Support\Facades\Redirect;
 use App\Models\comments;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -30,6 +32,7 @@ class UserController extends Controller
     {
         return view('profile.editPersonalProfile');
     }
+
 
     public function updateProfileDescription(Request $request)
     {
@@ -78,6 +81,19 @@ class UserController extends Controller
         $user = Auth::user();
 
         if ($user) {
+            $userData = [
+                'id' => $user->id,
+                'username' => $user->username,
+                'firstname' => $user->firstname,
+                'lastname' => $user->lastname,
+                'profile_image' => $user->profile_image,
+                'profile_description' => $user->profile_description,
+                'email' => $user->email,
+                'telephone' => $user->telephone,
+                'city' => $user->city,
+                'postcode' => $user->postcode,
+            ];
+
             // Obtener todas las publicaciones del usuario
             $posts = posts::where('id_user', $user->id)
                 ->where('isActive', 1)
@@ -85,20 +101,6 @@ class UserController extends Controller
 
             // Adjuntar la información del usuario a cada publicación
             foreach ($posts as $post) {
-                // Obtener la información del usuario
-                $userData = [
-                    'id' => $user->id,
-                    'username' => $user->username,
-                    'firstname' => $user->firstname,
-                    'lastname' => $user->lastname,
-                    'profile_image' => $user->profile_image,
-                    'profile_description' => $user->profile_description,
-                    'email' => $user->email,
-                    'telephone' => $user->telephone,
-                    'city' => $user->city,
-                    'postcode' => $user->postcode,
-                ];
-
                 // Obtener todos los comentarios asociados con el post actual
                 $postComments = commentsPosts::where('id_post', $post->id)
                     ->with(['comment.user'])
@@ -126,6 +128,7 @@ class UserController extends Controller
 
 
 
+
     public function CommentsUser($id_post)
     {
         // Busca el post por su ID
@@ -137,9 +140,8 @@ class UserController extends Controller
 
         // Obtén los comentarios asociados con el post
         $comments = DB::table('commentsPosts')
-            ->join('comments', 'commentsPosts.id_comment', '=', 'comments.id')
-            ->join('users', 'comments.id_user', '=', 'users.id')
-            ->select('comments.id', 'comments.comment', 'comments.id_user', 'users.username', 'users.profile_image')
+            ->join('users', 'commentsPosts.id_user', '=', 'users.id')
+            ->select('commentsPosts.id', 'commentsPosts.comment', 'commentsPosts.id_user', 'users.username', 'users.profile_image')
             ->where('commentsPosts.id_post', '=', $id_post)
             ->get();
 
@@ -212,6 +214,7 @@ class UserController extends Controller
             // Obtén el usuario autenticado
             $user = Auth::user();
 
+            // Actualiza la información del usuario con los datos proporcionados en la solicitud
             // Construye la consulta para actualizar la información del usuario
             DB::table('users')
                 ->where('id', $user->id)
@@ -242,6 +245,15 @@ class UserController extends Controller
         }
     }
 
+    public function delUserFromCommunity($id, $id_community)
+    {
+        // Eliminar la entrada de la tabla donde id_user e id_community coinciden
+        communitiesUsers::where('id_user', $id)
+            ->where('id_community', $id_community)
+            ->delete();
+
+        return redirect()->route('showUsers', ['id' => $id_community]); //CONTINUAR DES DE AQUÍ ON ME DIU QUE NO ACCEPTA LA REDIRECCIÓ PER METODE GET
+    }
     public function changePassword(Request $request)
     {
         try {
@@ -250,12 +262,12 @@ class UserController extends Controller
 
             // Verifica si la nueva contraseña y la repetición coinciden
             if ($request->input('new_password') !== $request->input('confirm_password')) {
-                return response()->json(['error' => 'Las contraseñas no coinciden'], 400);
+                return response()->json(['error' => 'The passwords do not match'], 400);
             }
 
             // Verifica si la contraseña actual del usuario es válida
             if (!Hash::check($request->input('actual_password'), $user->password)) {
-                return response()->json(['error' => 'La contraseña actual es incorrecta'], 400);
+                return response()->json(['error' => 'The current password is incorrect'], 400);
             }
 
             // Actualiza la contraseña del usuario directamente en la base de datos
@@ -264,7 +276,7 @@ class UserController extends Controller
                 ->update(['password' => Hash::make($request->input('new_password'))]);
 
             // Envía una respuesta de éxito
-            return response()->json(['message' => 'Contraseña actualizada correctamente'], 200);
+            return response()->json(['message' => 'Password updated correctly'], 200);
         } catch (\Exception $e) {
             // Maneja cualquier otro error que pueda ocurrir durante el proceso
             return response()->json(['error' => 'Ha ocurrido un error al actualizar la contraseña'], 500);

@@ -45,17 +45,49 @@ class PostsController extends Controller
         ]);
     }
 
-    public function getComunnities()
+    public function getPosts()
     {
         $posts = posts::with(['user', 'community'])->get();
         return view('adminPanel.paneladminPosts', compact('posts'));
     }
 
-    public function update(Request $request, posts $post)
+    public function getAdvertisements()
     {
-        $post->update($request->only(['title', 'description', 'category']));
-        return back();
+        $posts = posts::with(['user', 'community'])->get();
+        return view('adminPanel.paneladminAdvertisements', compact('posts'));
     }
+
+
+    public function updateAdvertisement(Request $request, posts $advertisement)
+    {
+        if ($advertisement->type === 'advertisement') {
+            $advertisement->update($request->only(['title', 'description']));
+            return redirect()->route('paneladminAdvertisements');
+        } else {
+            // Manejar el caso en que no sea un anuncio (podría ser útil para la validación o manejo de errores)
+            // Por ejemplo, podrías redirigirlo a una página de error o hacer otro tipo de acción.
+            return redirect()->back()->with('error', 'Esta publicación no es un anuncio.');
+        }
+    }
+
+    public function updatePost(Request $request, posts $post)
+    {
+        if ($post->type === 'post') {
+            $post->update($request->only(['title', 'description']));
+            return redirect()->route('paneladminPosts');
+        } else {
+            // Manejar el caso en que no sea una publicación normal
+            return redirect()->back()->with('error', 'Esta publicación no es un post.');
+        }
+    }
+
+
+    // public function update(Request $request, posts $post)
+    // {
+    //     $post->update($request->only(['title', 'description', 'category']));
+
+    //     return back();
+    // }
 
     /**
      * Show the form for creating a new resource.
