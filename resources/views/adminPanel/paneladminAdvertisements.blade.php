@@ -1,5 +1,5 @@
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-<html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" :class="{ 'theme-dark': dark }" x-data="data()">
+
 
 <!-- otra_vista.blade.php -->
 @extends('adminPanel.layout')

@@ -121,14 +121,20 @@ Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('pane
 Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
-Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
+Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('users.toggleIsActive');
+Route::get('/users/{id}/detail', [UserController::class, 'showDetail'])->name('users.detail');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
+Route::post('/users', [UserController::class, 'store'])->name('storeUser');
 
 Route::get('/paneladminAdvertisements', [PostsController::class, 'getAdvertisements'])->name('paneladminAdvertisements');
 Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAdvertisement'])->name('update.advertisement');
 
 Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
 
+
+Route::get('/createUserForm', function () {
+    return view('adminPanel.createUserForm');
+})->name('createUserForm');
 
 
 Route::get('/events', function () {
@@ -153,8 +159,6 @@ Route::get('/dashboard', function () {
 
 //Header
 //Header
-Route::get('/paneladminAdvertisements', function () {
-    return view('paneladminAdvertisements');
-})->name('paneladminAdvertisements');
+
 
 Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
