@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import ReactSelect from 'react-select';
 
-const CommunityRegionSelector = ({ width, onCommunityChange, onRegionChange  }) => {
+const CommunityRegionSelector = ({ width, onCommunityChange, onRegionChange }) => {
   const [communitiesData, setCommunitiesData] = useState([]);
   const [selectedCommunity, setSelectedCommunity] = useState('');
   const [selectedRegion, setSelectedRegion] = useState('');
   const [loading, setLoading] = useState(true);
   const [regions, setRegions] = useState([]);
+  const [inputValue, setInputValue] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,44 +52,50 @@ const CommunityRegionSelector = ({ width, onCommunityChange, onRegionChange  }) 
     onRegionChange(selectedRegion);
   }, [selectedRegion, onRegionChange]);
 
+  const handleCommunityFilter = (inputValue) => {
+    setInputValue(inputValue);
+  };
+
+  const handleCommunitySelect = (selectedOption) => {
+    setSelectedCommunity(selectedOption.value);
+    setSelectedRegion(''); // Limpiar el valor seleccionado de la región
+    setInputValue('');
+  };
+
+  const handleRegionSelect = (selectedOption) => {
+    setSelectedRegion(selectedOption.value);
+  };
+
   return (
     <div>
       <label htmlFor="communitySelector" className="block text-sm font-medium text-gray-600">
         Selecciona una comunidad:
       </label>
-      <select
-        id="communitySelector"
-        value={selectedCommunity}
-        onChange={(e) => setSelectedCommunity(e.target.value)}
-        className={`mt-1 p-2 border rounded-md ${width}`}
-      >
-        <option value="" disabled>Selecciona una opción</option>
-        {communitiesData && communitiesData.map((community) => (
-          <option key={community.id_autonomousCommunity} value={community.id_autonomousCommunity}>
-            {`${community.id_autonomousCommunity} - ${community.community_name}`}
-          </option>
-        ))}
-      </select>
+      <ReactSelect
+        options={communitiesData.map((community) => ({
+          value: community.id_autonomousCommunity,
+          label: community.community_name
+        }))}
+        value={selectedCommunity ? { value: selectedCommunity, label: communitiesData.find((community) => community.id_autonomousCommunity === selectedCommunity)?.community_name } : null}
+        onChange={handleCommunitySelect}
+        onInputChange={handleCommunityFilter}
+        placeholder="Escribe para filtrar..."
+      />
 
       {selectedCommunity && (
         <div className="mt-4">
           <label htmlFor="regionSelector" className="block text-sm font-medium text-gray-600">
             Selecciona una región:
           </label>
-          <select
-            id="regionSelector"
-            value={selectedRegion}
-            onChange={(e) => setSelectedRegion(e.target.value)}
-            className={`mt-1 p-2 border rounded-md ${width}`}
-            
-          >
-            <option value="" disabled>Selecciona una opción</option>
-            {regions && regions.map((region) => (
-              <option key={region.id_region} value={region.id_region}>
-                {`${region.id_region} - ${region.region_name}`}
-              </option>
-            ))}
-          </select>
+          <ReactSelect
+            options={regions.map((region) => ({
+              value: region.id_region,
+              label: region.region_name
+            }))}
+            value={selectedRegion ? { value: selectedRegion, label: regions.find((region) => region.id_region === selectedRegion)?.region_name } : null}
+            onChange={handleRegionSelect}
+            placeholder="Selecciona una opción"
+          />
         </div>
       )}
     </div>

@@ -13,7 +13,7 @@ const ToggleButton = ({ onToggle, checked, text }) => {
         checked={checked}
         onChange={handleToggle} // Usa handleToggle en lugar de onToggle directamente
       />
-      <div className={`relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 ${checked ? 'peer-checked:bg-blue-600' : ''}`}>
+      <div className={`relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-secondary dark:peer-focus:ring-secondary ${checked ? 'peer-checked:bg-primary' : ''}`}>
         <span
           className={`after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 ${checked ? 'after:translate-x-full rtl:after:-translate-x-full' : ''}`}
         ></span>
