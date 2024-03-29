@@ -14,7 +14,7 @@ const CommunitiesList = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get('http://localhost/api/communities');
+        const response = await axios.get('/communitiesList');
         setCommunities(response.data);
       } catch (error) {
         console.error('Error loading communities:', error.message);
