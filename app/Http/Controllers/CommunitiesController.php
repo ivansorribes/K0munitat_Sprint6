@@ -146,4 +146,11 @@ class CommunitiesController extends Controller
         $communitiesOpen = communities::where('private', 0)->get();
         return $communitiesOpen;
     }
+
+    public function communitiesList() 
+    {
+        $communitiesOpen = communities::all();
+        return $communitiesOpen;
+    }
+
 }

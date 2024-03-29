@@ -4,25 +4,16 @@ import { createRoot } from 'react-dom/client';
 import ReactPaginate from 'react-paginate';
 import CommunityCard from './CommunityCard';
 import 'tailwindcss/tailwind.css';
-import '../../css/community.css'
+import '../../css/community.css';
+import useApiSwitcher from '../hooks/useApiSwitcher'; // Importa el hook useApiSwitcher
+import ToggleButton from '../components/bottons/toggle';
 
 const CommunitiesList = () => {
-  const [communities, setCommunities] = useState([]);
   const [currentPage, setCurrentPage] = useState(0);
-  const perPage = 9; // Número de comunidades por página
+  const [option, setOption] = useState('option1');
+  const perPage = 9;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('/communitiesList');
-        setCommunities(response.data);
-      } catch (error) {
-        console.error('Error loading communities:', error.message);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const { data: communities, loading } = useApiSwitcher(option);
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -33,13 +24,17 @@ const CommunitiesList = () => {
     (currentPage + 1) * perPage
   );
 
+  const toggleOption = () => {
+    setOption(option === 'option1' ? 'option2' : 'option1');
+  };
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mx-4 md:mx-auto">
-      <div className="md:col-span-3 text-center">
-        <h1 className="text-4xl font-bold my-4">Community List</h1>
-        <div className="md:col-span-1 flex flex-col justify-center items-center mt-4 md:mt-0">
+    <div className="container mx-auto mt-[5vw] md:mt-[6] lg:mt-[16] xl:mt-[20]">
+      <div className="flex justify-between items-center">
+        <ToggleButton onToggle={toggleOption} checked={option === 'option2'} text={option === 'option1' ? 'All Communities' : 'My Communities'} />
+        <div className="ml-auto"> 
           <a
-            href="http://localhost/communities/create"
+            href="/communities/create"
             rel="noopener noreferrer"
           >
             <button className="button-create">
@@ -47,32 +42,30 @@ const CommunitiesList = () => {
             </button>
           </a>
         </div>
-        <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {displayedCommunities.map((community) => (
-              <CommunityCard
-                key={community.id}
-                community={community}
-                communityPath={`/community/${community.id}`}
-              />
-            ))}
-          </div>
-        </div>
-        <div className="flex justify-center mt-5 py-2">
+      </div>
+      <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4"> {/* Agrega margen entre el botón y el listado */}
+        {displayedCommunities.map((community) => (
+          <CommunityCard
+            key={community.id}
+            community={community}
+            communityPath={`/community/${community.id}`}
+          />
+        ))}
+      </div>
+      <div className="flex justify-center mt-5">
         <ReactPaginate
-            previousLabel={'previous'}
-            nextLabel={'next'}
-            breakLabel={'...'}
-            pageCount={Math.ceil(communities.length / perPage)}
-            marginPagesDisplayed={2}
-            pageRangeDisplayed={5}
-            onPageChange={handlePageChange}
-            containerClassName={'pagination flex space-x-2 items-center'}
-            activeClassName={'active'}
-            pageClassName={'bg-white text-black px-4 py-2 rounded-lg text-lg cursor-pointer'}
-            breakClassName={'bg-white text-black px-4 py-2 rounded-lg text-lg'}
+          previousLabel={'previous'}
+          nextLabel={'next'}
+          breakLabel={'...'}
+          pageCount={Math.ceil(communities.length / perPage)}
+          marginPagesDisplayed={2}
+          pageRangeDisplayed={5}
+          onPageChange={handlePageChange}
+          containerClassName={'pagination flex space-x-2 items-center'}
+          activeClassName={'active'}
+          pageClassName={'bg-white text-black px-4 py-2 rounded-lg text-lg cursor-pointer'}
+          breakClassName={'bg-white text-black px-4 py-2 rounded-lg text-lg'}
         />
-        </div>
       </div>
     </div>
   );
@@ -81,3 +74,5 @@ const CommunitiesList = () => {
 if (document.getElementById('communityList')) {
   createRoot(document.getElementById('communityList')).render(<CommunitiesList />);
 }
+
+export default CommunitiesList;
