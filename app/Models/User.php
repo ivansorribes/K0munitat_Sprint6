@@ -55,8 +55,8 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function communities(): BelongsToMany
+    public function communities():  BelongsToMany
     {
-        return $this->belongsToMany(communities::class,'communitiesUsers', 'id_community', 'id_user');
+        return $this->belongsToMany(communities::class, 'communitiesUsers', 'id_user', 'id_community');
     }
 }

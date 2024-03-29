@@ -3,7 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\api\CommunitiesApiController;
-
+use App\Http\Controllers\EventController;
+use App\Http\Controllers\PostsController;
+use App\Http\Controllers\commentsPostsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,5 +21,4 @@ use App\Http\Controllers\api\CommunitiesApiController;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-
 

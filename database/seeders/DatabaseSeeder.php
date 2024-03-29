@@ -20,10 +20,12 @@ class DatabaseSeeder extends Seeder
         $this->call(regionsSeeder::class);
         $this->call(communitiesSeeder::class);
         $this->call(postsSeeder::class);
-        $this->call(commentsSeeder::class);
+        // $this->call(commentsSeeder::class);
         $this->call(commentsPostsSeeder::class);
         $this->call(communitiesUsersSeeder::class);
         $this->call(imagePostSeeder::class);
         $this->call(likesPostsSeeder::class);
+        $this->call(post_admin_blogSeeder::class);
+        $this->call(EventSeeder::class);
     }
 }

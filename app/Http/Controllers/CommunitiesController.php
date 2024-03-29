@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use Illuminate\Validation\ValidationException;
 use App\Models\communities;
 use App\Models\User;
@@ -11,6 +12,35 @@ use Illuminate\Support\Facades\Auth;
 class CommunitiesController extends Controller
 {
 
+    public function retornarComunitats()
+    {
+        // Obtener todas las comunidades con los usuarios asociados
+        $communities = communities::with('admin')->get();
+        return view('adminPanel.paneladminComunitats', compact('communities'));
+    }
+
+
+
+    public function stateChange($id)
+    {
+        $community = communities::findOrFail($id);
+        $community->isActive = !$community->isActive;
+        $community->save();
+
+        return redirect()->back()->with('success', 'Estado cambiado exitosamente');
+    }
+
+    public function showUsers($communityId)
+    {
+        // Obtener la comunidad por su ID
+        $community = communities::findOrFail($communityId);
+
+        // Obtener la lista de usuarios asociados a esta comunidad
+        $users = $community->communityUsers()->get();
+
+        // Devolver la vista con la lista de usuarios
+        return view('adminPanel.usuarisComunitat', compact('users', 'community'));
+    }
     public function create()
     {
         return view('communities.createForm');
@@ -19,8 +49,8 @@ class CommunitiesController extends Controller
     public function index()
     {
         return view('communities.CommunitiesList');
-
     }
+
 
     public function store(Request $request)
     {
@@ -34,10 +64,10 @@ class CommunitiesController extends Controller
                 'private' => 'required|boolean',
                 'id_admin' => 'required'
             ]);
-    
+
             // Crear la comunidad
             $community = communities::create($validatedData);
-    
+
             // Redirigir de vuelta al formulario después de la presentación
             return response()->json(['message' => 'Community created successfully']);
         } catch (ValidationException $e) {
@@ -45,7 +75,7 @@ class CommunitiesController extends Controller
             return redirect()->route('communities.create')->withErrors($e->errors());
         }
     }
-    
+
     public function show($id)
     {
         // Obtén la comunidad por ID

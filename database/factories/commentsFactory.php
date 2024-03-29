@@ -17,7 +17,7 @@ class commentsFactory extends Factory
      */
     public function definition(): array
     {
-        $id_user= User::all()->pluck('id')->toArray();
+        $id_user = User::all()->pluck('id')->toArray();
 
         return [
             'id_user' => $this->faker->randomElement($id_user),

@@ -1,10 +1,10 @@
 
-    <footer class="bg-[#000000] mx-auto max-w-full  shadow">
-        <div class="container mx-auto w-full max-w-full px-6 py-14 lg:py-8 border-t border-b border-gray-200 dark:border-gray-700">
+    <footer class="bg-[#000000] mx-auto max-w-full  shadow-lg">
+        <div class="container mx-auto w-full max-w-full px-6 py-14 lg:py-8 border-t border-b border-gray-200 dark:border-gray-700 ">
             <div class="md:flex md:justify-between">
-              <div class="mb-6 md:mb-0">
+              <div class="mb-6 md:mb-0 ">
                   <a href="{{ route('home') }}" class="flex items-center cursor-pointer -mr-4 ml-8 mt-10 ">
-                      <img src="{{ asset('img/logo.png') }}" class="hover:scale-110 h-10 me-3" alt="Logo Komunitat" />
+                    <img src="{{ asset('img/K0munitat_Logo.svg') }}" alt="Logo Komunitat" class="hover:scale-110 h-10 w-auto">
                   </a>
               </div>
               <div class="grid grid-cols-2 gap-8 sm:gap-6 sm:grid-cols-3">
@@ -15,7 +15,10 @@
                               <a href="{{ route('home') }}" class="hover:underline">Home</a>
                           </li>
                           <li class="mb-4">
-                              <a href="{{ route('about-us') }}" class="hover:underline">Blog</a>
+                              <a href="{{ route('blog') }}" class="hover:underline">Blog</a>
+                          </li>
+                          <li class="mb-4">
+                            <a href="{{ route('calendar') }}" class="hover:underline">Events</a>
                           </li>
                           <li class="mb-4">
                             <a href="{{ route('about-us') }}" class="hover:underline">About Us</a>
