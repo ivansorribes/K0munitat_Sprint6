@@ -153,4 +153,11 @@ class CommunitiesController extends Controller
         return $communitiesOpen;
     }
 
+    public function communitiesUserId() 
+    {
+        $user = Auth::user();
+        $communitiesUserIds = $user->communities->pluck('id')->toArray();
+        return $communitiesUserIds;
+    }
+
 }

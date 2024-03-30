@@ -17,6 +17,22 @@ const CommunitiesList = () => {
   const [communities, setCommunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
+  const [userCommunities, setUserCommunities] = useState([]); // Lista de comunidades del usuario
+
+  useEffect(() => {
+    // Aquí debes realizar la llamada a tu API para obtener la lista de comunidades del usuario
+    // Reemplaza el contenido de este useEffect con tu lógica de obtención de datos
+    const fetchUserCommunities = async () => {
+      try {
+        const response = await axios.get('/communitiesUserId');
+        setUserCommunities(response.data); // Actualiza el estado con las comunidades del usuario
+      } catch (error) {
+        console.error('Error fetching user communities:', error);
+      }
+    };
+
+    fetchUserCommunities();
+  }, []); // Esta llamada solo se realiza una vez al montar el componente
 
   // Usa el hook useApiSwitcher con el valor de la opción actual
   const { data: apiData, loading: apiLoading } = useApiSwitcher(option, currentPage);
@@ -42,14 +58,6 @@ const CommunitiesList = () => {
     };
   }, []);
 
-  const fetchData = async () => {
-    try {
-      setCurrentPage(prevPage => prevPage + 1);
-    } catch (error) {
-      console.error('Error fetching data:', error);
-    }
-  };
-
   const toggleOption = () => {
     setOption(option === 'option1' ? 'option2' : 'option1');
     setCurrentPage(1); // Reiniciamos la página cuando cambiamos la opción
@@ -70,25 +78,34 @@ const CommunitiesList = () => {
     <div className="container mx-auto mt-[5vw] md:mt-[8] lg:mt-[10] xl:mt-[12]">
       <div className="flex justify-between items-center mb-4">
         <ToggleButton onToggle={toggleOption} checked={option === 'option2'} text={option === 'option1' ? 'All Communities' : 'My Communities'} />
-        <a
-          href="/communities/create"
-          rel="noopener noreferrer"
-        >
-          <ButtonCreate label = 'Create' />
+        <a href="/communities/create" rel="noopener noreferrer">
+          <ButtonCreate label="Create" />
         </a>
       </div>
       <div id="scroll-container" ref={scrollRef} style={{ overflowY: 'scroll', height: '60vh' }}>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {communities.map((community) => (
+        {communities.map((community) => {
+          let option = 'edit';
+          if (community.private === 0) {
+            option = 'enter';
+          } else {
+            if (userCommunities.includes(community.id)) {
+              option = 'enter';
+            } else {
+              option = 'send';
+            }
+          }
+
+          return (
             <CommunityCard
               key={community.id}
               community={community}
-              communityPath={`/community/${community.id}`}
+              option={option}
             />
-          ))}
+          );
+      })}
         </div>
         {loading && <p>Loading...</p>}
-        
       </div>
     </div>
   );
