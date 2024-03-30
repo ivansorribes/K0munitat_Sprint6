@@ -91,7 +91,15 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
     Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
     Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
+    //Route::get('/communitiesList', [CommunitiesController::class, 'communitiesUser'])->name('communities.list');
+
 });
+
+Route::get('/communitiesList', [CommunitiesController::class, 'communitiesList'])->name('communities.list');
+Route::get('/communitiesUser', [CommunitiesController::class, 'communitiesUser'])->name('communities.user');
+Route::get('/communitiesOpen', [CommunitiesController::class, 'communitiesOpen'])->name('communities.open');
+Route::get('/communitiesUserId', [CommunitiesController::class, 'communitiesUserId'])->name('communities.userId');
+
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
