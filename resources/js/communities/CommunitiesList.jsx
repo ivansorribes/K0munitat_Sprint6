@@ -45,7 +45,7 @@ const CommunitiesList = () => {
   useEffect(() => {
     const handleScroll = () => {
       if (scrollRef.current && scrollRef.current.scrollHeight - scrollRef.current.scrollTop === scrollRef.current.clientHeight) {
-        fetchData();
+        fetchData(); // Llama a fetchData() cuando se hace scroll al final
       }
     };
 
@@ -57,6 +57,12 @@ const CommunitiesList = () => {
       }
     };
   }, []);
+
+  const fetchData = () => {
+    // Aquí debes implementar la lógica para cargar más datos cuando se hace scroll
+    // Por ejemplo, puedes aumentar el número de la página actual y hacer otra llamada a la API
+    setCurrentPage(prevPage => prevPage + 1);
+  };
 
   const toggleOption = () => {
     setOption(option === 'option1' ? 'option2' : 'option1');
@@ -86,14 +92,10 @@ const CommunitiesList = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {communities.map((community) => {
           let option = 'edit';
-          if (community.private === 0) {
+          if (community.private === 0 || userCommunities.includes(community.id)) {
             option = 'enter';
           } else {
-            if (userCommunities.includes(community.id)) {
-              option = 'enter';
-            } else {
-              option = 'send';
-            }
+            option = 'send';
           }
 
           return (
@@ -103,7 +105,7 @@ const CommunitiesList = () => {
               option={option}
             />
           );
-      })}
+        })}
         </div>
         {loading && <p>Loading...</p>}
       </div>
