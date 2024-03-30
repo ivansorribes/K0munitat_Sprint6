@@ -5,8 +5,10 @@ import CommunityCard from './CommunityCard';
 import 'tailwindcss/tailwind.css';
 import '../../css/community.css';
 import useApiSwitcher from '../hooks/useApiSwitcher'; // Importa el hook useApiSwitcher
-import ToggleButton from '../components/bottons/toggle';
+import ToggleButton from '../components/buttons/toggle';
 import { animateScroll as scroll } from 'react-scroll';
+import {ButtonCreate} from '../components/buttons';
+
 
 const CommunitiesList = () => {
   const [option, setOption] = useState('option1');
@@ -72,9 +74,7 @@ const CommunitiesList = () => {
           href="/communities/create"
           rel="noopener noreferrer"
         >
-          <button className="button-create">
-            Create
-          </button>
+          <ButtonCreate label = 'Create' />
         </a>
       </div>
       <div id="scroll-container" ref={scrollRef} style={{ overflowY: 'scroll', height: '60vh' }}>
@@ -88,11 +88,7 @@ const CommunitiesList = () => {
           ))}
         </div>
         {loading && <p>Loading...</p>}
-        {!loading && (
-          <button onClick={fetchData} className="load-more-btn">
-            Load More
-          </button>
-        )}
+        
       </div>
     </div>
   );
