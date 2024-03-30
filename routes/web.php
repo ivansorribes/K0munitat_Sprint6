@@ -98,7 +98,6 @@ Route::middleware(['auth'])->group(function () {
 Route::get('/communitiesList', [CommunitiesController::class, 'communitiesList'])->name('communities.list');
 Route::get('/communitiesUser', [CommunitiesController::class, 'communitiesUser'])->name('communities.user');
 Route::get('/communitiesOpen', [CommunitiesController::class, 'communitiesOpen'])->name('communities.open');
-Route::get('/communities/{community}', [CommunitiesController::class, 'show'])->name('community.info');
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
