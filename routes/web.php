@@ -115,26 +115,36 @@ Route::get('/communities/{community}/{id_post}', function () {
 
 Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
-Route::put('/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
+Route::match(['put', 'get'], '/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
+Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
+
 
 Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');
-Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
+Route::put('/posts/{post}/toggle', [PostsController::class, 'toggleActivation'])->name('posts.toggle');
+Route::get('/posts/{post}', [PostsController::class, 'showPostById'])->name('post.show');
+Route::put('/posts/edit/{post}', [PostsController::class, 'updatePost'])->name('update.post');
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
 Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('users.toggleIsActive');
 Route::get('/users/{id}/detail', [UserController::class, 'showDetail'])->name('users.detail');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
 Route::post('/users', [UserController::class, 'store'])->name('storeUser');
+Route::get('/createUserForm', function () {
+    return view('adminPanel.createUserForm');
+})->name('createUserForm');
 
 Route::get('/paneladminAdvertisements', [PostsController::class, 'getAdvertisements'])->name('paneladminAdvertisements');
 Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAdvertisement'])->name('update.advertisement');
 
-Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
+Route::get('/dashboard', function () {
+    return view('adminPanel.dashboard');
+})->name('dashboard');
 
-Route::get('/createUserForm', function () {
-    return view('adminPanel.createUserForm');
-})->name('createUserForm');
+Route::get('/loginAdmin', function () {
+    return view('adminPanel.loginAdmin');
+})->name('loginAdmin');
 
 
 Route::get('/events', function () {
