@@ -11,7 +11,7 @@ const CommunityCard = ({ community, option }) => {
   if (option === 'enter') {
     buttonComponent = <ButtonSave label="Enter community" />;
   } else if (option === 'send') {
-    buttonComponent = <ButtonEdit label="Send solicitud" />;
+    buttonComponent = <ButtonEdit label="Send request" />;
   } else {
     buttonComponent = null;
   }
