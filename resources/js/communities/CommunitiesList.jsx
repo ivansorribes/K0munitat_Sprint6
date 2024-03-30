@@ -12,12 +12,14 @@ import {ButtonCreate} from '../components/buttons';
 const CommunitiesList = () => {
   const [option, setOption] = useState('option1');
   const [currentPage, setCurrentPage] = useState(1);
-  const perPage = 9;
   const [communities, setCommunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
   const [userCommunities, setUserCommunities] = useState([]);
   const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
+  const [showScrollButton, setShowScrollButton] = useState(false); // Estado para mostrar el botón de scroll
+  const { data: apiData, loading: apiLoading } = useApiSwitcher(option, currentPage);
+
 
   useEffect(() => {
     const fetchUserCommunities = async () => {
@@ -32,8 +34,6 @@ const CommunitiesList = () => {
     fetchUserCommunities();
   }, []);
 
-  const { data: apiData, loading: apiLoading } = useApiSwitcher(option, currentPage);
-
   useEffect(() => {
     setCommunities(prevCommunities => [...prevCommunities, ...apiData]);
     setLoading(apiLoading);
@@ -41,8 +41,12 @@ const CommunitiesList = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      if (scrollRef.current && scrollRef.current.scrollHeight - scrollRef.current.scrollTop === scrollRef.current.clientHeight) {
-        fetchData();
+      if (scrollRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+        setShowScrollButton(scrollTop > clientHeight / 2);
+        if (scrollHeight - scrollTop === clientHeight) {
+          fetchData();
+        }
       }
     };
 
@@ -85,8 +89,17 @@ const CommunitiesList = () => {
     community.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  // Función para manejar el click en el botón de scroll hacia arriba
+  const handleScrollToTop = () => {
+    scroll.scrollToTop({
+      containerId: 'scroll-container',
+      duration: 500,
+      smooth: 'easeInOutQuad'
+    });
+  };
+
   return (
-    <div className="container mx-auto mt-[5vw] md:mt-[8] lg:mt-[10] xl:mt-[12]">
+    <div className="container mx-auto mt-[5vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
         <ToggleButton onToggle={toggleOption} checked={option === 'option2'} text={option === 'option1' ? 'All Communities' : 'My Communities'} />
         {/* Cuadro de búsqueda */}
@@ -102,6 +115,13 @@ const CommunitiesList = () => {
         </a>
       </div>
       <div id="scroll-container" ref={scrollRef} style={{ overflowY: 'scroll', height: '60vh' }}>
+        {showScrollButton && (
+          <button onClick={handleScrollToTop} className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 focus:outline-none">
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+            </svg>
+          </button>
+        )}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {filteredCommunities.map((community) => (
             <CommunityCard
