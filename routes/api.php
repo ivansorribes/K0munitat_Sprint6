@@ -22,3 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show']);
+
+Route::post('/comments', [commentsPostsController::class, 'store']);
