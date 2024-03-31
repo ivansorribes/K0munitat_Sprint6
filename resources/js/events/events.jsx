@@ -1,6 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import React, { useState, useEffect } from 'react';
 import { Calendar, momentLocalizer } from 'react-big-calendar';
+import { ButtonCancel, ButtonCreate,  ButtonSave } from '../components/buttons';
 import moment from 'moment';
 import 'moment-timezone';
 import Modal from 'react-modal';
@@ -8,6 +9,7 @@ import { Formik, Field, Form, ErrorMessage } from 'formik';
 import axios from 'axios';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import '../../css/event.css';
+
 
 const localizer = momentLocalizer(moment);
 moment.tz.setDefault('Europe/Madrid');
@@ -46,7 +48,7 @@ const EventCalendar = () => {
     });
 
     useEffect(() => {
-        fetch('http://localhost/eventsList')
+        fetch('/eventsList')
             .then(response => response.json())
             .then(data => {
                 setEvents(data.events);
@@ -98,6 +100,11 @@ const EventCalendar = () => {
                 // Manejar errores
             });
     };
+
+    const cancelForm = () => {
+        window.location.href = '/events';
+      };
+    
 
     return (
         <div className="my-6 mx-auto max-w-6xl">
@@ -158,12 +165,12 @@ const EventCalendar = () => {
                         </div>
                         
                         <div className="flex items-center justify-between">
-                            <button
-                                type="submit"
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            >
-                                Save
-                            </button>
+                            <div>
+                                <ButtonCancel label='Cancel' onClick={cancelForm} />
+                            </div>
+                            <div>
+                                <ButtonSave label="Submit" onClick={SubmitEvent}/>
+                            </div>                   
                         </div>
                     </Form>
                 </Formik>
