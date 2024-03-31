@@ -100,11 +100,42 @@ const EventCalendar = () => {
                 // Manejar errores
             });
     };
+    const validateForm = (values) => {
+        const errors = {};
+    
+        // Validar que el campo de título no esté vacío
+        if (!values.title.trim()) {
+            errors.title = 'El título es requerido';
+        }
+    
+        // Validar que la fecha de inicio no esté vacía
+        if (!values.start.trim()) {
+            errors.start = 'La fecha de inicio es requerida';
+        }
+    
+        // Validar que la fecha de fin no esté vacía
+        if (!values.end.trim()) {
+            errors.end = 'La fecha de fin es requerida';
+        }
+    
+        // Validar que la fecha de inicio sea anterior a la fecha de fin
+        if (values.start && values.end && moment(values.start).isAfter(values.end)) {
+            errors.end = 'La fecha de fin debe ser posterior a la fecha de inicio';
+        }
+    
+        return errors;
+    };
+
+    const sanitizeInput = (input) => {
+        // Lógica para sanitizar los datos de entrada
+    };
+
 
     const cancelForm = () => {
         window.location.href = '/events';
-      };
+    };
     
+
 
     return (
         <div className="my-6 mx-auto max-w-6xl">
@@ -117,8 +148,10 @@ const EventCalendar = () => {
                 <h2>New Event</h2>
                 <Formik
                     initialValues={{ title: '', start: '', end: '', id_user: user.id }}
+                    validate={validateForm} // Aquí pasamos la función de validación
                     onSubmit={handleFormSubmit}
                 >
+                {({ errors, touched }) => (
                     <Form className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
                         <div className="mb-4">
                             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="title">
@@ -173,6 +206,7 @@ const EventCalendar = () => {
                             </div>                   
                         </div>
                     </Form>
+                )}
                 </Formik>
             </Modal>
             <Calendar
