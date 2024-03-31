@@ -147,7 +147,7 @@ Route::get('/events', function () {
 })->name('calendar');
 
 Route::middleware('allowAccesDates')->get('/eventsList', [EventController::class, 'index'])->name('events.list');
-Route::post('/eventsList', [EventController::class, 'store'])->name('events.store');
+Route::middleware('checkSuperAdmin')->post('/eventsList', [EventController::class, 'store'])->name('events.store');
 
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');

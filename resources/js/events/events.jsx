@@ -76,7 +76,7 @@ const EventCalendar = () => {
         setSelectedDate(null);
     };
 
-    const handleFormSubmit = (values, { resetForm }) => {
+    const handleFormSubmit = (values, { resetForm } = {})  => {
         values.start = formValues.start;
         axios.post('http://localhost/eventsList', values, {
             headers: {

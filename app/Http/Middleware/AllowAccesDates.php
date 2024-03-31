@@ -21,5 +21,6 @@ class AllowAccesDates
         }
 
         // Si no proviene de la aplicación React, responder con un error o redirigir
-        return redirect('/');    }   
+        abort(404);
+    }   
 }

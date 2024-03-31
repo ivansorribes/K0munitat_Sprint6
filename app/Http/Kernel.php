@@ -69,5 +69,6 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         // Otros middlewares...
         'allowAccesDates' => \App\Http\Middleware\AllowAccesDates::class,
+        'checkSuperAdmin' => \App\Http\Middleware\CheckSuperAdminRole::class,
     ];
 }
