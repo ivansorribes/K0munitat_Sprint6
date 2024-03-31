@@ -69,7 +69,7 @@ const CommunityRegionSelector = ({ width, onCommunityChange, onRegionChange }) =
   return (
     <div>
       <label htmlFor="communitySelector" className="block text-sm font-medium text-gray-600">
-        Selecciona una comunidad:
+      Select a community:
       </label>
       <ReactSelect
         options={communitiesData.map((community) => ({
@@ -79,13 +79,13 @@ const CommunityRegionSelector = ({ width, onCommunityChange, onRegionChange }) =
         value={selectedCommunity ? { value: selectedCommunity, label: communitiesData.find((community) => community.id_autonomousCommunity === selectedCommunity)?.community_name } : null}
         onChange={handleCommunitySelect}
         onInputChange={handleCommunityFilter}
-        placeholder="Escribe para filtrar..."
+        placeholder="Write to filter..."
       />
 
       {selectedCommunity && (
         <div className="mt-4">
           <label htmlFor="regionSelector" className="block text-sm font-medium text-gray-600">
-            Selecciona una región:
+           Select a region:
           </label>
           <ReactSelect
             options={regions.map((region) => ({
