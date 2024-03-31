@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class communities extends Model
 {
@@ -23,14 +24,16 @@ class communities extends Model
         'isActive'
     ];
 
-    public function user(): BelongsTo
+    public function user(): BelongsToMany
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class);
     }
+
     public function communityUsers()
     {
         return $this->belongsToMany(User::class, 'communitiesUsers', 'id_community', 'id_user');
     }
+    
     public function admin(): BelongsTo
     {
         return $this->belongsTo(User::class, 'id_admin');

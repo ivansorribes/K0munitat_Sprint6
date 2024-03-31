@@ -4,7 +4,10 @@ namespace App\Http\Controllers;
 
 use Illuminate\Validation\ValidationException;
 use App\Models\communities;
+use App\Models\User;
+
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class CommunitiesController extends Controller
 {
@@ -130,4 +133,31 @@ class CommunitiesController extends Controller
         $communities = communities::destroy($id);
         return $communities;
     }
+
+    public function communitiesUser() 
+    {
+        $user = Auth::user();
+        $communitiesUser = $user->communities;
+        return $communitiesUser;
+    }
+
+    public function communitiesOpen() 
+    {
+        $communitiesOpen = communities::where('private', 0)->get();
+        return $communitiesOpen;
+    }
+
+    public function communitiesList() 
+    {
+        $communitiesOpen = communities::all();
+        return $communitiesOpen;
+    }
+
+    public function communitiesUserId() 
+    {
+        $user = Auth::user();
+        $communitiesUserIds = $user->communities->pluck('id')->toArray();
+        return $communitiesUserIds;
+    }
+
 }

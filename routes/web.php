@@ -14,6 +14,7 @@ use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\commentsPostsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
 
@@ -96,6 +97,12 @@ Route::middleware(['auth'])->group(function () {
 
 });
 
+Route::get('/communitiesList', [CommunitiesController::class, 'communitiesList'])->name('communities.list');
+Route::get('/communitiesUser', [CommunitiesController::class, 'communitiesUser'])->name('communities.user');
+Route::get('/communitiesOpen', [CommunitiesController::class, 'communitiesOpen'])->name('communities.open');
+Route::get('/communitiesUserId', [CommunitiesController::class, 'communitiesUserId'])->name('communities.userId');
+
+
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
 Route::post('/password/reset', [AuthController::class, 'resetPassword'])->name('reset.password');
@@ -122,7 +129,7 @@ Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::cla
 Route::put('/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
 
 Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');
-Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
+// Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
 Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
@@ -159,10 +166,12 @@ Route::get('/dashboard', function () {
 })->name('dashboard');
 
 
-//Header
-//Header
 Route::get('/paneladminAdvertisements', function () {
     return view('paneladminAdvertisements');
 })->name('paneladminAdvertisements');
 
 Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
+
+Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
+Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);
+Route::put('/posts/{id_post}', [PostsController::class, 'update']);

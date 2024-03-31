@@ -3,6 +3,8 @@ import { createRoot } from 'react-dom/client';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
 import CommunityRegionSelector from '../components/select/selectCommunityAut';
+import {ButtonSave, ButtonCancel} from '../components/buttons';
+
 
 export default function CommunitiesFormCreate() {
   const [idAutonomousCommunity, setIdAutonomousCommunity] = useState('');
@@ -33,6 +35,10 @@ export default function CommunitiesFormCreate() {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const cancelForm = () => {
+    window.location.href = 'http://localhost/communities';
   };
 
   return (
@@ -104,13 +110,13 @@ export default function CommunitiesFormCreate() {
               <ErrorMessage name="private" component="div" className="text-red-500" />
             </div>
 
-            <div>
-              <button
-                type="submit"
-                className="hover:shadow-form rounded-md bg-primary py-3 px-8 text-base font-semibold text-white focus:outline-none"
-              >
-                Submit
-              </button>
+            <div className="flex justify-between">
+              <div>
+                <ButtonCancel label='Cancel' onClick={cancelForm} />
+              </div>
+              <div>
+                <ButtonSave label='Submit' onClick={SubmitEvent} />
+              </div>
             </div>
 
             {serverErrors && (
