@@ -136,7 +136,6 @@ const EventCalendar = () => {
     };
     
 
-
     return (
         <div className="my-6 mx-auto max-w-6xl">
             <Modal
@@ -147,7 +146,7 @@ const EventCalendar = () => {
             >
                 <h2>New Event</h2>
                 <Formik
-                    initialValues={{ title: '', start: '', end: '', id_user: user.id }}
+                    initialValues={{ title: '', start: formValues.start, end: '', id_user: user.id }}
                     validate={validateForm} // Aquí pasamos la función de validación
                     onSubmit={handleFormSubmit}
                 >
@@ -202,7 +201,7 @@ const EventCalendar = () => {
                                 <ButtonCancel label='Cancel' onClick={cancelForm} />
                             </div>
                             <div>
-                                <ButtonSave label="Submit" onClick={SubmitEvent}/>
+                                <ButtonSave label="Submit" onClick={handleFormSubmit}/>
                             </div>                   
                         </div>
                     </Form>
@@ -223,7 +222,8 @@ const EventCalendar = () => {
     );
 };
 
-
-if (document.getElementById('MyCalendar')) {
-    createRoot(document.getElementById('MyCalendar')).render(<EventCalendar />);
+const myCalendarElement = document.getElementById('MyCalendar');
+if (myCalendarElement) {
+    Modal.setAppElement(myCalendarElement);
+    createRoot(myCalendarElement).render(<EventCalendar />);
 }
