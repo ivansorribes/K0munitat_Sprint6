@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Validation\ValidationException;
 use App\Models\communities;
+use App\Models\communitiesUsers;
 use App\Models\User;
 
 use Illuminate\Http\Request;
@@ -51,11 +52,10 @@ class CommunitiesController extends Controller
         return view('communities.CommunitiesList');
     }
 
-
     public function store(Request $request)
     {
         try {
-            // Validación de datos
+            // Validación de datos para la comunidad
             $validatedData = $request->validate([
                 'name' => 'required|string|max:254',
                 'description' => 'required|string|max:254',
@@ -64,10 +64,20 @@ class CommunitiesController extends Controller
                 'private' => 'required|boolean',
                 'id_admin' => 'required'
             ]);
-
+    
+            // Escapar los datos antes de almacenarlos en la base de datos
+            $validatedData['name'] = htmlspecialchars($validatedData['name']);
+            $validatedData['description'] = htmlspecialchars($validatedData['description']);
+    
             // Crear la comunidad
             $community = communities::create($validatedData);
-
+    
+            // Crear la entrada en communitiesUsers para asociar al usuario con la nueva comunidad
+            $userCommunity = communitiesUsers::create([
+                'id_community' => $community->id,
+                'id_user' => $validatedData['id_admin']
+            ]);
+    
             // Redirigir de vuelta al formulario después de la presentación
             return response()->json(['message' => 'Community created successfully']);
         } catch (ValidationException $e) {

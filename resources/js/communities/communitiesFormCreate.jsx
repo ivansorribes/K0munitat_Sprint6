@@ -5,6 +5,7 @@ import axios from 'axios';
 import CommunityRegionSelector from '../components/select/selectCommunityAut';
 import {ButtonSave, ButtonCancel} from '../components/buttons';
 import * as Yup from 'yup';
+import DOMPurify from 'dompurify';
 
 export default function CommunitiesFormCreate() {
   const [idAutonomousCommunity, setIdAutonomousCommunity] = useState('');
@@ -14,9 +15,16 @@ export default function CommunitiesFormCreate() {
   const [communityRegionError, setCommunityRegionError] = useState('');
   const id = document.getElementById("id_user").value;
 
+  
   const handleSubmit = async (values) => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-    const formValues = { ...values, id_autonomousCommunity: idAutonomousCommunity, id_region: idRegion };
+    const formValues = {
+      ...values,
+      id_autonomousCommunity: idAutonomousCommunity,
+      id_region: idRegion,
+      name: DOMPurify.sanitize(values.name), // Sanitize name input
+      description: DOMPurify.sanitize(values.description) // Sanitize description input
+    };
     setSubmitting(true);
     try {
       const response = await axios.post('http://localhost/communities', formValues);
@@ -106,8 +114,6 @@ export default function CommunitiesFormCreate() {
                     onRegionChange={setIdRegion}
                     setCommunityRegionError={setCommunityRegionError}
                   />
-                  <ErrorMessage name="id_autonomousCommunity" component="div" className="text-red-500" />
-                  <ErrorMessage name="id_region" component="div" className="text-red-500" />
                 </div>
 
                 <div className="mb-5">
