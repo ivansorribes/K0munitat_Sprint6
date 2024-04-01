@@ -164,9 +164,14 @@ export default function CommunitiesFormCreate() {
                   <div>
                     <ButtonCancel label='Cancel' onClick={cancelForm} />
                   </div>
-                  <div>
-                    <button label='Submit' type = 'submit'>Submit</button>
-                  </div>
+                  <button
+                    className="text-white px-4 py-2 rounded"
+                    style={{ background: '#64a858'}}
+                    type='submit'
+                    disabled={submitting || success || error} // Deshabilita el botón cuando se está enviando el formulario o se muestra un mensaje de éxito/error
+                  >
+                    Submit
+                  </button>                
                 </div>
 
                 {serverErrors && (
@@ -186,6 +191,6 @@ export default function CommunitiesFormCreate() {
   );
 }
 
-if (document.getElementById('communityForm')) {
+if (document.getElementById('communityForm') && !document.getElementById('communityForm').hasChildNodes()) {
   createRoot(document.getElementById('communityForm')).render(<CommunitiesFormCreate />);
 }
