@@ -98,6 +98,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::middleware('allowAccesDates') ->group( function() {
+    Route::get('/communitiesUserActual', [CommunitiesController::class, 'userActual'])->name('communities.userActual');
     Route::get('/communitiesList', [CommunitiesController::class, 'communitiesList'])->name('communities.list');
     Route::get('/communitiesUser', [CommunitiesController::class, 'communitiesUser'])->name('communities.user');
     Route::get('/communitiesOpen', [CommunitiesController::class, 'communitiesOpen'])->name('communities.open');

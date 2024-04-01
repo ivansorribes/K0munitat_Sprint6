@@ -13,25 +13,48 @@ export default function CommunitiesFormCreate() {
   const [submitting, setSubmitting] = useState(false);
   const [serverErrors, setServerErrors] = useState(null);
   const [communityRegionError, setCommunityRegionError] = useState('');
-  const id = document.getElementById("id_user").value;
+  const [userData, setUserData] = useState(null); // Estado para almacenar los datos del usuario
+  const [adminId, setAdminId] = useState(''); // Estado para almacenar el ID del administrador
 
-  
+  const fetchData = async () => {
+    try {
+      // Realizar la solicitud GET a la API para obtener los datos del usuario
+      const response = await axios.get('/communitiesUserActual'); // Ajusta la ruta según la API
+      setUserData(response.data); // Almacena los datos del usuario en el estado
+    } catch (error) {
+      console.error('Error fetching user data from API:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Llamar a la función fetchData al montar el componente
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    if (userData) {
+      setAdminId(userData.id);
+    }
+  }, [userData]);
+
+
   const handleSubmit = async (values) => {
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const formValues = {
       ...values,
       id_autonomousCommunity: idAutonomousCommunity,
       id_region: idRegion,
+      id_admin:adminId,
       name: DOMPurify.sanitize(values.name), // Sanitize name input
       description: DOMPurify.sanitize(values.description) // Sanitize description input
     };
     setSubmitting(true);
     try {
-      const response = await axios.post('http://localhost/communities', formValues);
+      const response = await axios.post('/communities', formValues);
 
       if (response.data.message) {
         window.alert('Form submitted successfully');
-        window.location.href = 'http://localhost/communities';
+        window.location.href = '/communities';
       }
     } catch (error) {
       if (error.response && error.response.data.errors) {
@@ -48,7 +71,7 @@ export default function CommunitiesFormCreate() {
 
 
   const cancelForm = () => {
-    window.location.href = 'http://localhost/communities';
+    window.location.href = '/communities';
   };
 
   const validationSchema = Yup.object().shape({
@@ -70,7 +93,7 @@ export default function CommunitiesFormCreate() {
               private: '',
               name: '',
               description: '',
-              id_admin: id,
+              id_admin:adminId,
             }}
             validationSchema={validationSchema}
             onSubmit={handleSubmit}

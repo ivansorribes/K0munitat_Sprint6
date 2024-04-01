@@ -148,19 +148,28 @@ class CommunitiesController extends Controller
     {
         $user = Auth::user();
         $communitiesUser = $user->communities;
-        return $communitiesUser;
+        return response()->json([
+            'communities' => $communitiesUser,
+            'user' => $user
+        ]); 
     }
+
+    
 
     public function communitiesOpen() 
     {
         $communitiesOpen = communities::where('private', 0)->get();
         return $communitiesOpen;
     }
-
     public function communitiesList() 
     {
-        $communitiesOpen = communities::all();
-        return $communitiesOpen;
+        $user = Auth::user();
+        $communitiesList = communities::all();
+        
+        return response()->json([
+            'communities' => $communitiesList,
+            'user' => $user
+        ]);
     }
 
     public function communitiesUserId() 
@@ -168,6 +177,12 @@ class CommunitiesController extends Controller
         $user = Auth::user();
         $communitiesUserIds = $user->communities->pluck('id')->toArray();
         return $communitiesUserIds;
+    }
+
+    public function userActual() 
+    {
+        $user = Auth::user();
+        return $user;
     }
 
 }
