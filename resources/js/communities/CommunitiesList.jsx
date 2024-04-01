@@ -101,7 +101,7 @@ const CommunitiesList = () => {
   return (
     <div className="container mx-auto mt-[5vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
-        <ToggleButton onToggle={toggleOption} checked={option === 'option2'} text={option === 'option1' ? 'All Communities' : 'My Communities'} />
+        <ToggleButton onToggle={toggleOption} checked={option === 'option2'} text={option === 'option1' ? 'My Communities' : 'All Communities'}  />
         {/* Cuadro de búsqueda */}
         <input
           type="text"
