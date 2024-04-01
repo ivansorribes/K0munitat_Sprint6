@@ -1,16 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 import axios from 'axios';
 import CommunityRegionSelector from '../components/select/selectCommunityAut';
 import {ButtonSave, ButtonCancel} from '../components/buttons';
-
+import * as Yup from 'yup';
 
 export default function CommunitiesFormCreate() {
   const [idAutonomousCommunity, setIdAutonomousCommunity] = useState('');
   const [idRegion, setIdRegion] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [serverErrors, setServerErrors] = useState(null);
+  const [communityRegionError, setCommunityRegionError] = useState('');
   const id = document.getElementById("id_user").value;
 
   const handleSubmit = async (values) => {
@@ -37,9 +38,16 @@ export default function CommunitiesFormCreate() {
     }
   };
 
+
   const cancelForm = () => {
     window.location.href = 'http://localhost/communities';
   };
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('Community Name is required'),
+    description: Yup.string().required('Community Description is required'),
+    private: Yup.string().required('Please select the Type'),
+  });
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-white-500">
@@ -47,17 +55,18 @@ export default function CommunitiesFormCreate() {
         <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full">
           <div className="max-w-[900px] mx-auto">
-            <Formik
-              initialValues={{
-                id_autonomousCommunity: '',
-                id_region: '',
-                private: '',
-                name: '',
-                description: '',
-                id_admin: id,
-              }}
-              onSubmit={handleSubmit}
-            >
+          <Formik
+            initialValues={{
+              id_autonomousCommunity: '',
+              id_region: '',
+              private: '',
+              name: '',
+              description: '',
+              id_admin: id,
+            }}
+            validationSchema={validationSchema}
+            onSubmit={handleSubmit}
+          >
               <Form className="bg-white p-8 rounded-md shadow-md">
                 <h1 className="text-2xl font-bold mb-4">Create Community Form</h1>
                 <div className="mb-5">
@@ -95,6 +104,7 @@ export default function CommunitiesFormCreate() {
                     width="w-full"
                     onCommunityChange={setIdAutonomousCommunity}
                     onRegionChange={setIdRegion}
+                    setCommunityRegionError={setCommunityRegionError}
                   />
                   <ErrorMessage name="id_autonomousCommunity" component="div" className="text-red-500" />
                   <ErrorMessage name="id_region" component="div" className="text-red-500" />
@@ -118,7 +128,7 @@ export default function CommunitiesFormCreate() {
                     <ButtonCancel label='Cancel' onClick={cancelForm} />
                   </div>
                   <div>
-                    <ButtonSave label='Submit' onClick={SubmitEvent} />
+                    <button label='Submit' type = 'submit'>Submit</button>
                   </div>
                 </div>
 
