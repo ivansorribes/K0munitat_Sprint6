@@ -9,9 +9,9 @@ const useApiSwitcher = (value) => {
     try {
       // Comprobar el valor para determinar la URL de la API
       let apiUrl;
-      if (value === 'option1') {
+      if (value === 'option2') {
         apiUrl = '/communitiesList';
-      } else if (value === 'option2') {
+      } else if (value === 'option1') {
         apiUrl = '/communitiesUser';
       }
 
