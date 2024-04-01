@@ -15,6 +15,8 @@ export default function CommunitiesFormCreate() {
   const [communityRegionError, setCommunityRegionError] = useState('');
   const [userData, setUserData] = useState(null); // Estado para almacenar los datos del usuario
   const [adminId, setAdminId] = useState(''); // Estado para almacenar el ID del administrador
+  const [error, setError] = useState(''); // Estado para almacenar el mensaje de error
+  const [success, setSuccess] = useState(''); // Estado para almacenar el mensaje de éxito
 
   const fetchData = async () => {
     try {
@@ -51,10 +53,13 @@ export default function CommunitiesFormCreate() {
     setSubmitting(true);
     try {
       const response = await axios.post('/communities', formValues);
-
+    
       if (response.data.message) {
-        window.alert('Form submitted successfully');
-        window.location.href = '/communities';
+        setSuccess('Form submitted successfully');
+        setTimeout(() => {
+          setSuccess('');
+          window.location.href = '/communities';
+        }, 3000); // Borra el mensaje de éxito después de 3 segundos y redirige
       }
     } catch (error) {
       if (error.response && error.response.data.errors) {
@@ -62,7 +67,8 @@ export default function CommunitiesFormCreate() {
         setServerErrors(error.response.data.errors);
       } else {
         // Otros errores
-        window.alert('Error submitting the form:', error.message);
+        setError('Error submitting the form');
+        setTimeout(() => setError(''), 3000); // Borra el mensaje de error después de 3 segundos
       }
     } finally {
       setSubmitting(false);
@@ -86,6 +92,8 @@ export default function CommunitiesFormCreate() {
         <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
         <div className="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full">
           <div className="max-w-[900px] mx-auto">
+          {error && <div className="text-red-500">{error}</div>}
+          {success && <div className="text-green-500">{success}</div>}
           <Formik
             initialValues={{
               id_autonomousCommunity: '',
