@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('event', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('id_community')->references('id')->on('communities');
             $table->foreignId('id_user')->references('id')->on('users');
             $table->string('title');
             $table->date('start');
