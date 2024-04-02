@@ -12,7 +12,7 @@
 <body class="flex">    
     <div class="flex-1">
         <div class="container mx-auto p-8">
-            <h1 class="text-2xl font-bold mb-4">Crear Publicacion En El Blog</h1>
+            <h1 class="text-2xl font-bold mb-4">Create New Blog Post</h1>
 <form action="{{ route('blog.store') }}" method="POST" enctype="multipart/form-data">
     @csrf
     <div class="mb-4">
@@ -27,7 +27,7 @@
         <label for="post_image" class="block text-gray-700 font-bold mb-2">Image:</label>
         <input type="file" id="post_image" name="post_image" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
     </div>
-    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Crear Blog</button>
+    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Create</button>
 </form>
 
 </body>
