@@ -22,11 +22,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/communities', [CommunitiesApiController::class, 'index'])->name('api.communities.index');
-Route::get('/communities/{community}', [CommunitiesApiController::class, 'show'])->name('api.communities.show');
-
-Route::get('/events', [EventController::class, 'index'])->name('api.events.index');
-Route::post('/events', [EventController::class, 'store'])->name('api.events.store');
 
 Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show']);
 
