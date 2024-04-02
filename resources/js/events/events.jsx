@@ -78,7 +78,7 @@ const EventCalendar = () => {
 
     const handleFormSubmit = (values, { resetForm } = {})  => {
         values.start = formValues.start;
-        axios.post('http://localhost/eventsList', values, {
+        axios.post('/eventsList', values, {
             headers: {
                 'X-CSRF-TOKEN': window.csrf_token 
             }
