@@ -375,7 +375,7 @@ export default function EditPersonalProfile() {
             </div>
 
             {showMessage && (
-                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded absolute top-0 right-0 mt-4 mr-4" role="alert">
+                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded absolute top-0 right-0 mt-24 mr-4" role="alert">
                     <strong className="font-bold">Success!</strong>
                     <span className="block sm:inline"> User information updated successfully.</span>
                 </div>
