@@ -27,7 +27,11 @@ class BlogController extends Controller
     }
 
 
-
+    public function show($id)
+    {
+    $blog = post_admin_blog::findOrFail($id);
+    return view('blog.show', ['blog' => $blog]);
+    }
 
 
 
