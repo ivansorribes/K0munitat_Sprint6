@@ -14,7 +14,10 @@ use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
 use App\Http\Controllers\LikeController;
+use App\Http\Controllers\commentsPostsController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\EventController;
+
 
 
 /*
@@ -76,6 +79,7 @@ Route::get('/auth/callback', [AuthController::class, 'callback'])->name('auth.ca
 //GOOGLE AUTH
 Route::get('/auth/Redirect1', [AuthController::class, 'Redirect1'])->name('auth.redirect1');
 Route::get('/auth/Callback1', [AuthController::class, 'Callback1'])->name('auth.callback1');
+
 Route::middleware(['auth'])->group(function () {
     //Rutas de comunidades
     Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
@@ -91,6 +95,15 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
     Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
 });
+
+Route::middleware('allowAccesDates')->group(function () {
+    Route::get('/communitiesUserActual', [CommunitiesController::class, 'userActual'])->name('communities.userActual');
+    Route::get('/communitiesList', [CommunitiesController::class, 'communitiesList'])->name('communities.list');
+    Route::get('/communitiesUser', [CommunitiesController::class, 'communitiesUser'])->name('communities.user');
+    Route::get('/communitiesOpen', [CommunitiesController::class, 'communitiesOpen'])->name('communities.open');
+    Route::get('/communitiesUserId', [CommunitiesController::class, 'communitiesUserId'])->name('communities.userId');
+});
+
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
@@ -151,9 +164,14 @@ Route::get('/loginAdmin', function () {
 })->name('loginAdmin');
 
 
+////EVENTS
 Route::get('/events', function () {
     return view('events.calendar');
 })->name('calendar');
+
+Route::middleware('allowAccesDates')->get('/eventsList', [EventController::class, 'index'])->name('events.list');
+Route::middleware('checkSuperAdmin')->post('/eventsList', [EventController::class, 'store'])->name('events.store');
+
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
 
@@ -174,3 +192,7 @@ Route::get('/paneladmin', function () {
 
 
 Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
+
+Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
+Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);
+Route::put('/posts/{id_post}', [PostsController::class, 'update']);
