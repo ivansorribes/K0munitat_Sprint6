@@ -77,8 +77,11 @@ const EventCalendar = () => {
     };
 
     const handleFormSubmit = (values, { resetForm } = {})  => {
-        values.start = formValues.start;
-        axios.post('http://localhost/eventsList', values, {
+        const sanitizedValues = {
+            ...values,
+            title: sanitizeInput(values.title),
+        };
+            axios.post('/eventsList', sanitizedValues, {
             headers: {
                 'X-CSRF-TOKEN': window.csrf_token 
             }
@@ -127,9 +130,12 @@ const EventCalendar = () => {
     };
 
     const sanitizeInput = (input) => {
-        // Lógica para sanitizar los datos de entrada
+        if (typeof input === 'string') {
+            // Remover caracteres especiales que podrían ser usados en XSS
+            return input.replace(/[<>&"']/g, '');
+        }
+        return input;
     };
-
 
     const cancelForm = () => {
         window.location.href = '/events';
