@@ -174,13 +174,20 @@ Route::middleware('checkSuperAdmin')->post('/eventsList', [EventController::clas
 
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
-Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
+
+Route::get('/blog/show/{id}', [BlogController::class, 'viewCard'])->name('blog.show');
+
 Route::get('/paneladminBlog', [BlogController::class, 'adminPanel'])->name('paneladminBlog');
+
 Route::get('/blog/create', [BlogController::class, 'createBlog'])->name('blog.create');
+
 Route::post('/blog/store', [BlogController::class, 'store'])->name('blog.store');
-Route::delete('/blog/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
+
+Route::delete('/blog/destroy/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
+
 Route::get('/blog/{id}/edit', [BlogController::class, 'updateBlog'])->name('blog.edit');
-Route::patch('/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
+
+Route::match(['put', 'patch'], '/blog/update/{id}', [BlogController::class, 'update'])->name('blog.update');
 
 
 Route::get('/admin', function () {

@@ -27,7 +27,7 @@ class BlogController extends Controller
     }
 
 
-    public function show($id)
+    public function viewCard($id)
     {
     $blog = post_admin_blog::findOrFail($id);
     return view('blog.show', ['blog' => $blog]);
