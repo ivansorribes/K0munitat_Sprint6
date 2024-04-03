@@ -281,7 +281,7 @@ export default function EditPersonalProfile() {
     };
 
     return (
-        <div className="container mx-auto mt-8">
+        <div className="container mx-auto mt-20">
             <div className="bg-white shadow-md rounded p-8 mb-4">
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-3xl font-bold">{user.username}</h1>
@@ -375,7 +375,7 @@ export default function EditPersonalProfile() {
             </div>
 
             {showMessage && (
-                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded absolute top-0 right-0 mt-4 mr-4" role="alert">
+                <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded absolute top-0 right-0 mt-24 mr-4" role="alert">
                     <strong className="font-bold">Success!</strong>
                     <span className="block sm:inline"> User information updated successfully.</span>
                 </div>
@@ -386,6 +386,7 @@ export default function EditPersonalProfile() {
                     <div className="modal-content bg-white p-4 rounded-xl overflow-hidden" style={{ width: '600px', height: '400px' }}>
                         <div className="flex flex-col justify-between h-full">
                             <h2 className="text-2xl font-bold mb-1 text-center">Change Password</h2>
+                            <hr className="border-gray-800 my-0" />
                             {error && <span className="text-red-500">{error}</span>}
                             <label>Current Password</label>
                             <div className="relative">
@@ -441,6 +442,8 @@ export default function EditPersonalProfile() {
                         <div className="flex flex-col justify-between h-full">
                             <div className="mb-4">
                                 <h2 className="text-2xl font-bold mb-1 text-center">Change Image</h2>
+                                <hr className="border-gray-800 my-0" />
+
                             </div>
                             <div>
                                 <img

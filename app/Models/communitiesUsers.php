@@ -18,13 +18,4 @@ class communitiesUsers extends Model
         'id_user'    
     ];
 
-    public function community(): BelongsTo
-    {
-        return $this->belongsTo(communities::class);
-    }
-
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
 }

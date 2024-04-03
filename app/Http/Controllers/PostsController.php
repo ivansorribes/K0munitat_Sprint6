@@ -13,6 +13,7 @@ use App\Models\communities;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Auth;
 use App\Models\commentsPosts;
+use Illuminate\Support\Facades\Validator;
 
 class PostsController extends Controller
 {
@@ -58,6 +59,8 @@ class PostsController extends Controller
     }
 
 
+
+
     public function updateAdvertisement(Request $request, posts $advertisement)
     {
         if ($advertisement->type === 'advertisement') {
@@ -72,13 +75,16 @@ class PostsController extends Controller
 
     public function updatePost(Request $request, posts $post)
     {
-        if ($post->type === 'post') {
-            $post->update($request->only(['title', 'description']));
-            return redirect()->route('paneladminPosts');
-        } else {
-            // Manejar el caso en que no sea una publicación normal
-            return redirect()->back()->with('error', 'Esta publicación no es un post.');
-        }
+        $post->update($request->only(['title', 'description']));
+        return redirect()->back();
+    }
+
+    public function toggleActivation(posts $post)
+    {
+        $post->isActive = !$post->isActive;
+        $post->save();
+
+        return redirect()->back()->with('success', 'Post state toggled successfully.');
     }
 
 
@@ -115,6 +121,11 @@ class PostsController extends Controller
         return categories::all();
     }
 
+    public function showPostById(posts $post)
+    {
+        // Aquí puedes cargar la vista de detalles del post y pasar los datos del post
+        return view('adminPanel.postDetail', ['post' => $post]);
+    }
     /**
      * Store a newly created resource in storage.
      */
@@ -218,6 +229,50 @@ class PostsController extends Controller
             'post' => $post,
         ]);
     }
+
+    public function update(Request $request, $id_post)
+    {
+        $post = posts::find($id_post);
+
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
+
+        // Verificar si el usuario actual es el creador del post
+        if ($post->id_user !== Auth::id()) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            // Asumiendo que no se requieren cambios en las imágenes en este punto
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        $post = posts::with('images')->find($id_post); // Asegúrate de cargar las relaciones necesarias
+
+        if (!$post) {
+            return response()->json(['message' => 'Post not found'], 404);
+        }
+
+        $post->title = $request->input('title');
+        $post->description = $request->input('description');
+
+        // Aquí podrías incluir lógica para manejar actualizaciones de imágenes, si es necesario
+        // Por ejemplo, si permites que las imágenes sean añadidas o removidas durante la actualización del post
+
+        $post->save();
+
+        // Retorna el post actualizado incluyendo sus imágenes
+        // Esto es crucial para asegurarte de que el frontend recibe la información más actual
+        $updatedPost = posts::with('images')->find($id_post);
+
+        return response()->json($updatedPost, 200);
+    }
+
 
     /**
      * Show the form for editing the specified resource.
