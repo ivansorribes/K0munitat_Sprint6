@@ -43,7 +43,7 @@ Route::get('/about-us', function () {
 
 // ADMIN PANEL
 Route::get('/adminPanel', function () {
-    return view('login.panelAdmin');
+    return view('adminPanel.loginAdmin');
 })->name('AdminPanel');
 
 // USER RELATED
