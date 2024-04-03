@@ -171,13 +171,13 @@ class UserController extends Controller
                 // Guardar la nueva imagen en el directorio /storage/app/public/posts/
                 $image = $request->file('image');
                 $imageName = time() . '.' . $image->getClientOriginalExtension();
-                $image->move(public_path('/storage/posts/'), $imageName);
+                $image->move(public_path('/img/post'), $imageName);
 
                 // Actualizar la ruta de la imagen en la base de datos
                 DB::table('imagePost')->where('id_post', $id_post)->update(['name' => $imageName]);
 
                 // Obtener la URL completa de la imagen actualizada
-                $imageUrl = asset('/storage/posts/' . $imageName);
+                $imageUrl = asset('/img/post' . $imageName);
             }
 
             // Obtener el post actualizado
