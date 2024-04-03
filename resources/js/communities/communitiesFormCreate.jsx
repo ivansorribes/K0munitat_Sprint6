@@ -87,7 +87,6 @@ export default function CommunitiesFormCreate() {
   });
 
   return (
-    <div className="container mx-auto mt-[8vw] md:mt-[8] lg:mt-[10] xl:mt-[12] mb-[4vw] relative">
     <div className="min-h-screen flex items-center justify-center bg-white-500">
       <div className="relative py-3 sm:max-w-3xl sm:mx-auto">
         <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
@@ -188,7 +187,6 @@ export default function CommunitiesFormCreate() {
           </div>
         </div>
       </div>
-    </div>
     </div>
   );
 }
