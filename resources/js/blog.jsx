@@ -95,7 +95,7 @@ const BlogCard = () => {
                         &#9825;
                       </button>
                     </div>
-                    <h3 className="mb-4 font-semibold text-2xl">
+                    <h3 className="mb-4 font-semibold text-neutral text-2xl">
                       {blogPost.title}
                     </h3>
                     <p className="text-neutral text-sm mb-0">
