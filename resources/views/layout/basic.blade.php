@@ -24,7 +24,7 @@
 <body>
     @include('header.header')
 
-    <main class="mt-32 mb-16">
+    <main class="mt-16 mb-16">
         @yield('content')
     </main>
 
