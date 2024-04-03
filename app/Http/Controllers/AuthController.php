@@ -39,6 +39,31 @@ class AuthController extends Controller
         return view('login.resetPasswordForm')->with(['token' => $token, 'email' => $request->email]);
     }
 
+    public function authenticate(Request $request)
+    {
+        $credentials = $request->validate([
+            'username' => 'required|string',
+            'password' => 'required|string',
+        ]);
+
+        if (Auth::attempt($credentials)) {
+            // Authentication passed...
+
+            $user = Auth::user();
+
+            // Verificar si el usuario tiene el rol de "superAdmin"
+            if ($user->role === 'superAdmin') {
+                return redirect()->intended('/dashboard');
+            } else {
+                // Si no es superAdmin, no permitir el inicio de sesión y mostrar un mensaje
+                Auth::logout();
+                return redirect()->back()->with('error', 'You are not allowed to log in.');
+            }
+        }
+
+        return redirect()->back()->with('error', 'Invalid credentials.');
+    }
+
     //Funcio per a registrar un usuari
     function register(Request $request)
     {
