@@ -19,8 +19,9 @@
                 <div class="col-span-5">
                     <form action="{{ route('blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        @method('PUT')
-                        <div class="mb-4">
+                        @method('PATCH')                    
+                            <div class="mb-4">
+
                             <label for="title" class="block text-gray-700 font-bold mb-2">Title:</label>
                             <input type="text" id="title" name="title" value="{{ $blog->title }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
                         </div>
