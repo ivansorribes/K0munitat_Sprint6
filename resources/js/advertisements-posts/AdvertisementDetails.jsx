@@ -117,7 +117,17 @@ export default function AdvertisementDetails() {
                 <div className="p-6">
                     <div className="pb-3 mb-4 border-b border-stone-200 text-sm flex justify-between items-center text-neutral">
                         <div className="flex items-center gap-4">
-                            <span className="font-bold">{post.creator_username}</span>
+                            <div className="flex items-center space-x-3"> {/* Contenedor Flex */}
+                                <img
+                                    id="userIcon"
+                                    src={post.user.profile_image} // Asegúrate de que esto devuelve la URL correcta
+                                    alt="Profile Image"
+                                    className="h-10 w-10 rounded-full"
+                                />
+                                <p className="text-sm text-neutral font-extrabold">
+                                    {post.user.username} {/* Asegúrate de acceder correctamente al username */}
+                                </p>
+                            </div>
                             <span className="text-xs">
                                 Created: <time dateTime={post.created_at}>{new Date(post.created_at).toLocaleDateString('es-ES', {
                                     year: 'numeric',
