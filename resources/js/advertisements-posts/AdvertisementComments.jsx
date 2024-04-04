@@ -147,9 +147,18 @@ export default function AdvertisementComments() {
                                 <div>
                                     <footer className="mb-2">
                                         <div className="flex items-center justify-between">
-                                            <p className="text-sm text-neutral font-extrabold">
-                                                {comment.username}
-                                            </p>
+                                            <div className="flex items-center space-x-3"> {/* Contenedor Flex */}
+                                                <img
+                                                    id="userIcon"
+                                                    src={comment.user.profile_image} // Asegúrate de que esto devuelve la URL correcta
+                                                    alt="Profile Image"
+                                                    className="h-10 w-10 rounded-full"
+                                                />
+                                                <p className="text-sm text-neutral font-extrabold">
+                                                    {comment.user.username} {/* Asegúrate de acceder correctamente al username */}
+                                                </p>
+                                            </div>
+
                                             {comment.user.id == id_user && (
                                                 <div>
                                                     <button onClick={() => handleEditComment(comment)} className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800">Edit</button>
