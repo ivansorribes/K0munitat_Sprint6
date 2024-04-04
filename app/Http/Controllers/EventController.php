@@ -38,17 +38,17 @@ class EventController extends Controller
                 'start' => 'required|date',
                 'end' => 'required|date|after_or_equal:start',
             ]);
-
+        
             // Crear un nuevo evento
             $event = new Event();
             $event->id_user = $request->input('id_user');
-            $event->title = $request->input('title');
+            $event->title = htmlspecialchars($request->input('title')); // Sanitizar el título
             $event->start = $request->input('start');
             $event->end = $request->input('end');
-
+        
             // Guardar el evento en la base de datos
             $event->save();
-
+        
             // Devolver una respuesta JSON con el evento recién creado
             return response()->json(['message' => 'Evento creado exitosamente', 'data' => $event], 201);
         } catch (\Exception $e) {

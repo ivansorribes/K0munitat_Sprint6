@@ -59,6 +59,8 @@ class PostsController extends Controller
     }
 
 
+
+
     public function updateAdvertisement(Request $request, posts $advertisement)
     {
         if ($advertisement->type === 'advertisement') {
@@ -73,13 +75,16 @@ class PostsController extends Controller
 
     public function updatePost(Request $request, posts $post)
     {
-        if ($post->type === 'post') {
-            $post->update($request->only(['title', 'description']));
-            return redirect()->route('paneladminPosts');
-        } else {
-            // Manejar el caso en que no sea una publicación normal
-            return redirect()->back()->with('error', 'Esta publicación no es un post.');
-        }
+        $post->update($request->only(['title', 'description']));
+        return redirect()->back();
+    }
+
+    public function toggleActivation(posts $post)
+    {
+        $post->isActive = !$post->isActive;
+        $post->save();
+
+        return redirect()->back()->with('success', 'Post state toggled successfully.');
     }
 
 
@@ -116,6 +121,11 @@ class PostsController extends Controller
         return categories::all();
     }
 
+    public function showPostById(posts $post)
+    {
+        // Aquí puedes cargar la vista de detalles del post y pasar los datos del post
+        return view('adminPanel.postDetail', ['post' => $post]);
+    }
     /**
      * Store a newly created resource in storage.
      */

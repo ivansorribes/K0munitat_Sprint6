@@ -4,21 +4,21 @@
 const lineConfig = {
   type: 'line',
   data: {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
     datasets: [
+      // {
+      //   label: 'Organic',
+      //   /**
+      //    * These colors come from Tailwind CSS palette
+      //    * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
+      //    */
+      //   backgroundColor: '#0694a2',
+      //   borderColor: '#0694a2',
+      //   data: [43, 48, 40, 54, 67, 73, 70],
+      //   fill: false,
+      // },
       {
-        label: 'Organic',
-        /**
-         * These colors come from Tailwind CSS palette
-         * https://tailwindcss.com/docs/customizing-colors/#default-color-palette
-         */
-        backgroundColor: '#0694a2',
-        borderColor: '#0694a2',
-        data: [43, 48, 40, 54, 67, 73, 70],
-        fill: false,
-      },
-      {
-        label: 'Paid',
+        label: 'Users',
         fill: false,
         /**
          * These colors come from Tailwind CSS palette
@@ -26,7 +26,7 @@ const lineConfig = {
          */
         backgroundColor: '#7e3af2',
         borderColor: '#7e3af2',
-        data: [24, 50, 64, 74, 52, 51, 65],
+        data: [24, 50, 64, 74, 52, 51, 65, 50, 64, 74, 52, 51, 65],
       },
     ],
   },

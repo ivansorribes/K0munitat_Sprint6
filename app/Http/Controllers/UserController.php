@@ -61,6 +61,12 @@ class UserController extends Controller
         return view('adminPanel.paneladminUsers', compact('users'));
     }
 
+    public function showDetail($id)
+    {
+        $user = User::findOrFail($id);
+        return view('adminPanel.userDetails', ['user' => $user]);
+    }
+
     public function toggleIsActive($id)
     {
         $user = User::findOrFail($id);
@@ -72,7 +78,7 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $user->update($request->all());
+        $user->update($request->only(['firstname', 'lastname', 'email', 'username', 'telephone', 'city', 'postcode', 'profile_description', 'profile_image', 'role']));
         return back();
     }
 
@@ -146,6 +152,39 @@ class UserController extends Controller
             ->get();
 
         return response()->json(['comments' => $comments]);
+    }
+    //funcio usada en el formulari de crear usuari al panel d'admin
+    public function store(Request $request)
+    {
+        // Validación de los datos del formulario, incluyendo la contraseña y confirmación de contraseña
+        $validatedData = $request->validate([
+            'firstname' => 'required|string|max:255',
+            'lastname' => 'required|string|max:255',
+            'username' => 'required|string|max:255|unique:users',
+            'role' => 'required|string|in:superAdmin,communityAdmin,communityMod,user',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed', // La regla "confirmed" verifica que "password" y "password_confirmation" coincidan
+            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'city' => 'nullable|string|max:255',
+            'postcode' => 'nullable|string|max:255',
+            'telephone' => 'nullable|string|max:255',
+            'profile_description' => 'nullable|string',
+        ]);
+
+        // Hashing de la contraseña antes de almacenarla en la base de datos
+        $validatedData['password'] = Hash::make($request->password);
+
+        // Procesamiento de la imagen del perfil si se proporciona
+        if ($request->hasFile('profile_image')) {
+            $imagePath = $request->file('profile_image')->store('profile_images');
+            $validatedData['profile_image'] = $imagePath;
+        }
+
+        // Creación del usuario
+        $user = User::create($validatedData);
+
+        // Redirección o respuesta de acuerdo al resultado
+        return redirect()->route('paneladminUsers')->with('success', 'User created successfully.');
     }
 
     public function EditPost(Request $request, $id_post)
@@ -254,6 +293,7 @@ class UserController extends Controller
 
         return redirect()->route('showUsers', ['id' => $id_community]); //CONTINUAR DES DE AQUÍ ON ME DIU QUE NO ACCEPTA LA REDIRECCIÓ PER METODE GET
     }
+
     public function changePassword(Request $request)
     {
         try {
