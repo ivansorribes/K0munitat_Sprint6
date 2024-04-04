@@ -210,6 +210,7 @@ class PostsController extends Controller
 
         // Ajusta la estructura de los comentarios como antes
         $post->comments->each(function ($comment) {
+            $comment->likes_count = $comment->likes()->count();
             if ($comment->user) {
                 $comment->username = $comment->user->username;
                 unset($comment->id_user);

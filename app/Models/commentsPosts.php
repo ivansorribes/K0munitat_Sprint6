@@ -30,8 +30,16 @@ class commentsPosts extends Model
     {
         return $this->belongsTo(User::class, 'id_user');
     }
-    public function comment()
+
+    protected $appends = ['likes_count'];
+
+    public function likes()
     {
-        return $this->belongsTo(commentsPosts::class, 'id_comment');
+        return $this->hasMany(LikeComment::class, 'id_comment');
+    }
+
+    public function getLikesCountAttribute()
+    {
+        return $this->likes()->count();
     }
 }
