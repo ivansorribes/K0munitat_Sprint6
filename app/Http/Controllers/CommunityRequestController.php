@@ -23,10 +23,10 @@ class CommunityRequestController extends Controller
         ]);
 
         $communityRequest->save();
-        
+
         // Retorna una respuesta adecuada
         return response()->json([
-            'message' => 'Solicitud de comunidad creada exitosamente.',
+            'message' => 'Successfully created community application.',
             'data' => $communityRequest
         ], 201);
     }
