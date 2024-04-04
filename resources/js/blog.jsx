@@ -55,7 +55,7 @@ const BlogCard = () => {
                 key={index}
                 className="bg-white w-full rounded-lg shadow-md flex flex-col transition-all overflow-hidden hover:shadow-2xl"
               >
-                <a href={`/blog/${blogPost.id}`} className="block">
+                <a href={`/blog/show/${blogPost.id}`} className="block">
                   <div className="p-6">
                     <div className="pb-3 mb-4 border-b border-stone-200 text-xs font-medium flex justify-between text-neutral">
                       <span className="flex items-center gap-1">
@@ -95,7 +95,7 @@ const BlogCard = () => {
                         &#9825;
                       </button>
                     </div>
-                    <h3 className="mb-4 font-semibold text-2xl">
+                    <h3 className="mb-4 font-semibold text-neutral text-2xl">
                       {blogPost.title}
                     </h3>
                     <p className="text-neutral text-sm mb-0">
