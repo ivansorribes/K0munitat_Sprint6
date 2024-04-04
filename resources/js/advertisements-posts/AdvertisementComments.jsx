@@ -12,7 +12,7 @@ export default function AdvertisementComments() {
     const id_user = document.getElementById("id_user").value;
     const username = document.getElementById("username").value;
 
-    useEffect(() => {
+    const fetchComments = () => {
         const pathParts = window.location.pathname.split('/');
         const communityId = pathParts[pathParts.length - 2];
         const postId = pathParts[pathParts.length - 1];
@@ -24,6 +24,10 @@ export default function AdvertisementComments() {
                 setComments(data.post.comments || []);
             })
             .catch(error => console.error('Error fetching post data:', error));
+    };
+
+    useEffect(() => {
+        fetchComments(); // Llama a la función dentro de useEffect
     }, []);
 
     const handlePostComment = async () => {
@@ -43,14 +47,27 @@ export default function AdvertisementComments() {
             }
 
             const newCommentData = await response.json();
-            const commentWithUsername = { ...newCommentData, username: username, user: { id: id_user } };
 
-            setComments(prevComments => [...prevComments, commentWithUsername]);
+            const userProfileImageUrl = '';
+
+            const commentWithCompleteUserData = {
+                ...newCommentData,
+                user: {
+                    id: id_user,
+                    username: username,
+                    profile_image: userProfileImageUrl
+                }
+            };
+
+            setComments(prevComments => [...prevComments, commentWithCompleteUserData]);
+            fetchComments();
             setNewComment('');
         } catch (error) {
             console.error('Error posting the comment:', error);
         }
     };
+
+
 
     const handleEditComment = (comment) => {
         setEditingCommentId(comment.id);
