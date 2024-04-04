@@ -27,5 +27,6 @@ class DatabaseSeeder extends Seeder
         $this->call(likesPostsSeeder::class);
         $this->call(post_admin_blogSeeder::class);
         $this->call(EventSeeder::class);
+        hola
     }
 }
