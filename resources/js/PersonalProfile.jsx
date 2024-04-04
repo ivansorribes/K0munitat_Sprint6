@@ -94,7 +94,7 @@ export default function PersonalProfile() {
         setSelectedEditPost(post);
         closeDeleteConfirmation(); // Cerrar el modal de confirmación de eliminación si está abierto
         setEditModalOpen(true);
-        setSelectedImageURL(`/storage/posts/${post.image.name}`); // Establecer la URL de la imagen seleccionada
+        setSelectedImageURL(`/img/post/${post.image.name}`); // Establecer la URL de la imagen seleccionada
     
         // Cerrar cualquier menú desplegable abierto al abrir el modal de edición
         setMenuOpen(Array(posts.length).fill(false));
@@ -284,7 +284,7 @@ export default function PersonalProfile() {
                             >
                                 <img
                                     className="w-full h-44 object-cover rounded"
-                                    src={`/storage/posts/${post.image.name}`}
+                                    src={`/img/post/${post.image.name}`}
                                     alt={`Publicación ${post.id}`}
                                     onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
                                 />
