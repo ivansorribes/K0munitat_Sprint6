@@ -13,7 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
-use App\Http\Controllers\LikeController;
+use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\commentsPostsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
@@ -205,7 +205,7 @@ Route::get('/paneladmin', function () {
 //Header
 
 
-Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
+Route::post('/posts/{post}/likes', [LikePostController::class, 'like'])->middleware('auth');
 
 Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
 Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);
