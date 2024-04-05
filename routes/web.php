@@ -15,6 +15,7 @@ use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
 use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\commentsPostsController;
+use App\Http\Controllers\CommunityRequestController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
 
@@ -87,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
     Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
+    Route::post('/communitiesRequest', [CommunityRequestController::class, 'store'])->name('communitiesRequest.store');
 
     // Show community with posts & ads
     Route::get('/communities/{community}', [PostsController::class, 'index'])->name('communities.show');
