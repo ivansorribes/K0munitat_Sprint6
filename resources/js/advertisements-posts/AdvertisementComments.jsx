@@ -218,11 +218,29 @@ export default function AdvertisementComments() {
                                                 </div>
                                             )}
                                         </div>
+
                                     </footer>
                                     <p className="text-neutral">
                                         {comment.comment}
                                     </p>
-
+                                    {comment.replies && comment.replies.length > 0 && (
+                                        <div className="mt-4">
+                                            <h4 className="text-sm text-neutral font-bold mb-2">Replies</h4>
+                                            {comment.replies.map((reply) => (
+                                                <div key={reply.id} className="ml-4 mb-2 p-2 bg-gray-100 rounded-lg">
+                                                    <div className="flex items-center space-x-3 mb-1">
+                                                        <img
+                                                            src={reply.user.profile_image}
+                                                            alt="Profile Image"
+                                                            className="h-6 w-6 rounded-full"
+                                                        />
+                                                        <p className="text-xs text-neutral font-extrabold">{reply.user.username}</p>
+                                                    </div>
+                                                    <p className="text-xs text-neutral">{reply.reply}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
                                     <div className="flex justify-between items-center mt-2">
                                         <button
                                             className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800"
