@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
+import { CommentLikeButton } from "../components/CommentLikeButton";
 
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
@@ -143,6 +144,24 @@ export default function AdvertisementComments() {
         }
     };
 
+    const onToggleLike = async (commentId) => {
+        // Aquí iría la lógica para actualizar el estado de "like" en tu backend.
+        // Por simplicidad, solo actualizaré el estado local de los comentarios.
+
+        const updatedComments = comments.map(comment => {
+            if (comment.id === commentId) {
+                const updatedLikeStatus = !comment.liked; // Esto asume que tienes un campo 'liked' en tus comentarios
+                const updatedLikesCount = updatedLikeStatus ? comment.likes_count + 1 : comment.likes_count - 1;
+                return { ...comment, liked: updatedLikeStatus, likes_count: updatedLikesCount };
+            }
+            return comment;
+        });
+
+        setComments(updatedComments);
+
+        // Aquí deberías hacer una solicitud a tu servidor para actualizar el estado de "like" del comentario
+    };
+
     return (
         <>
             <section className="bg-white py-8 lg:py-16 antialiased">
@@ -163,19 +182,17 @@ export default function AdvertisementComments() {
                             ) : (
                                 <div>
                                     <footer className="mb-2">
-                                        <div className="flex items-center justify-between">
-                                            <div className="flex items-center space-x-3"> {/* Contenedor Flex */}
+                                        <div className="flex items-center justify-between"> {/* Contenedor Flex principal */}
+                                            <div className="flex items-center space-x-3"> {/* Contenedor para la imagen y el nombre de usuario */}
                                                 <img
-                                                    id="userIcon"
-                                                    src={comment.user.profile_image} // Asegúrate de que esto devuelve la URL correcta
+                                                    src={comment.user.profile_image}
                                                     alt="Profile Image"
                                                     className="h-10 w-10 rounded-full"
                                                 />
                                                 <p className="text-sm text-neutral font-extrabold">
-                                                    {comment.user.username} {/* Asegúrate de acceder correctamente al username */}
+                                                    {comment.user.username}
                                                 </p>
                                             </div>
-
                                             {comment.user.id == id_user && (
                                                 <div>
                                                     <button onClick={() => handleEditComment(comment)} className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800">Edit</button>
@@ -187,6 +204,14 @@ export default function AdvertisementComments() {
                                     <p className="text-neutral">
                                         {comment.comment}
                                     </p>
+                                    <div className="flex justify-end"> {/* Asegura que el botón de likes se alinee a la derecha */}
+                                        <CommentLikeButton
+                                            commentId={comment.id}
+                                            liked={comment.liked || false}
+                                            likesCount={comment.likes_count}
+                                            onToggleLike={onToggleLike}
+                                        />
+                                    </div>
                                 </div>
                             )}
                         </article>
