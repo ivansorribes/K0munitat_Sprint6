@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { CommentLikeButton } from "../components/CommentLikeButton";
+import { ReplyBox } from "../components/ReplyBox";
 
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
@@ -12,6 +13,7 @@ export default function AdvertisementComments() {
     const [commentToDelete, setCommentToDelete] = useState(null);
     const id_user = document.getElementById("id_user").value;
     const username = document.getElementById("username").value;
+    const [activeReplyBox, setActiveReplyBox] = useState(null);
 
     const fetchComments = () => {
         const pathParts = window.location.pathname.split('/');
@@ -220,7 +222,13 @@ export default function AdvertisementComments() {
                                     <p className="text-neutral">
                                         {comment.comment}
                                     </p>
-                                    <div className="flex justify-end"> {/* Asegura que el botón de likes se alinee a la derecha */}
+
+                                    <div className="flex justify-between items-center mt-2">
+                                        <button
+                                            className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800"
+                                            onClick={() => setActiveReplyBox(activeReplyBox === comment.id ? null : comment.id)}
+                                        >Reply
+                                        </button>
                                         <CommentLikeButton
                                             commentId={comment.id}
                                             liked={comment.liked || false}
@@ -228,9 +236,19 @@ export default function AdvertisementComments() {
                                             onToggleLike={onToggleLike}
                                         />
                                     </div>
+                                    {activeReplyBox === comment.id && (
+                                        <ReplyBox
+                                            onSendReply={(replyText) => {
+                                                console.log("Reply text for comment ID", comment.id, ":", replyText);
+                                                // Aquí puedes agregar la lógica para enviar la respuesta al servidor
+                                                setActiveReplyBox(null); // Opcional: Cierra el cuadro de respuesta después de enviar
+                                            }}
+                                        />
+                                    )}
                                 </div>
                             )}
                         </article>
+
                     ))}
 
                     <div className="mb-6">

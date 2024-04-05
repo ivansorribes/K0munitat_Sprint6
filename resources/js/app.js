@@ -21,6 +21,7 @@ import './Sidebar.jsx';
 import './Taula.jsx';
 import './components/HeartButton.jsx';
 import './components/CommentLikeButton.jsx';
+import './components/ReplyBox.jsx';
 
 import './EditPersonalProfile.jsx';
 import './events/events.jsx';
