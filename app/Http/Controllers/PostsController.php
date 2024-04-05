@@ -184,18 +184,26 @@ class PostsController extends Controller
      */
     public function show(Request $request, $community, $id_post)
     {
-        $post = posts::with(['images' => function ($query) {
-            $query->select('id', 'id_post', 'name');
-        }, 'comments' => function ($query) {
-            $query->with(['user' => function ($q) {
-                // Asegúrate de ajustar la ruta a donde realmente se almacenan tus imágenes de perfil
-                $q->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
-            }])
-                ->select('id', 'id_post', 'id_user', 'comment');
-        }, 'user' => function ($query) { // Carga el usuario que creó el post
-            $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
-        }, 'likes'])
-            ->findOrFail($id_post);
+        $post = posts::with([
+            'images' => function ($query) {
+                $query->select('id', 'id_post', 'name');
+            },
+            'comments' => function ($query) {
+                $query->with([
+                    'user' => function ($q) {
+                        $q->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+                    },
+                    'replies' => function ($q) { // Carga las respuestas de cada comentario
+                        $q->with('user:id,username,profile_image') // Ajusta según tus necesidades
+                            ->select('id', 'id_comment', 'id_user', 'reply', 'created_at'); // Asegúrate de seleccionar los campos adecuados para tus respuestas
+                    }
+                ])->select('id', 'id_post', 'id_user', 'comment', 'created_at');
+            },
+            'user' => function ($query) { // Carga el usuario que creó el post
+                $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+            },
+            'likes'
+        ])->findOrFail($id_post);
 
         $post->liked = $post->likes->contains('user_id', Auth::id());
 
