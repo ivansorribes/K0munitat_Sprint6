@@ -144,23 +144,39 @@ export default function AdvertisementComments() {
         }
     };
 
-    const onToggleLike = async (commentId) => {
-        // Aquí iría la lógica para actualizar el estado de "like" en tu backend.
-        // Por simplicidad, solo actualizaré el estado local de los comentarios.
-
-        const updatedComments = comments.map(comment => {
-            if (comment.id === commentId) {
-                const updatedLikeStatus = !comment.liked; // Esto asume que tienes un campo 'liked' en tus comentarios
-                const updatedLikesCount = updatedLikeStatus ? comment.likes_count + 1 : comment.likes_count - 1;
-                return { ...comment, liked: updatedLikeStatus, likes_count: updatedLikesCount };
-            }
-            return comment;
-        });
-
-        setComments(updatedComments);
-
-        // Aquí deberías hacer una solicitud a tu servidor para actualizar el estado de "like" del comentario
+    const onToggleLike = (commentId) => {
+        fetch(`/comments/${commentId}/likes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ id_comment: commentId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Actualiza el estado de los comentarios para reflejar el cambio de like
+                    setComments(prevComments =>
+                        prevComments.map(comment => {
+                            if (comment.id === commentId) {
+                                const updatedLiked = !comment.liked;
+                                return {
+                                    ...comment,
+                                    liked: updatedLiked,
+                                    likes_count: updatedLiked ? comment.likes_count + 1 : comment.likes_count - 1
+                                };
+                            }
+                            return comment;
+                        })
+                    );
+                }
+            })
+            .catch(error => console.error('Error al intentar dar like al comentario:', error));
     };
+
+
 
     return (
         <>

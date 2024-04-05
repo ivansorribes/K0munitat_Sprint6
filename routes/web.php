@@ -17,8 +17,7 @@ use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\commentsPostsController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
-
-
+use App\Http\Controllers\LikeCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -209,4 +208,5 @@ Route::post('/posts/{post}/likes', [LikePostController::class, 'like'])->middlew
 
 Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
 Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);
+Route::post('/comments/{commentId}/likes', [LikeCommentController::class, 'like'])->middleware('auth');
 Route::put('/posts/{id_post}', [PostsController::class, 'update']);
