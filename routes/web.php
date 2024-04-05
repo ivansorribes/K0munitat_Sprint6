@@ -13,9 +13,11 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
-use App\Http\Controllers\LikeController;
+use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\commentsPostsController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\EventController;
+
 
 
 /*
@@ -41,7 +43,7 @@ Route::get('/about-us', function () {
 
 // ADMIN PANEL
 Route::get('/adminPanel', function () {
-    return view('login.panelAdmin');
+    return view('adminPanel.loginAdmin');
 })->name('AdminPanel');
 
 // USER RELATED
@@ -77,6 +79,7 @@ Route::get('/auth/callback', [AuthController::class, 'callback'])->name('auth.ca
 //GOOGLE AUTH
 Route::get('/auth/Redirect1', [AuthController::class, 'Redirect1'])->name('auth.redirect1');
 Route::get('/auth/Callback1', [AuthController::class, 'Callback1'])->name('auth.callback1');
+
 Route::middleware(['auth'])->group(function () {
     //Rutas de comunidades
     Route::get('/comuAut/list', [AutonomousCommunitiesController::class, 'list'])->name('comuAut.list');
@@ -92,6 +95,15 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
     Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
 });
+
+Route::middleware('allowAccesDates')->group(function () {
+    Route::get('/communitiesUserActual', [CommunitiesController::class, 'userActual'])->name('communities.userActual');
+    Route::get('/communitiesList', [CommunitiesController::class, 'communitiesList'])->name('communities.list');
+    Route::get('/communitiesUser', [CommunitiesController::class, 'communitiesUser'])->name('communities.user');
+    Route::get('/communitiesOpen', [CommunitiesController::class, 'communitiesOpen'])->name('communities.open');
+    Route::get('/communitiesUserId', [CommunitiesController::class, 'communitiesUserId'])->name('communities.userId');
+});
+
 
 // Rutas para el olvido y restablecimiento de contraseña
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
@@ -114,29 +126,68 @@ Route::get('/communities/{community}/{id_post}', function () {
 })->name('advertisements-posts.show');
 
 
+Route::get('/dashboard', function () {
+    return view('adminPanel.dashboard');
+})->name('dashboard');
+
+
+// Rutas protegidas por el middleware CheckRole
+
 Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
-Route::put('/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
+Route::match(['put', 'get'], '/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
+Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
 
 Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');
-// Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
+Route::put('/posts/{post}/toggle', [PostsController::class, 'toggleActivation'])->name('posts.toggle');
+Route::get('/posts/{post}', [PostsController::class, 'showPostById'])->name('post.show');
+Route::put('/posts/edit/{post}', [PostsController::class, 'updatePost'])->name('update.post');
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
-Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
+Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('users.toggleIsActive');
+Route::get('/users/{id}/detail', [UserController::class, 'showDetail'])->name('users.detail');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
+Route::post('/users', [UserController::class, 'store'])->name('storeUser');
+Route::get('/createUserForm', function () {
+    return view('adminPanel.createUserForm');
+})->name('createUserForm');
 
 Route::get('/paneladminAdvertisements', [PostsController::class, 'getAdvertisements'])->name('paneladminAdvertisements');
 Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAdvertisement'])->name('update.advertisement');
 
-Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
 
 
+Route::get('/loginAdmin', function () {
+    return view('adminPanel.loginAdmin');
+})->name('loginAdmin');
+
+
+////EVENTS
 Route::get('/events', function () {
     return view('events.calendar');
 })->name('calendar');
+
+Route::middleware('allowAccesDates')->get('/eventsList', [EventController::class, 'index'])->name('events.list');
+Route::middleware('checkSuperAdmin')->post('/eventsList', [EventController::class, 'store'])->name('events.store');
+
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
+
+Route::get('/blog/show/{id}', [BlogController::class, 'viewCard'])->name('blog.show');
+
+Route::get('/paneladminBlog', [BlogController::class, 'adminPanel'])->name('paneladminBlog');
+
+Route::get('/blog/create', [BlogController::class, 'createBlog'])->name('blog.create');
+
+Route::post('/blog/store', [BlogController::class, 'store'])->name('blog.store');
+
+Route::delete('/blog/destroy/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
+
+Route::get('/blog/{id}/edit', [BlogController::class, 'updateBlog'])->name('blog.edit');
+
+Route::match(['put', 'patch'], '/blog/update/{id}', [BlogController::class, 'update'])->name('blog.update');
 
 
 Route::get('/admin', function () {
@@ -147,16 +198,14 @@ Route::get('/paneladmin', function () {
     return view('panel-admin');
 })->name('panel-admin');
 
-Route::get('/dashboard', function () {
-    return view('adminPanel.dashboard');
-})->name('dashboard');
 
 
-Route::get('/paneladminAdvertisements', function () {
-    return view('paneladminAdvertisements');
-})->name('paneladminAdvertisements');
 
-Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
+//Header
+//Header
+
+
+Route::post('/posts/{post}/likes', [LikePostController::class, 'like'])->middleware('auth');
 
 Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
 Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);

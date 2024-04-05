@@ -94,7 +94,7 @@ export default function PersonalProfile() {
         setSelectedEditPost(post);
         closeDeleteConfirmation(); // Cerrar el modal de confirmación de eliminación si está abierto
         setEditModalOpen(true);
-        setSelectedImageURL(`/storage/posts/${post.image.name}`); // Establecer la URL de la imagen seleccionada
+        setSelectedImageURL(`/img/post/${post.image.name}`); // Establecer la URL de la imagen seleccionada
     
         // Cerrar cualquier menú desplegable abierto al abrir el modal de edición
         setMenuOpen(Array(posts.length).fill(false));
@@ -214,7 +214,7 @@ export default function PersonalProfile() {
 
     return (
 
-        <div className="container mx-auto mt-8">
+        <div className="container mx-auto mt-20">
             <div className="bg-white shadow-md rounded p-8 mb-4">
                 <div className="flex items-center justify-between mb-4">
                     <h1 className="text-3xl font-bold">{`${user.username}`}</h1>
@@ -275,15 +275,16 @@ export default function PersonalProfile() {
 
                 <div className="mt-6">
                     <h2 className="text-2xl text-center font-bold mb-4">Publications</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <hr className="border-gray-800 my-0 mb-10" />
+                    <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-${posts.length >= 3 ? '3' : '2'} gap-4`}>
                         {posts.map((post, index) => (
                             <div
                                 key={post.id}
                                 className="post-card border border-gray-300 p-4 bg-gray-100 cursor-pointer relative"
                             >
                                 <img
-                                    className="w-full h-50 object-cover rounded"
-                                    src={`/storage/posts/${post.image.name}`}
+                                    className="w-full h-44 object-cover rounded"
+                                    src={`/img/post/${post.image.name}`}
                                     alt={`Publicación ${post.id}`}
                                     onClick={() => openModal(post.image.name, `${post.likes.length} likes`, `${post.comments.length} comentarios`, post.description)}
                                 />
