@@ -13,10 +13,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
-use App\Http\Controllers\LikeController;
+use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\commentsPostsController;
+use App\Http\Controllers\CommunityRequestController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\MessagesController;
+
 
 
 
@@ -91,6 +94,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
     Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
+    Route::post('/communitiesRequest', [CommunityRequestController::class, 'store'])->name('communitiesRequest.store');
 
     // Show community with posts & ads
     Route::get('/communities/{community}', [PostsController::class, 'index'])->name('communities.show');
@@ -161,6 +165,10 @@ Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAd
 
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
+//Rutes para el email part de admin
+Route::get('/paneladminEmail', [MessagesController::class, 'getEmailView'])->name('getEmailView');
+Route::post('/messages/{id}', [MessagesController::class, 'destroy'])->name('delete.message');
+
 
 
 Route::get('/loginAdmin', function () {
@@ -205,11 +213,12 @@ Route::get('/paneladmin', function () {
 
 
 
+
 //Header
 //Header
 
 
-Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
+Route::post('/posts/{post}/likes', [LikePostController::class, 'like'])->middleware('auth');
 
 Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
 Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);

@@ -158,7 +158,7 @@ class PostsController extends Controller
                     $image = $request->file('image');
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('/img/post/'), $imageName);
-            
+
                     ImagePost::create([
                         'id_post' => $post->id,
                         'name' => $imageName,
@@ -169,7 +169,7 @@ class PostsController extends Controller
                     return back()->withErrors('Ha ocurrido un error al guardar la imagen. Por favor, intenta de nuevo.')->withInput();
                 }
             }
-            
+
 
 
             return redirect("/communities/{$communityId}");
@@ -188,12 +188,13 @@ class PostsController extends Controller
             $query->select('id', 'id_post', 'name');
         }, 'comments' => function ($query) {
             $query->with(['user' => function ($q) {
-                $q->select('id', 'username');
+                // Asegúrate de ajustar la ruta a donde realmente se almacenan tus imágenes de perfil
+                $q->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
             }])
                 ->select('id', 'id_post', 'id_user', 'comment');
         }, 'user' => function ($query) { // Carga el usuario que creó el post
-            $query->select('id', 'username');
-        }, 'likes']) // Asegúrate de cargar la relación de likes aquí
+            $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+        }, 'likes'])
             ->findOrFail($id_post);
 
         $post->liked = $post->likes->contains('user_id', Auth::id());
@@ -209,6 +210,7 @@ class PostsController extends Controller
 
         // Ajusta la estructura de los comentarios como antes
         $post->comments->each(function ($comment) {
+            $comment->likes_count = $comment->likes()->count();
             if ($comment->user) {
                 $comment->username = $comment->user->username;
                 unset($comment->id_user);
