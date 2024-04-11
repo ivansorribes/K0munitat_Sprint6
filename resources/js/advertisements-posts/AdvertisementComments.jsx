@@ -256,12 +256,41 @@ export default function AdvertisementComments() {
                                     </div>
                                     {activeReplyBox === comment.id && (
                                         <ReplyBox
-                                            onSendReply={(replyText) => {
+                                            commentId={comment.id} // Asegúrate de pasar el ID del comentario
+                                            onSendReply={async (replyText) => {
                                                 console.log("Reply text for comment ID", comment.id, ":", replyText);
-                                                // Aquí puedes agregar la lógica para enviar la respuesta al servidor
+
+                                                // Construyendo el objeto de datos
+                                                const data = JSON.stringify({
+                                                    reply: replyText
+                                                });
+
+                                                try {
+                                                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                                    const response = await fetch(`/comments/${comment.id}/reply`, {
+                                                        method: 'POST',
+                                                        body: data,
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                            'X-CSRF-TOKEN': csrfToken, // Asegúrate de tener csrfToken disponible
+                                                        },
+                                                    });
+
+                                                    if (response.ok) {
+                                                        console.log("Respuesta enviada con éxito");
+                                                        // Aquí puedes agregar lógica adicional para actualizar la UI según sea necesario
+                                                    } else {
+                                                        console.error("Error al enviar la respuesta");
+                                                    }
+                                                } catch (error) {
+                                                    console.error("Error al enviar la respuesta:", error);
+                                                }
+
                                                 setActiveReplyBox(null); // Opcional: Cierra el cuadro de respuesta después de enviar
                                             }}
                                         />
+
                                     )}
                                 </div>
                             )}
