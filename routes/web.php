@@ -14,8 +14,10 @@ use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
 use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\commentsPostsController;
+use App\Http\Controllers\CommunityRequestController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\LikeCommentController;
 use App\Http\Controllers\ReplyCommentController;
 
@@ -86,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
     Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
+    Route::post('/communitiesRequest', [CommunityRequestController::class, 'store'])->name('communitiesRequest.store');
 
     // Show community with posts & ads
     Route::get('/communities/{community}', [PostsController::class, 'index'])->name('communities.show');
@@ -156,6 +159,10 @@ Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAd
 
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
+//Rutes para el email part de admin
+Route::get('/paneladminEmail', [MessagesController::class, 'getEmailView'])->name('getEmailView');
+Route::post('/messages/{id}', [MessagesController::class, 'destroy'])->name('delete.message');
+
 
 
 Route::get('/loginAdmin', function () {
@@ -196,6 +203,7 @@ Route::get('/admin', function () {
 Route::get('/paneladmin', function () {
     return view('panel-admin');
 })->name('panel-admin');
+
 
 
 
