@@ -64,6 +64,10 @@ Route::get('/contact', [ContactController::class, 'contactView'])->name('contact
 //Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
+//Emails
+Route::post('/emailUser', [MessagesController::class, 'emailUserView'])->name('emailUser.view');
+
+
 
 // FORGOT PASSWORD / PASSWORD-RESET
 Route::post('/forgot-password', [AuthController::class, 'sendResetLink'])->name('forgot.password.link');
