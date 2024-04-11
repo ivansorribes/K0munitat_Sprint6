@@ -136,6 +136,7 @@ const CommunitiesList = () => {
               key={community.id}
               community={community}
               option={userCommunities.includes(community.id) || community.private === 0 ? 'enter' : 'send'}
+              user={user}
             />
           ))}
         </div>
