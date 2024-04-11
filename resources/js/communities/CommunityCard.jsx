@@ -21,6 +21,7 @@ const CommunityCard = ({ community, option, user }) => {
   };
 
   const handleSendRequest = () => {
+    axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     axios.post('/communitiesRequest', {
         id_community: community.id,
         id_user: user.id
