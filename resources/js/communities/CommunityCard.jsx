@@ -7,6 +7,7 @@ import axios from 'axios'; // Importa Axios
 const CommunityCard = ({ community, option, user }) => {
   const [showModal, setShowModal] = useState(false); // Estado para controlar la visibilidad del modal
   const [communityUrl, setCommunityUrl] = useState(""); // Usamos useState para manejar el estado de la URL
+  const [showSuccessModal, setShowSuccessModal] = useState(false); // Estado para controlar la visibilidad de la modal de éxito
 
   let buttonComponent;
 
@@ -29,6 +30,7 @@ const CommunityCard = ({ community, option, user }) => {
       .then(response => {
         console.log(response.data);
         setShowModal(false); // Oculta el modal después de enviar la solicitud
+        setShowSuccessModal(true); 
       })
       .catch(error => {
         console.error('Error sending community request:', error);
@@ -70,6 +72,29 @@ const CommunityCard = ({ community, option, user }) => {
                 </div>
                 <div>
                   <ButtonSave label="Send Request" onClick={handleSendRequest} />
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal para mostrar el mensaje de éxito */}
+      {showSuccessModal && (
+        <div className="fixed inset-0 z-10 overflow-y-auto items-center">
+          <div className="modal-overlay absolute w-full h-full bg-gray-900 ">
+          <div className="modal-container bg-white w-full md:max-w-md mx-auto rounded shadow-lg overflow-y-auto">
+            <div className="modal-content py-4 text-left px-6">
+              <div className="pb-3">
+                <p className="text-2xl font-bold">Success!</p>
+              </div>
+              <div className="my-5">
+                <p>Your request to join {community.name} has been sent successfully.</p>
+              </div>
+              <div className="flex justify-end">
+                <div>
+                  <ButtonSave label="Close" onClick={() => setShowSuccessModal(false)} />
                 </div>
               </div>
             </div>
