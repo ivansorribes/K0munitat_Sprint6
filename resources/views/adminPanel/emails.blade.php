@@ -24,7 +24,7 @@
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
                     @foreach ($messages as $message)
-                        <tr class="{{ $message->unread ? 'font-bold' : '' }}">
+                        <tr>
                             <td class="px-6 py-4">{{ $message->sender_name }}</td>
                             <td class="px-6 py-4">{{ $message->subject }}</td>
                             <td class="px-6 py-4">{{ $message->message }}</td>
@@ -35,8 +35,6 @@
                             </td>
                         </tr>
                     @endforeach
-
-
                     <!-- Si no hay mensajes -->
                     @if ($messages->isEmpty())
                         <tr>
@@ -48,22 +46,21 @@
         </div>
     </div>
 
-    <!-- Modal para confirmar eliminación -->
     <div id="deleteModal" class="hidden fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
         <div class="bg-white p-8 rounded shadow-md">
             <p>¿Estás seguro de que deseas eliminar este mensaje?</p>
-            <div id="loading" class="hidden">
-                <div id="loading-content"></div>
-            </div>
             <div class="flex justify-end mt-4">
                 <form id="deleteForm" method="POST">
                     @csrf
-                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md mr-2">Sí, Eliminar</button>
+                    <button type="submit" style="background-color: #E51C1C"
+                        class="text-white px-4 py-2 rounded-md mr-2 w-32 h-full">Sí, Eliminar</button>
                 </form>
-                <button onclick="closeModal()" class="bg-gray-500 text-black px-4 py-2 rounded-md mr-2">Cancelar</button>
+                <button onclick="closeModal()" style="background-color: #3d3c3b"
+                    class="text-white px-4 py-2 rounded-md mr-2 w-32 h-full">Cancelar</button>
             </div>
         </div>
     </div>
+
 
     <script>
         function confirmDelete(id) {
@@ -74,16 +71,6 @@
 
         function closeModal() {
             document.getElementById('deleteModal').classList.add('hidden');
-        }
-
-        function showLoading() {
-            document.getElementById('loading').classList.remove('hidden');
-            document.getElementById('loading-content').classList.remove('hidden');
-        }
-
-        function hideLoading() {
-            document.getElementById('loading').classList.add('hidden');
-            document.getElementById('loading-content').classList.add('hidden');
         }
     </script>
 

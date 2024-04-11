@@ -12,23 +12,17 @@ class MessagesController extends Controller
 {
 
 
-    public function getEmailView(Request $request)
+    public function getEmailView()
     {
-        // Verificar si es la primera visita del usuario
-        if (!$request->session()->has('email_view_first_visit')) {
-            // Marcar todos los mensajes como no leídos
-            contactMessages::where('read', false)->update(['read' => true]);
-            
-            // Establecer la sesión indicando que es la primera visita
-            $request->session()->put('email_view_first_visit', true);
-        }
-    
+        // Marcar todos los mensajes como leídos
+        contactMessages::where('read', false)->update(['read' => true]);
+
         // Obtener todos los mensajes
         $messages = contactMessages::all();
-    
+
         return view('adminPanel.emails', compact('messages'));
     }
-    
+
 
     public function destroy($id)
     {

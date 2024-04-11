@@ -17,6 +17,13 @@ class contactMessages extends Model
         'phone',
         'email',
         'subject',
-        'message'
+        'message',
+        'read',
+        'id_user'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user');
+    }
 }
