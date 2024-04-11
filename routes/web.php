@@ -18,6 +18,8 @@ use App\Http\Controllers\commentsPostsController;
 use App\Http\Controllers\CommunityRequestController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
+use App\Http\Controllers\MessagesController;
+
 
 
 
@@ -159,6 +161,10 @@ Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAd
 
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
+//Rutes para el email part de admin
+Route::get('/paneladminEmail', [MessagesController::class, 'getEmailView'])->name('getEmailView');
+Route::post('/messages/{id}', [MessagesController::class, 'destroy'])->name('delete.message');
+
 
 
 Route::get('/loginAdmin', function () {
@@ -199,6 +205,7 @@ Route::get('/admin', function () {
 Route::get('/paneladmin', function () {
     return view('panel-admin');
 })->name('panel-admin');
+
 
 
 
