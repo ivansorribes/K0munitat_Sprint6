@@ -90,7 +90,7 @@ function Contact() {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-white-500">
+        <div className="min-h-screen flex items-center justify-center bg-white-500 mt-14 mb-4">
             <div className="relative py-3 sm:max-w-xl sm:mx-auto">
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
                 <div className="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full max-w-md text-center">

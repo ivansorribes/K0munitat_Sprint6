@@ -36,7 +36,7 @@ class PostsController extends Controller
         // Añadir URL completa a cada imagen
         $posts->each(function ($post) {
             $post->images->each(function ($image) {
-                $image->url = URL::to('storage/posts/' . $image->name);
+                $image->url = URL::to('img/post/' . $image->name);
             });
             $post->liked = $post->likes()->where('id_user', Auth::id())->exists();
         });
@@ -155,23 +155,22 @@ class PostsController extends Controller
             // Manejo de la carga de la imagen
             if ($request->hasFile('image')) {
                 try {
-                    $file = $request->file('image');
-                    Log::info("Intentando guardar el archivo: " . $file->getClientOriginalName());
-                    $path = $file->store('posts', 'public');
-                    Log::info("Archivo guardado en: " . $path);
+                    $image = $request->file('image');
+                    $imageName = time() . '.' . $image->getClientOriginalExtension();
+                    $image->move(public_path('/img/post/'), $imageName);
+
+                    ImagePost::create([
+                        'id_post' => $post->id,
+                        'name' => $imageName,
+                        'front_page' => true,
+                    ]);
                 } catch (\Exception $e) {
                     Log::error("Error al guardar el archivo: " . $e->getMessage());
-                    // Asegúrate de retornar o manejar el error aquí si es necesario
+                    return back()->withErrors('Ha ocurrido un error al guardar la imagen. Por favor, intenta de nuevo.')->withInput();
                 }
-                $imageName = basename($path);
-
-                // Guardar referencia de la imagen en la base de datos
-                ImagePost::create([
-                    'id_post' => $post->id,
-                    'name' => $imageName,
-                    'front_page' => true,
-                ]);
             }
+
+
 
             return redirect("/communities/{$communityId}");
         } catch (\Exception $e) {
@@ -189,12 +188,13 @@ class PostsController extends Controller
             $query->select('id', 'id_post', 'name');
         }, 'comments' => function ($query) {
             $query->with(['user' => function ($q) {
-                $q->select('id', 'username');
+                // Asegúrate de ajustar la ruta a donde realmente se almacenan tus imágenes de perfil
+                $q->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
             }])
                 ->select('id', 'id_post', 'id_user', 'comment');
         }, 'user' => function ($query) { // Carga el usuario que creó el post
-            $query->select('id', 'username');
-        }, 'likes']) // Asegúrate de cargar la relación de likes aquí
+            $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+        }, 'likes'])
             ->findOrFail($id_post);
 
         $post->liked = $post->likes->contains('user_id', Auth::id());
@@ -205,11 +205,12 @@ class PostsController extends Controller
         }
 
         $post->images->each(function ($image) {
-            $image->url = URL::to('storage/posts/' . $image->name);
+            $image->url = URL::to('img/post/' . $image->name);
         });
 
         // Ajusta la estructura de los comentarios como antes
         $post->comments->each(function ($comment) {
+            $comment->likes_count = $comment->likes()->count();
             if ($comment->user) {
                 $comment->username = $comment->user->username;
                 unset($comment->id_user);
