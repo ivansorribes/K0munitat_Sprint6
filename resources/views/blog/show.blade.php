@@ -8,7 +8,7 @@
         <div class="max-w-full bg-white rounded-lg shadow-md overflow-hidden"> <!-- Cambiamos max-w-4xl a max-w-full -->
             <div class="p-8">
                 <h1 class="text-4xl font-bold text-neutral mb-4">{{ $blog->title }}</h1>
-                <p class="text-lg text-neutral mb-4">{{ $blog->description }}</p>
+                <p class="text-lg text-neutral mb-4">{!! $blog->description !!}</p>
             </div>
             @if($blog->post_image)
             <div class="px-8 py-6">
