@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\comments;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {
@@ -348,4 +349,6 @@ class UserController extends Controller
             return response()->json(['error' => 'Ha ocurrido un error al eliminar la imagen de perfil'], 500);
         }
     }
+
+   
 }
