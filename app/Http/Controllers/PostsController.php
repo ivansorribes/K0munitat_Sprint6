@@ -193,9 +193,11 @@ class PostsController extends Controller
                     'user' => function ($q) {
                         $q->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
                     },
-                    'replies' => function ($q) { // Carga las respuestas de cada comentario
-                        $q->with('user:id,username,profile_image') // Ajusta según tus necesidades
-                            ->select('id', 'id_comment', 'id_user', 'reply', 'created_at'); // Asegúrate de seleccionar los campos adecuados para tus respuestas
+                    'replies' => function ($q) {
+                        $q->with(['user' => function ($query) {
+                            $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+                        }])
+                            ->select('id', 'id_comment', 'id_user', 'reply', 'created_at');
                     }
                 ])->select('id', 'id_post', 'id_user', 'comment', 'created_at');
             },
