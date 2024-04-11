@@ -288,6 +288,7 @@ export default function AdvertisementComments() {
                                                 }
 
                                                 setActiveReplyBox(null); // Opcional: Cierra el cuadro de respuesta después de enviar
+                                                fetchComments();
                                             }}
                                         />
 
