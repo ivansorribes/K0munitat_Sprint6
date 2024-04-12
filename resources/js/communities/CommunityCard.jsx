@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import 'tailwindcss/tailwind.css';
 import '../../css/community.css';
+import CommunitySprite from "./communitySprite";
 import { ButtonSave, ButtonEdit, ButtonCancel } from '../components/buttons';
 import axios from 'axios'; // Importa Axios
 
@@ -44,16 +45,18 @@ const CommunityCard = ({ community, option, user }) => {
   }
 
   return (
-    <div className="bg-white p-6 rounded-md shadow-md flex flex-col">
-      <div className="flex-grow">
-        <h2 className="text-2xl font-bold mb-2">{community.name}</h2>
-        <p className="text-gray-500 mb-4">{community.description}</p>
+    <div className="bg-white p-6 rounded-md shadow-md flex flex-col justify-center items-center" >
+      <div className="flex flex-col items-center" style={{ width: '320px', height: '260px' }} >
+      <CommunitySprite communityId={community.id_autonomousCommunity} />
+        <h2 className="text-2xl font-bold mb-2 text-center">{community.name}</h2>
       </div>
-      
+     
       <a href={communityUrl} target="_blank" rel="noopener noreferrer">
-        {buttonComponent}
+        <div className="flex justify-center mb-">
+          {buttonComponent}
+        </div>
       </a>
-
+  
       {/* Modal para enviar la solicitud */}
       {showModal && (
         <div className="fixed inset-0 z-10 overflow-y-auto items-center">
@@ -61,7 +64,7 @@ const CommunityCard = ({ community, option, user }) => {
           <div className="modal-container bg-white w-full md:max-w-md mx-auto rounded shadow-lg overflow-y-auto">
             <div className="modal-content py-4 text-left px-6">
               <div className="pb-3">
-                <p className="text-2xl font-bold">Send Request to Join {community.name}</p>
+                <p className="text-2xl font-bold text-center">Send Request to Join {community.name}</p>
               </div>
               <div className="my-5">{/* Contenido del formulario o mensaje aquí */}</div>
               <div className="flex justify-between">
@@ -79,6 +82,7 @@ const CommunityCard = ({ community, option, user }) => {
       )}
     </div>
   );
+  
 };
 
 export default CommunityCard;

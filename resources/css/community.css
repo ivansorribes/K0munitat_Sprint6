@@ -52,3 +52,124 @@
       margin-right: 0; /* Elimina el margen derecho en pantallas más pequeñas */
   }
 }
+
+/*Sprite css*/
+.spritesdef {
+  background-image: url(../../public/img/communities/spritesheet.png);
+  background-repeat: no-repeat;
+  display: block;
+}
+
+.spritesdef-Andalucia {
+  width: 256px;
+  height: 220px;
+  background-position: 0 0;
+}
+
+.spritesdef-Aragon {
+  width: 256px;
+  height: 220px;
+  background-position: -256px 0;
+}
+
+.spritesdef-Asturias {
+  width: 256px;
+  height: 220px;
+  background-position: -512px 0;
+}
+
+.spritesdef-Cantabria {
+  width: 256px;
+  height: 220px;
+  background-position: -768px 0;
+}
+
+.spritesdef-Castilla-La_Mancha {
+  width: 256px;
+  height: 220px;
+  background-position: 0 -220px;
+}
+
+.spritesdef-Castilla_y_Leon {
+  width: 256px;
+  height: 220px;
+  background-position: -256px -220px;
+}
+
+.spritesdef-Cataluna {
+  width: 256px;
+  height: 220px;
+  background-position: -512px -220px;
+}
+
+.spritesdef-Ceuta {
+  width: 256px;
+  height: 220px;
+  background-position: -768px -220px;
+}
+
+.spritesdef-Comunidad_Valenciana {
+  width: 256px;
+  height: 220px;
+  background-position: 0 -440px;
+}
+
+.spritesdef-Comunidad_de_Madrid {
+  width: 256px;
+  height: 220px;
+  background-position: -256px -440px;
+}
+
+.spritesdef-Extremadura {
+  width: 256px;
+  height: 220px;
+  background-position: -512px -440px;
+}
+
+.spritesdef-Galicia {
+  width: 256px;
+  height: 220px;
+  background-position: -768px -440px;
+}
+
+.spritesdef-Islas_Baleares {
+  width: 256px;
+  height: 220px;
+  background-position: 0 -660px;
+}
+
+.spritesdef-Islas_Canarias {
+  width: 256px;
+  height: 220px;
+  background-position: -256px -660px;
+}
+
+.spritesdef-La_Rioja {
+  width: 256px;
+  height: 220px;
+  background-position: -512px -660px;
+}
+
+.spritesdef-Melilla {
+  width: 256px;
+  height: 220px;
+  background-position: -768px -660px;
+}
+
+.spritesdef-Murcia {
+  width: 256px;
+  height: 220px;
+  background-position: -1024px 0;
+}
+
+.spritesdef-Navarra {
+  width: 256px;
+  height: 220px;
+  background-position: -1024px -220px;
+}
+
+.spritesdef-Pais_Vasco {
+  width: 256px;
+  height: 220px;
+  background-position: -1024px -440px;
+}
