@@ -46,13 +46,14 @@ const CommunityCard = ({ community, option, user }) => {
 
   return (
     <div className="bg-white p-6 rounded-md shadow-md flex flex-col justify-center items-center" >
-      <div className="flex flex-col items-center" style={{ width: '320px', height: '260px' }} >
-      <CommunitySprite communityId={community.id_autonomousCommunity} />
-        <h2 className="text-2xl font-bold mb-2 text-center">{community.name}</h2>
+      <div className="flex flex-col items-center mb-2" style={{ width: '280px', height: '260px' }}>
+      <h2 className="text-2xl font-bold mb-1 text-center overflow-hidden" style={{ maxHeight: '100px' }}>
+          {community.name} </h2>
+        <CommunitySprite communityId={community.id_autonomousCommunity} />
       </div>
      
       <a href={communityUrl} target="_blank" rel="noopener noreferrer">
-        <div className="flex justify-center mb-">
+        <div className="flex justify-center mb-1">
           {buttonComponent}
         </div>
       </a>
@@ -82,7 +83,6 @@ const CommunityCard = ({ community, option, user }) => {
       )}
     </div>
   );
-  
 };
 
 export default CommunityCard;
