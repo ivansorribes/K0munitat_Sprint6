@@ -1,13 +1,11 @@
-import React, { useState, useRef } from 'react';
-import { createRoot } from 'react-dom/client';
-import { ButtonSave } from './components/buttons';
-import emailjs from '@emailjs/browser';
-
-
+import React, { useState } from 'react';
 
 function Contact() {
     const [formData, setFormData] = useState({
-
+        user_name: '',
+        user_phone: '',
+        user_email: '',
+        message: ''
     });
     const [submitSuccess, setSubmitSuccess] = useState(false); // Estado para el mensaje de confirmación
     const [showEmptyFieldsMessage, setShowEmptyFieldsMessage] = useState(false); // Estado para mostrar el mensaje de campos vacíos
@@ -15,27 +13,17 @@ function Contact() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-
-        // Verificar si el campo es el teléfono y si contiene letras
-        if (name === 'phone' && !/^\d+$/.test(value) && value !== '') {
-            // Mostrar mensaje de error
-            setPhoneError(true);
-        } else {
-            // Si no hay letras, actualizar el estado normalmente
-            setPhoneError(false);
-            setFormData({
-                ...formData,
-                [name]: value
-            });
-        }
+        setFormData({
+            ...formData,
+            [name]: value
+        });
     };
-
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
         // Check if any of the fields are empty
-        if (formData.name === '' || formData.phone === '' || formData.email === '' || formData.message === '') {
+        if (formData.user_name === '' || formData.user_phone === '' || formData.user_email === '' || formData.message === '') {
             setShowEmptyFieldsMessage(true); // Set state to show empty fields message
 
             // Reset the state after 2 seconds
@@ -46,68 +34,35 @@ function Contact() {
             return; // Exit the function early
         }
 
+        // Send form data to the server
+        sendFormData();
+    };
+
+    const sendFormData = async () => {
         try {
             const response = await fetch('/contact', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': window.csrf_token,
                 },
-                body: JSON.stringify(formData)
+                body: JSON.stringify(formData),
             });
 
             if (response.ok) {
-                console.log('Formulario enviado exitosamente');
-                setSubmitSuccess(true); // Establecer el estado para mostrar el mensaje de confirmación
-
-                // Reiniciar el formulario después de 1 segundos
-                setTimeout(() => {
-                    setSubmitSuccess(false);
-                    setFormData({
-                        name: '',
-                        phone: '',
-                        email: '',
-                        message: ''
-                    });
-                }, 1000);
+                // Reset form data and show submit success message
+                setSubmitSuccess(true);
+                setFormData({
+                    user_name: '',
+                    user_phone: '',
+                    user_email: '',
+                    message: ''
+                });
             } else {
-                console.error('Error al enviar el formulario');
+                console.error('Error al enviar el formulario:', response.statusText);
             }
         } catch (error) {
             console.error('Error al enviar el formulario:', error);
         }
-    };
-
-    const form = useRef();
-
-    const sendEmail = (e) => {
-        e.preventDefault();
-
-        emailjs
-            .sendForm('service_480gjd6', 'template_4k72k27', form.current, {
-                publicKey: 'n1bE4VIf9Fj8jWYkI',
-            })
-            .then(
-                (result) => {
-                    console.log(result.text)
-                    console.log('SUCCESS!');
-                    setSubmitSuccess(true); // Establecer el estado para mostrar el mensaje de confirmación
-
-                    // Reiniciar el formulario después de 1 segundos
-                    setTimeout(() => {
-                        setSubmitSuccess(false);
-                        setFormData({
-                            name: '',
-                            phone: '',
-                            email: '',
-                            message: ''
-                        });
-                    }, 1000);
-                },
-                (error) => {
-                    console.log('FAILED...', error);
-                },
-            );
     };
 
     return (
@@ -119,16 +74,16 @@ function Contact() {
                     {submitSuccess && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
                         <strong className="font-bold">Success!</strong>
                         <span className="block sm:inline"> Form submitted successfully.</span>
-                    </div>} {/* Mostrar mensaje de confirmación */}
+                    </div>}
                     {showEmptyFieldsMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
                         <strong className="font-bold">Error!</strong>
                         <span className="block sm:inline"> Fields cannot be empty.</span>
-                    </div>} {/* Mostrar mensaje de campos vacíos */}
+                    </div>}
                     {phoneError && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
                         <strong className="font-bold">Error!</strong>
                         <span className="block sm:inline"> Phone number can only contain numbers.</span>
-                    </div>} {/* Mostrar mensaje de error en el campo de teléfono */}
-                    <form ref={form} onSubmit={sendEmail}>
+                    </div>}
+                    <form onSubmit={handleSubmit}>
                         <div className="mb-4 relative">
                             <input
                                 autoComplete="off"
@@ -136,8 +91,8 @@ function Contact() {
                                 name="user_name"
                                 type="text"
                                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                                value={formData.name}
                                 onChange={handleChange}
+                                value={formData.user_name}
                             />
                             <label
                                 htmlFor="user_name"
@@ -153,8 +108,8 @@ function Contact() {
                                 name="user_phone"
                                 type="tel"
                                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                                value={formData.phone}
                                 onChange={handleChange}
+                                value={formData.user_phone}
                             />
                             <label
                                 htmlFor="user_phone"
@@ -170,8 +125,8 @@ function Contact() {
                                 name="user_email"
                                 type="email"
                                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
-                                value={formData.email}
                                 onChange={handleChange}
+                                value={formData.user_email}
                             />
                             <label
                                 htmlFor="user_email"
@@ -185,8 +140,8 @@ function Contact() {
                                 id="message"
                                 name="message"
                                 className="peer h-32 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600 resize-none"
-                                value={formData.message}
                                 onChange={handleChange}
+                                value={formData.message}
                             ></textarea>
                             <label
                                 htmlFor="message"
@@ -196,7 +151,7 @@ function Contact() {
                             </label>
                         </div>
                         <div className="relative mb-4">
-                            <ButtonSave type="submit" label="Send" />
+                            <button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Send</button>
                         </div>
                     </form>
 
@@ -206,6 +161,4 @@ function Contact() {
     );
 }
 
-if (document.getElementById('Contact')) {
-    createRoot(document.getElementById('Contact')).render(<Contact />);
-}
+export default Contact;

@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('sender_name', 50);
             $table->string('phone');
             $table->string('sender_email', 50);
-            $table->string('subject', 50);
             $table->text('message');
             $table->boolean('read')->default(false);
             $table->foreignId('id_user')->references('id')->on('users');

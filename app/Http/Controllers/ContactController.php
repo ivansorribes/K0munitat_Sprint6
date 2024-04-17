@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
+use App\Models\contactMessages;
+use Illuminate\Support\Facades\Auth;
+
+
 
 class ContactController extends Controller
 {
@@ -15,41 +19,31 @@ class ContactController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            // Validación de datos
-            $request->validate([
-                'name' => 'required',
-                'phone' => 'required',
-                'email' => 'required|email',
-                'message' => 'required',
-            ]);
+        // Validar los datos del formulario
+        $request->validate([
+            'user_name' => 'required|string|max:50',
+            'user_phone' => 'required|string',
+            'user_email' => 'required|email|string|max:50',
+            'message' => 'required|string',
+        ]);
 
-            // Obtención de los datos del formulario
-            $formData = $request->only(['name', 'phone', 'email', 'message']);
+        // Obtener el usuario autenticado
+        $user = Auth::user();
 
-            // Construcción del cuerpo del mensaje
-            $body = "Hemos recibido una solicitud de contacto con los siguientes datos:\n\n";
-            foreach ($formData as $key => $value) {
-                $body .= ucfirst($key) . ": " . $value . "\n";
-            }
+        // Crear un nuevo mensaje de contacto
+        $contactMessage = new contactMessages([
+            'sender_name' => $request->input('user_name'),
+            'phone' => $request->input('user_phone'),
+            'sender_email' => $request->input('user_email'),
+            'message' => $request->input('message'),
+            'read' => false,
+            'id_user' => $user->id, // ID del usuario autenticado
+        ]);
 
-            // Dirección de correo donde se enviará el mensaje
-            $email = "tatiana@k0munitat.com";
+        // Guardar el mensaje de contacto en la base de datos
+        $contactMessage->save();
 
-            // Envío del correo electrónico
-            Mail::raw($body, function ($message) use ($email) {
-                $message->from('noreply@k0munitat.com', 'K0munitat');
-                $message->to($email, 'User Name')->subject('Formulario de contacto');
-            });
-
-            // Redirección con un mensaje de éxito
-            return back()->with('success', '¡Gracias por tu mensaje! Nos pondremos en contacto contigo pronto.');
-        } catch (\Exception $e) {
-            // Registro del error en los logs
-            Log::error($e);
-
-            // Retorno de un error al cliente
-            return response()->json(['error' => 'Ha ocurrido un error al procesar el formulario'], 500);
-        }
+        // Retornar una respuesta de éxito
+        return response()->json(['message' => 'Mensaje de contacto almacenado con éxito.'], 201);
     }
 }
