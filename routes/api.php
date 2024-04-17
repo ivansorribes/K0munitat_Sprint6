@@ -6,6 +6,8 @@ use App\Http\Controllers\api\CommunitiesApiController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\commentsPostsController;
+use App\Http\Controllers\UserController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -26,3 +28,5 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show']);
 
 Route::post('/comments', [commentsPostsController::class, 'store']);
+
+Route::post('send/email', [UserController::class, 'mail'])->name('email');
