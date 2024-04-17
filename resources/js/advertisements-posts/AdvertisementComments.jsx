@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
+import { CommentLikeButton } from "../components/CommentLikeButton";
+import { ReplyBox } from "../components/ReplyBox";
 
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
@@ -11,8 +13,9 @@ export default function AdvertisementComments() {
     const [commentToDelete, setCommentToDelete] = useState(null);
     const id_user = document.getElementById("id_user").value;
     const username = document.getElementById("username").value;
+    const [activeReplyBox, setActiveReplyBox] = useState(null);
 
-    useEffect(() => {
+    const fetchComments = () => {
         const pathParts = window.location.pathname.split('/');
         const communityId = pathParts[pathParts.length - 2];
         const postId = pathParts[pathParts.length - 1];
@@ -24,6 +27,10 @@ export default function AdvertisementComments() {
                 setComments(data.post.comments || []);
             })
             .catch(error => console.error('Error fetching post data:', error));
+    };
+
+    useEffect(() => {
+        fetchComments(); // Llama a la función dentro de useEffect
     }, []);
 
     const handlePostComment = async () => {
@@ -43,14 +50,27 @@ export default function AdvertisementComments() {
             }
 
             const newCommentData = await response.json();
-            const commentWithUsername = { ...newCommentData, username: username, user: { id: id_user } };
 
-            setComments(prevComments => [...prevComments, commentWithUsername]);
+            const userProfileImageUrl = '';
+
+            const commentWithCompleteUserData = {
+                ...newCommentData,
+                user: {
+                    id: id_user,
+                    username: username,
+                    profile_image: userProfileImageUrl
+                }
+            };
+
+            setComments(prevComments => [...prevComments, commentWithCompleteUserData]);
+            fetchComments();
             setNewComment('');
         } catch (error) {
             console.error('Error posting the comment:', error);
         }
     };
+
+
 
     const handleEditComment = (comment) => {
         setEditingCommentId(comment.id);
@@ -126,6 +146,40 @@ export default function AdvertisementComments() {
         }
     };
 
+    const onToggleLike = (commentId) => {
+        fetch(`/comments/${commentId}/likes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ id_comment: commentId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Actualiza el estado de los comentarios para reflejar el cambio de like
+                    setComments(prevComments =>
+                        prevComments.map(comment => {
+                            if (comment.id === commentId) {
+                                const updatedLiked = !comment.liked;
+                                return {
+                                    ...comment,
+                                    liked: updatedLiked,
+                                    likes_count: updatedLiked ? comment.likes_count + 1 : comment.likes_count - 1
+                                };
+                            }
+                            return comment;
+                        })
+                    );
+                }
+            })
+            .catch(error => console.error('Error al intentar dar like al comentario:', error));
+    };
+
+
+
     return (
         <>
             <section className="bg-white py-8 lg:py-16 antialiased">
@@ -146,10 +200,17 @@ export default function AdvertisementComments() {
                             ) : (
                                 <div>
                                     <footer className="mb-2">
-                                        <div className="flex items-center justify-between">
-                                            <p className="text-sm text-neutral font-extrabold">
-                                                {comment.username}
-                                            </p>
+                                        <div className="flex items-center justify-between"> {/* Contenedor Flex principal */}
+                                            <div className="flex items-center space-x-3"> {/* Contenedor para la imagen y el nombre de usuario */}
+                                                <img
+                                                    src={comment.user.profile_image}
+                                                    alt="Profile Image"
+                                                    className="h-10 w-10 rounded-full"
+                                                />
+                                                <p className="text-sm text-neutral font-extrabold">
+                                                    {comment.user.username}
+                                                </p>
+                                            </div>
                                             {comment.user.id == id_user && (
                                                 <div>
                                                     <button onClick={() => handleEditComment(comment)} className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800">Edit</button>
@@ -157,13 +218,85 @@ export default function AdvertisementComments() {
                                                 </div>
                                             )}
                                         </div>
+
                                     </footer>
                                     <p className="text-neutral">
                                         {comment.comment}
                                     </p>
+                                    {comment.replies && comment.replies.length > 0 && (
+                                        <div className="mt-4">
+                                            <h4 className="text-sm text-neutral font-bold mb-2">Replies</h4>
+                                            {comment.replies.map((reply) => (
+                                                <div key={reply.id} className="ml-4 mb-2 p-2 bg-gray-100 rounded-lg">
+                                                    <div className="flex items-center space-x-3 mb-1">
+                                                        <img
+                                                            src={reply.user.profile_image}
+                                                            alt="Profile Image"
+                                                            className="h-6 w-6 rounded-full"
+                                                        />
+                                                        <p className="text-xs text-neutral font-extrabold">{reply.user.username}</p>
+                                                    </div>
+                                                    <p className="text-xs text-neutral">{reply.reply}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                    <div className="flex justify-between items-center mt-2">
+                                        <button
+                                            className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800"
+                                            onClick={() => setActiveReplyBox(activeReplyBox === comment.id ? null : comment.id)}
+                                        >Reply
+                                        </button>
+                                        <CommentLikeButton
+                                            commentId={comment.id}
+                                            liked={comment.liked || false}
+                                            likesCount={comment.likes_count}
+                                            onToggleLike={onToggleLike}
+                                        />
+                                    </div>
+                                    {activeReplyBox === comment.id && (
+                                        <ReplyBox
+                                            commentId={comment.id} // Asegúrate de pasar el ID del comentario
+                                            onSendReply={async (replyText) => {
+                                                console.log("Reply text for comment ID", comment.id, ":", replyText);
+
+                                                // Construyendo el objeto de datos
+                                                const data = JSON.stringify({
+                                                    reply: replyText
+                                                });
+
+                                                try {
+                                                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+
+                                                    const response = await fetch(`/comments/${comment.id}/reply`, {
+                                                        method: 'POST',
+                                                        body: data,
+                                                        headers: {
+                                                            'Content-Type': 'application/json',
+                                                            'X-CSRF-TOKEN': csrfToken, // Asegúrate de tener csrfToken disponible
+                                                        },
+                                                    });
+
+                                                    if (response.ok) {
+                                                        console.log("Respuesta enviada con éxito");
+                                                        // Aquí puedes agregar lógica adicional para actualizar la UI según sea necesario
+                                                    } else {
+                                                        console.error("Error al enviar la respuesta");
+                                                    }
+                                                } catch (error) {
+                                                    console.error("Error al enviar la respuesta:", error);
+                                                }
+
+                                                setActiveReplyBox(null); // Opcional: Cierra el cuadro de respuesta después de enviar
+                                                fetchComments();
+                                            }}
+                                        />
+
+                                    )}
                                 </div>
                             )}
                         </article>
+
                     ))}
 
                     <div className="mb-6">

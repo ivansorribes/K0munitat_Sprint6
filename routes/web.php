@@ -10,15 +10,16 @@ use App\Http\Controllers\CommunitiesController;
 use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
-use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
-use App\Http\Controllers\LikeController;
+use App\Http\Controllers\LikePostController;
 use App\Http\Controllers\commentsPostsController;
+use App\Http\Controllers\CommunityRequestController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
-
-
+use App\Http\Controllers\MessagesController;
+use App\Http\Controllers\LikeCommentController;
+use App\Http\Controllers\ReplyCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,7 +44,7 @@ Route::get('/about-us', function () {
 
 // ADMIN PANEL
 Route::get('/adminPanel', function () {
-    return view('login.panelAdmin');
+    return view('adminPanel.loginAdmin');
 })->name('AdminPanel');
 
 // USER RELATED
@@ -87,6 +88,7 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/communities/create', [CommunitiesController::class, 'create'])->name('communities.create');
     Route::get('/communities', [CommunitiesController::class, 'index'])->name('communities.index');
+    Route::post('/communitiesRequest', [CommunityRequestController::class, 'store'])->name('communitiesRequest.store');
 
     // Show community with posts & ads
     Route::get('/communities/{community}', [PostsController::class, 'index'])->name('communities.show');
@@ -94,10 +96,9 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/communities/{community}/edit', [CommunitiesController::class, 'edit'])->name('communities.edit');
     Route::put('/communities/{community}', [CommunitiesController::class, 'update']);
     Route::delete('/communities/{community}', [CommunitiesController::class, 'destroy']);
-
 });
 
-Route::middleware('allowAccesDates') ->group( function() {
+Route::middleware('allowAccesDates')->group(function () {
     Route::get('/communitiesUserActual', [CommunitiesController::class, 'userActual'])->name('communities.userActual');
     Route::get('/communitiesList', [CommunitiesController::class, 'communitiesList'])->name('communities.list');
     Route::get('/communitiesUser', [CommunitiesController::class, 'communitiesUser'])->name('communities.user');
@@ -127,21 +128,46 @@ Route::get('/communities/{community}/{id_post}', function () {
 })->name('advertisements-posts.show');
 
 
+Route::get('/dashboard', function () {
+    return view('adminPanel.dashboard');
+})->name('dashboard');
+
+
+// Rutas protegidas por el middleware CheckRole
+
 Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComunitats'])->name('paneladminComunitats');
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
-Route::put('/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
+Route::match(['put', 'get'], '/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
+Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
 
 Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');
-// Route::put('/posts/{post}', [PostsController::class, 'updatePost'])->name('update.post');
+Route::put('/posts/{post}/toggle', [PostsController::class, 'toggleActivation'])->name('posts.toggle');
+Route::get('/posts/{post}', [PostsController::class, 'showPostById'])->name('post.show');
+Route::put('/posts/edit/{post}', [PostsController::class, 'updatePost'])->name('update.post');
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
-Route::put('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('toggleIsActive');
+Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('users.toggleIsActive');
+Route::get('/users/{id}/detail', [UserController::class, 'showDetail'])->name('users.detail');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
+Route::post('/users', [UserController::class, 'store'])->name('storeUser');
+Route::get('/createUserForm', function () {
+    return view('adminPanel.createUserForm');
+})->name('createUserForm');
 
 Route::get('/paneladminAdvertisements', [PostsController::class, 'getAdvertisements'])->name('paneladminAdvertisements');
 Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAdvertisement'])->name('update.advertisement');
 
-Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
+
+//Rutes para el email part de admin
+Route::get('/paneladminEmail', [MessagesController::class, 'getEmailView'])->name('getEmailView');
+Route::post('/messages/{id}', [MessagesController::class, 'destroy'])->name('delete.message');
+
+
+
+Route::get('/loginAdmin', function () {
+    return view('adminPanel.loginAdmin');
+})->name('loginAdmin');
 
 
 ////EVENTS
@@ -154,13 +180,20 @@ Route::middleware('checkSuperAdmin')->post('/eventsList', [EventController::clas
 
 // BLOG
 Route::get('/blog', [BlogController::class, 'index'])->name('blog');
-Route::get('/blog/{id}', [BlogController::class, 'show'])->name('blog.show');
+
+Route::get('/blog/show/{id}', [BlogController::class, 'viewCard'])->name('blog.show');
+
 Route::get('/paneladminBlog', [BlogController::class, 'adminPanel'])->name('paneladminBlog');
+
 Route::get('/blog/create', [BlogController::class, 'createBlog'])->name('blog.create');
+
 Route::post('/blog/store', [BlogController::class, 'store'])->name('blog.store');
-Route::delete('/blog/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
+
+Route::delete('/blog/destroy/{id}', [BlogController::class, 'destroy'])->name('blog.destroy');
+
 Route::get('/blog/{id}/edit', [BlogController::class, 'updateBlog'])->name('blog.edit');
-Route::patch('/blog/{id}', [BlogController::class, 'update'])->name('blog.update');
+
+Route::match(['put', 'patch'], '/blog/update/{id}', [BlogController::class, 'update'])->name('blog.update');
 
 
 Route::get('/admin', function () {
@@ -171,17 +204,18 @@ Route::get('/paneladmin', function () {
     return view('panel-admin');
 })->name('panel-admin');
 
-Route::get('/dashboard', function () {
-    return view('adminPanel.dashboard');
-})->name('dashboard');
 
 
-Route::get('/paneladminAdvertisements', function () {
-    return view('paneladminAdvertisements');
-})->name('paneladminAdvertisements');
 
-Route::post('/posts/{post}/likes', [LikeController::class, 'like'])->middleware('auth');
+
+//Header
+//Header
+
+
+Route::post('/posts/{post}/likes', [LikePostController::class, 'like'])->middleware('auth');
 
 Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
 Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);
+Route::post('/comments/{commentId}/likes', [LikeCommentController::class, 'like'])->middleware('auth');
 Route::put('/posts/{id_post}', [PostsController::class, 'update']);
+Route::post('/comments/{commentId}/reply', [ReplyCommentController::class, 'store']);

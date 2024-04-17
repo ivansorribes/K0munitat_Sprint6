@@ -6,6 +6,18 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 <html :class="{ 'theme-dark': dark }" x-data="data()" lang="en">
+<head>
+    <script src="https://cdn.ckeditor.com/ckeditor5/32.0.0/classic/ckeditor.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            ClassicEditor
+                .create(document.querySelector('#description'))
+                .catch(error => {
+                    console.error(error);
+                });
+        });
+    </script>
+</head>
 <body class="flex">    
     <div class="flex-1">
         <div class="container mx-auto p-8">
@@ -19,7 +31,7 @@
                 <div class="col-span-5">
                     <form action="{{ route('blog.update', $blog->id) }}" method="POST" enctype="multipart/form-data">
                         @csrf
-                        @method('PUT')
+                        @method('PATCH')                    
                         <div class="mb-4">
                             <label for="title" class="block text-gray-700 font-bold mb-2">Title:</label>
                             <input type="text" id="title" name="title" value="{{ $blog->title }}" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
