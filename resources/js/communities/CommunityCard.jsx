@@ -44,11 +44,15 @@ const CommunityCard = ({ community, option, user }) => {
     buttonComponent = null;
   }
 
+  // Limitar la longitud del nombre de la comunidad
+  const truncatedName = community.name.length > 20 ? community.name.substring(0, 20) + "..." : community.name;
+
   return (
     <div className="bg-white p-6 rounded-md shadow-md flex flex-col justify-center items-center" >
       <div className="flex flex-col items-center mb-2" style={{ width: '280px', height: '260px' }}>
-      <h2 className="text-2xl font-bold mb-1 text-center overflow-hidden" style={{ maxHeight: '100px' }}>
-          {community.name} </h2>
+        <h2 className="text-2xl font-bold mb-1 text-center overflow-hidden" style={{ maxHeight: '100px' }}>
+          {truncatedName}
+        </h2>
         <CommunitySprite communityId={community.id_autonomousCommunity} />
       </div>
      
