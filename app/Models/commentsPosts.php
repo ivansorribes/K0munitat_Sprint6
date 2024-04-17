@@ -42,4 +42,9 @@ class commentsPosts extends Model
     {
         return $this->likes()->count();
     }
+
+    public function replies()
+    {
+        return $this->hasMany(ReplyComment::class, 'id_comment', 'id');
+    }
 }
