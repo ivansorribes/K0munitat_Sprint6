@@ -94,10 +94,6 @@ export default function AdvertisementDetails() {
         }
     };
 
-
-
-
-
     if (!post) {
         return <div>Loading...</div>;
     }
@@ -107,7 +103,7 @@ export default function AdvertisementDetails() {
 
     return (
         <div className="flex flex-col items-center mx-auto max-w-screen-lg m-10">
-            <div className="self-start mb-4">
+            <div className="self-start mb-4 mt-10">
                 <a href={`/communities/${communityId}`} className="inline-block bg-primary hover:bg-secondary text-white font-bold py-2 px-4 rounded">
                     Back
                 </a>

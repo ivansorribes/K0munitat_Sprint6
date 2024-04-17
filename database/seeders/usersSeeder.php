@@ -25,6 +25,7 @@ class usersSeeder extends Seeder
             'city' => 'Deltebre',
             'postcode' => 43580,
             'telephone' => fake()->phoneNumber(),
+            'profile_image' => 'DefaultImage.png',
             'profile_description' => 'Descripcion de prueba',
             'created_at' => now(),
             'role' => 'superAdmin',
@@ -41,6 +42,7 @@ class usersSeeder extends Seeder
             'city' => 'Sant Carles de la Rapita',
             'postcode' => 43540,
             'telephone' => fake()->phoneNumber(),
+            'profile_image' => 'DefaultImage.png',
             'profile_description' => 'Descripcion de prueba',
             'created_at' => now(),
             'role' => 'superAdmin',
@@ -58,6 +60,7 @@ class usersSeeder extends Seeder
             'city' => 'Amposta',
             'postcode' => 43870,
             'telephone' => fake()->phoneNumber(),
+            'profile_image' => 'DefaultImage.png',
             'profile_description' => 'Descripcion de prueba',
             'created_at' => now(),
             'role' => 'superAdmin',
@@ -75,6 +78,7 @@ class usersSeeder extends Seeder
             'city' => 'Amposta',
             'postcode' => 43870,
             'telephone' => fake()->phoneNumber(),
+            'profile_image' => 'DefaultImage.png',
             'profile_description' => 'Descripcion de prueba',
             'created_at' => now(),
             'role' => 'superAdmin',
@@ -92,6 +96,7 @@ class usersSeeder extends Seeder
             'city' => 'Camarles',
             'postcode' => 43894,
             'telephone' => fake()->phoneNumber(),
+            'profile_image' => 'DefaultImage.png',
             'profile_description' => 'Descripcion de prueba',
             'created_at' => now(),
             'role' => 'superAdmin',
@@ -109,6 +114,7 @@ class usersSeeder extends Seeder
             'city' => 'Amposta',
             'postcode' => 43870,
             'telephone' => fake()->phoneNumber(),
+            'profile_image' => 'DefaultImage.png',
             'profile_description' => 'Descripcion de prueba',
             'created_at' => now(),
             'role' => 'superAdmin',
@@ -126,6 +132,7 @@ class usersSeeder extends Seeder
             'city' => 'Amposta',
             'postcode' => 43870,
             'telephone' => fake()->phoneNumber(),
+            'profile_image' => 'DefaultImage.png',
             'profile_description' => 'Descripcion de prueba',
             'created_at' => now(),
             'role' => 'superAdmin',
@@ -143,6 +150,7 @@ class usersSeeder extends Seeder
             'city' => 'Amposta',
             'postcode' => 43870,
             'telephone' => fake()->phoneNumber(),
+            'profile_image' => 'DefaultImage.png',
             'profile_description' => 'Descripcion de prueba',
             'created_at' => now(),
             'role' => 'superAdmin',
@@ -160,13 +168,11 @@ class usersSeeder extends Seeder
             'city' => 'Amposta',
             'postcode' => 43870,
             'telephone' => fake()->phoneNumber(),
+            'profile_image' => 'DefaultImage.png',
             'profile_description' => 'Descripcion de prueba',
             'created_at' => now(),
             'role' => 'superAdmin',
             'remember_token' => Str::random(10),
         ]);
-
     }
-
-    
 }

@@ -10,7 +10,6 @@ use App\Http\Controllers\CommunitiesController;
 use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
-use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
 use App\Http\Controllers\LikePostController;
@@ -19,9 +18,8 @@ use App\Http\Controllers\CommunityRequestController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessagesController;
-
-
-
+use App\Http\Controllers\LikeCommentController;
+use App\Http\Controllers\ReplyCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -218,4 +216,6 @@ Route::post('/posts/{post}/likes', [LikePostController::class, 'like'])->middlew
 
 Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
 Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);
+Route::post('/comments/{commentId}/likes', [LikeCommentController::class, 'like'])->middleware('auth');
 Route::put('/posts/{id_post}', [PostsController::class, 'update']);
+Route::post('/comments/{commentId}/reply', [ReplyCommentController::class, 'store']);
