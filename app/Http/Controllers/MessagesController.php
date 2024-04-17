@@ -33,4 +33,11 @@ class MessagesController extends Controller
             return redirect()->back()->with('error', 'Failed to delete message');
         }
     }
+
+
+    public function emailUserView()
+    {
+        $emails = DB::table('contactMessages')->get(); // Obtener todos los registros de la tabla contactMessages
+        return view('emailsUser.emailsUser', compact('emails')); // Pasar los datos a la vista
+    }
 }

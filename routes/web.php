@@ -67,8 +67,6 @@ Route::get('/contact', [ContactController::class, 'contactView'])->name('contact
 //Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
 
-//Emails
-Route::post('/emailUser', [MessagesController::class, 'emailUserView'])->name('emailUser.view');
 
 
 
@@ -165,9 +163,10 @@ Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAd
 
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
-//Rutes para el email part de admin
+//Rutes para el email part de admin/usuari
 Route::get('/paneladminEmail', [MessagesController::class, 'getEmailView'])->name('getEmailView');
 Route::post('/messages/{id}', [MessagesController::class, 'destroy'])->name('delete.message');
+Route::get('/emailUser', [MessagesController::class, 'emailUserView'])->name('emailUserView');
 
 
 

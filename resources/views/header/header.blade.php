@@ -48,6 +48,7 @@
                         <a href="{{ route('ProfileView') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Profile</a>
                         <a href="{{ route('emailUserView') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Email</a>
                         <a href="{{ route('logout') }}" class="block px-4 py-2 text-gray-800 hover:bg-gray-200">Log out</a>
+
                     </div>
                 @else
                     <!-- Menú desplegable para no Admin -->
