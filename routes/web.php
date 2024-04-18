@@ -133,7 +133,8 @@ Route::get('/communities/{community}/{id_post}', function () {
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-
+Route::get('/user-count-by-month', [UserController::class, 'userCountByMonth']);
+Route::get('/post-count-by-category', [PostsController::class, 'postCountByCategory']);
 
 // Rutas protegidas por el middleware CheckRole
 
@@ -146,7 +147,6 @@ Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('pane
 Route::put('/posts/{post}/toggle', [PostsController::class, 'toggleActivation'])->name('posts.toggle');
 Route::get('/posts/{post}', [PostsController::class, 'showPostById'])->name('post.show');
 Route::put('/posts/edit/{post}', [PostsController::class, 'updatePost'])->name('update.post');
-Route::get('/post-count-by-category', [PostsController::class, 'postCountByCategory']);
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
 Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('users.toggleIsActive');
