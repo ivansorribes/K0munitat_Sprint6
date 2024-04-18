@@ -20,6 +20,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\LikeCommentController;
 use App\Http\Controllers\ReplyCommentController;
+use App\Http\Controllers\LikeReplyCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -229,3 +230,4 @@ Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy
 Route::post('/comments/{commentId}/likes', [LikeCommentController::class, 'like'])->middleware('auth');
 Route::put('/posts/{id_post}', [PostsController::class, 'update']);
 Route::post('/comments/{commentId}/reply', [ReplyCommentController::class, 'store']);
+Route::post('/replies/{replyId}/likes', [LikeReplyCommentController::class, 'likeReply'])->middleware('auth');

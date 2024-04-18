@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { createRoot } from "react-dom/client";
 import { CommentLikeButton } from "../components/CommentLikeButton";
 import { ReplyBox } from "../components/ReplyBox";
+import { ReplyLikeButton } from "../components/ReplyLikeButton";
 
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
@@ -178,6 +179,45 @@ export default function AdvertisementComments() {
             .catch(error => console.error('Error al intentar dar like al comentario:', error));
     };
 
+    const onToggleLikeReply = (replyId, commentId) => {
+        fetch(`/replies/${replyId}/likes`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            },
+            body: JSON.stringify({ id_reply: replyId })
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Update the comments state to reflect the like change
+                    setComments(prevComments =>
+                        prevComments.map(comment => {
+                            if (comment.id === commentId) {
+                                return {
+                                    ...comment,
+                                    replies: comment.replies.map(reply => {
+                                        if (reply.id === replyId) {
+                                            const updatedLiked = !reply.liked;
+                                            return {
+                                                ...reply,
+                                                liked: updatedLiked,
+                                                likes_count: updatedLiked ? reply.likes_count + 1 : reply.likes_count - 1
+                                            };
+                                        }
+                                        return reply;
+                                    })
+                                };
+                            }
+                            return comment;
+                        })
+                    );
+                }
+            })
+            .catch(error => console.error('Error when toggling like on reply:', error));
+    };
 
 
     return (
@@ -243,6 +283,12 @@ export default function AdvertisementComments() {
                                                         <p className="text-xs text-neutral font-extrabold">{reply.user.username}</p>
                                                     </div>
                                                     <p className="text-xs text-neutral">{reply.reply}</p>
+                                                    <ReplyLikeButton
+                                                        replyId={reply.id}
+                                                        liked={reply.liked || false}
+                                                        likesCount={reply.likes_count}
+                                                        onToggleLikeReply={() => onToggleLikeReply(reply.id, comment.id)} // Pass as a callback
+                                                    />
                                                 </div>
                                             ))}
                                         </div>

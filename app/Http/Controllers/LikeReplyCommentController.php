@@ -8,11 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class LikeReplyCommentController extends Controller
 {
-    public function likeReply(Request $request)
+    public function likeReply(Request $request, $replyId) // Include $replyId here
     {
-        $replyId = $request->id_reply;
-
-        $like = LikeReplyComment::where('id_reply', $replyId)->where('id_user', Auth::id())->first();
+        $like = LikeReplyComment::where('id_reply', $replyId)
+            ->where('id_user', Auth::id())
+            ->first();
 
         if ($like) {
             $like->delete();
