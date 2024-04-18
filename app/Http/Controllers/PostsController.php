@@ -221,6 +221,11 @@ class PostsController extends Controller
         ])->findOrFail($id_post);
 
         $post->liked = $post->likes->contains('user_id', Auth::id());
+
+        $post->images->each(function ($image) {
+            $image->url = URL::to('img/post/' . $image->name);
+        });
+
         $post->comments->each(function ($comment) {
             $comment->likes_count = $comment->likes()->count();
             $comment->replies->each(function ($reply) {
