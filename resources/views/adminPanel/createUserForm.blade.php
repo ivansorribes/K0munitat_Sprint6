@@ -14,6 +14,7 @@
         <form action="{{ route('storeUser') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+
                 <div class="flex flex-wrap -mx-2">
                     <div class="w-full md:w-1/3 px-2 mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="firstname">Name</label>
