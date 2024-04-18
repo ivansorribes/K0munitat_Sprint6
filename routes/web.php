@@ -63,7 +63,7 @@ Route::post('/deleteUserImage', [UserController::class, 'deleteUserImage'])->nam
 //Contact
 Route::get('/contact', [ContactController::class, 'contactView'])->name('contact.view')->middleware('auth');
 //Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/sendEmail', [ContactController::class, 'store'])->name('contact.store');
 
 
 
@@ -164,7 +164,12 @@ Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 //Rutes para el email part de admin/usuari
 Route::get('/paneladminEmail', [MessagesController::class, 'getEmailView'])->name('getEmailView');
 Route::post('/messages/{id}', [MessagesController::class, 'destroy'])->name('delete.message');
+Route::post('/messagesRestoreAdmin/{id}', [MessagesController::class, 'restoreAdmin'])->name('restoreAdmin.message');
+Route::post('/reply-message', [MessagesController::class, 'replyMessage'])->name('reply.message');
 Route::get('/emailUser', [MessagesController::class, 'emailUserView'])->name('emailUserView');
+Route::post('/messagesDelete/{id}', [MessagesController::class, 'Delete'])->name('eliminate.message');
+Route::post('/messagesRestore/{id}', [MessagesController::class, 'restore'])->name('restore.message');
+
 
 
 
