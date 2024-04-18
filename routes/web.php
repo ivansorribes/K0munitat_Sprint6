@@ -10,7 +10,6 @@ use App\Http\Controllers\CommunitiesController;
 use App\Http\Controllers\autonomousCommunitiesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
-use App\Http\Controllers\HeaderController;
 use App\Http\Controllers\BlogController;
 use App\Models\communitiesUsers;
 use App\Http\Controllers\LikePostController;
@@ -19,9 +18,8 @@ use App\Http\Controllers\CommunityRequestController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessagesController;
-
-
-
+use App\Http\Controllers\LikeCommentController;
+use App\Http\Controllers\ReplyCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -65,7 +63,9 @@ Route::post('/deleteUserImage', [UserController::class, 'deleteUserImage'])->nam
 //Contact
 Route::get('/contact', [ContactController::class, 'contactView'])->name('contact.view')->middleware('auth');
 //Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/sendEmail', [ContactController::class, 'store'])->name('contact.store');
+
+
 
 
 // FORGOT PASSWORD / PASSWORD-RESET
@@ -152,6 +152,8 @@ Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActiv
 Route::get('/users/{id}/detail', [UserController::class, 'showDetail'])->name('users.detail');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
 Route::post('/users', [UserController::class, 'store'])->name('storeUser');
+Route::delete('/users/{id}/destroy', [UserController::class, 'destroy'])->name('deleteUser');
+
 Route::get('/createUserForm', function () {
     return view('adminPanel.createUserForm');
 })->name('createUserForm');
@@ -161,9 +163,15 @@ Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAd
 
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
-//Rutes para el email part de admin
+//Rutes para el email part de admin/usuari
 Route::get('/paneladminEmail', [MessagesController::class, 'getEmailView'])->name('getEmailView');
 Route::post('/messages/{id}', [MessagesController::class, 'destroy'])->name('delete.message');
+Route::post('/messagesRestoreAdmin/{id}', [MessagesController::class, 'restoreAdmin'])->name('restoreAdmin.message');
+Route::post('/reply-message', [MessagesController::class, 'replyMessage'])->name('reply.message');
+Route::get('/emailUser', [MessagesController::class, 'emailUserView'])->name('emailUserView');
+Route::post('/messagesDelete/{id}', [MessagesController::class, 'Delete'])->name('eliminate.message');
+Route::post('/messagesRestore/{id}', [MessagesController::class, 'restore'])->name('restore.message');
+
 
 
 
@@ -218,4 +226,6 @@ Route::post('/posts/{post}/likes', [LikePostController::class, 'like'])->middlew
 
 Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
 Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);
+Route::post('/comments/{commentId}/likes', [LikeCommentController::class, 'like'])->middleware('auth');
 Route::put('/posts/{id_post}', [PostsController::class, 'update']);
+Route::post('/comments/{commentId}/reply', [ReplyCommentController::class, 'store']);

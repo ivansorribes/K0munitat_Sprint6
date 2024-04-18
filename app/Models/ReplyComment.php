@@ -5,22 +5,22 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class contactMessages extends Model
+class ReplyComment extends Model
 {
     use HasFactory;
 
-    protected $table = 'contactMessages';
-
+    protected $table = 'reply_comments';
 
     protected $fillable = [
-        'sender_name',
-        'phone',
-        'email',
-        'message',
-        'read',
+        'reply',
         'id_user',
-        'isActive'
+        'id_comment'
     ];
+
+    public function comment()
+    {
+        return $this->belongsTo(commentsPosts::class, 'id_comment');
+    }
 
     public function user()
     {

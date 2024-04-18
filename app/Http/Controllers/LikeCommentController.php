@@ -4,9 +4,28 @@ namespace App\Http\Controllers;
 
 use App\Models\LikeComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class LikeCommentController extends Controller
 {
+    public function like(Request $request)
+    {
+        $commentId = $request->id_comment;
+
+        $like = LikeComment::where('id_comment', $commentId)->where('id_user', Auth::id())->first();
+
+        if ($like) {
+            $like->delete();
+        } else {
+            $newLike = new LikeComment();
+            $newLike->id_comment = $commentId;
+            $newLike->id_user = Auth::id();
+            $newLike->save();
+        }
+
+        return response()->json(['success' => true]);
+    }
+
     /**
      * Display a listing of the resource.
      */

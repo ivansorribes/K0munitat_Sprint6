@@ -73,11 +73,20 @@ class PostsController extends Controller
         }
     }
 
-    public function updatePost(Request $request, posts $post)
+    public function updatePost(Request $request, Posts $post)
     {
-        $post->update($request->only(['title', 'description']));
-        return redirect()->back();
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        // Update the post with validated data
+        $post->update($validatedData);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Post updated successfully!');
     }
+
 
     public function toggleActivation(posts $post)
     {
@@ -184,18 +193,28 @@ class PostsController extends Controller
      */
     public function show(Request $request, $community, $id_post)
     {
-        $post = posts::with(['images' => function ($query) {
-            $query->select('id', 'id_post', 'name');
-        }, 'comments' => function ($query) {
-            $query->with(['user' => function ($q) {
-                // Asegúrate de ajustar la ruta a donde realmente se almacenan tus imágenes de perfil
-                $q->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
-            }])
-                ->select('id', 'id_post', 'id_user', 'comment');
-        }, 'user' => function ($query) { // Carga el usuario que creó el post
-            $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
-        }, 'likes'])
-            ->findOrFail($id_post);
+        $post = posts::with([
+            'images' => function ($query) {
+                $query->select('id', 'id_post', 'name');
+            },
+            'comments' => function ($query) {
+                $query->with([
+                    'user' => function ($q) {
+                        $q->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+                    },
+                    'replies' => function ($q) {
+                        $q->with(['user' => function ($query) {
+                            $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+                        }])
+                            ->select('id', 'id_comment', 'id_user', 'reply', 'created_at');
+                    }
+                ])->select('id', 'id_post', 'id_user', 'comment', 'created_at');
+            },
+            'user' => function ($query) { // Carga el usuario que creó el post
+                $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+            },
+            'likes'
+        ])->findOrFail($id_post);
 
         $post->liked = $post->likes->contains('user_id', Auth::id());
 
