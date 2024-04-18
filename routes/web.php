@@ -20,6 +20,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\LikeCommentController;
 use App\Http\Controllers\ReplyCommentController;
+use App\Http\Controllers\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -130,9 +132,7 @@ Route::get('/communities/{community}/{id_post}', function () {
 })->name('advertisements-posts.show');
 
 
-Route::get('/dashboard', function () {
-    return view('adminPanel.dashboard');
-})->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
 
 // Rutas protegidas por el middleware CheckRole
@@ -146,6 +146,7 @@ Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('pane
 Route::put('/posts/{post}/toggle', [PostsController::class, 'toggleActivation'])->name('posts.toggle');
 Route::get('/posts/{post}', [PostsController::class, 'showPostById'])->name('post.show');
 Route::put('/posts/edit/{post}', [PostsController::class, 'updatePost'])->name('update.post');
+Route::get('/post-count-by-category', [PostsController::class, 'postCountByCategory']);
 
 Route::get('/paneladminUsers', [UserController::class, 'userInfo'])->name('paneladminUsers');
 Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActive'])->name('users.toggleIsActive');
