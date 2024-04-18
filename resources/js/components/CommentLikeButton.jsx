@@ -1,6 +1,6 @@
 export function CommentLikeButton({ commentId, liked, likesCount, onToggleLike }) {
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-end gap-2">
             <button
                 className={`p-2 rounded-full ${liked ? 'text-red-500' : 'text-gray-400'} hover:text-red-500 transition-colors`}
                 onClick={() => onToggleLike(commentId)}

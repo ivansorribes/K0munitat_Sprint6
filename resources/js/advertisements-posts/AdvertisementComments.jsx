@@ -200,8 +200,8 @@ export default function AdvertisementComments() {
                             ) : (
                                 <div>
                                     <footer className="mb-2">
-                                        <div className="flex items-center justify-between"> {/* Contenedor Flex principal */}
-                                            <div className="flex items-center space-x-3"> {/* Contenedor para la imagen y el nombre de usuario */}
+                                        <div className="flex items-center justify-between w-full"> {/* Contenedor para la imagen y el nombre de usuario y el botón de likes */}
+                                            <div className="flex items-center space-x-3"> {/* Contenedor interno solo para la imagen y el nombre de usuario */}
                                                 <img
                                                     src={comment.user.profile_image}
                                                     alt="Profile Image"
@@ -217,6 +217,12 @@ export default function AdvertisementComments() {
                                                     <button onClick={() => handleDeleteClick(comment.id)} className="ml-2 py-1 px-3 text-xs font-bold text-neutral bg-red-500 rounded-lg hover:bg-red-600">Delete</button>
                                                 </div>
                                             )}
+                                            <CommentLikeButton
+                                                commentId={comment.id}
+                                                liked={comment.liked || false}
+                                                likesCount={comment.likes_count}
+                                                onToggleLike={onToggleLike}
+                                            />
                                         </div>
 
                                     </footer>
@@ -247,12 +253,6 @@ export default function AdvertisementComments() {
                                             onClick={() => setActiveReplyBox(activeReplyBox === comment.id ? null : comment.id)}
                                         >Reply
                                         </button>
-                                        <CommentLikeButton
-                                            commentId={comment.id}
-                                            liked={comment.liked || false}
-                                            likesCount={comment.likes_count}
-                                            onToggleLike={onToggleLike}
-                                        />
                                     </div>
                                     {activeReplyBox === comment.id && (
                                         <ReplyBox
