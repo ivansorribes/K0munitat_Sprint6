@@ -18,7 +18,7 @@ const CommunitiesList = () => {
   const [userCommunities, setUserCommunities] = useState([]);
   const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
   const [showScrollButton, setShowScrollButton] = useState(false); // Estado para mostrar el botón de scroll
-  const { data: apiData, loading: apiLoading } = useApiSwitcher(option);
+  const { data: responseData, loading: apiLoading } = useApiSwitcher(option);
   const [user, setUser] = useState([]);
 
   useEffect(() => {
@@ -35,17 +35,18 @@ const CommunitiesList = () => {
   }, []);
 
   useEffect(() => {
-    if (apiData && apiData.communities) {
-      setCommunities(prevCommunities => [...prevCommunities, ...apiData.communities]);
+    if (responseData && responseData.communities) {
+      setCommunities(prevCommunities => [...prevCommunities, ...responseData.communities]);
+      setPosts((prev) => [...prevCommunities, ...response.data.posts.data]);
     }
     setLoading(apiLoading);
-  }, [apiData, apiLoading]);
+  }, [responseData, apiLoading]);
 
   useEffect(() => {
-    if (apiData && apiData.user) {
-      setUser(apiData.user);
+    if (responseData && responseData.user) {
+      setUser(responseData.user);
     }
-  }, [apiData]);
+  }, [responseData]);
  
   useEffect(() => {
     const handleScroll = () => {
