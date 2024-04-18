@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ButtonSave } from './components/buttons';
-import { GoogleReCaptcha, GoogleReCaptchaProvider } from 'react-google-recaptcha-v3';
+
 
 
 function Contact() {
     const [formData, setFormData] = useState({
-        name: '',
-        phone: '',
-        email: '',
-        message: ''
+
     });
     const [submitSuccess, setSubmitSuccess] = useState(false); // Estado para el mensaje de confirmación
     const [showEmptyFieldsMessage, setShowEmptyFieldsMessage] = useState(false); // Estado para mostrar el mensaje de campos vacíos
@@ -32,15 +29,6 @@ function Contact() {
         }
     };
 
-    const [captchaIsDone, setCaptchaDone] = useState(false);
-    const key = '6LcGRZ8pAAAAAGFU9n6NNljY4TncKxkDhUz0PRCc';
-
-    function handleVerify(){
-        console.log('changed')
-        setCaptchaDone(true)
-    }
-
-    
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,7 +46,7 @@ function Contact() {
         }
 
         try {
-            const response = await fetch('/contact', {
+            const response = await fetch('/sendEmail', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -94,7 +82,8 @@ function Contact() {
             <div className="relative py-3 sm:max-w-xl sm:mx-auto">
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
                 <div className="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full max-w-md text-center">
-                    <h1 className="text-2xl font-bold mb-4">Contacto</h1>
+                    <h1 className="text-2xl font-bold mb-4">Contact</h1>
+                    <hr className="border-gray-800 my-0 mb-10" />
                     {submitSuccess && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
                         <strong className="font-bold">Success!</strong>
                         <span className="block sm:inline"> Form submitted successfully.</span>
@@ -111,15 +100,15 @@ function Contact() {
                         <div className="mb-4 relative">
                             <input
                                 autoComplete="off"
-                                id="name"
-                                name="name"
+                                id="user_name"
+                                name="user_name"
                                 type="text"
                                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
                                 value={formData.name}
                                 onChange={handleChange}
                             />
                             <label
-                                htmlFor="name"
+                                htmlFor="user_name"
                                 className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
                             >
                                 Name
@@ -128,15 +117,15 @@ function Contact() {
                         <div className="mb-4 relative">
                             <input
                                 autoComplete="off"
-                                id="phone"
-                                name="phone"
+                                id="user_phone"
+                                name="user_phone"
                                 type="tel"
                                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
                                 value={formData.phone}
                                 onChange={handleChange}
                             />
                             <label
-                                htmlFor="phone"
+                                htmlFor="user_phone"
                                 className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
                             >
                                 Phone
@@ -145,15 +134,15 @@ function Contact() {
                         <div className="mb-4 relative">
                             <input
                                 autoComplete="off"
-                                id="email"
-                                name="email"
+                                id="user_email"
+                                name="user_email"
                                 type="email"
                                 className="peer h-10 w-full border-b-2 border-gray-300 text-gray-900 focus:outline-none focus:border-yellow-600"
                                 value={formData.email}
                                 onChange={handleChange}
                             />
                             <label
-                                htmlFor="email"
+                                htmlFor="user_email"
                                 className="absolute left-0 -top-3.5 text-gray-600 text-sm peer-placeholder-shown:text-base peer-placeholder-shown:text-gray-440 peer-placeholder-shown:top-2 transition-all peer-focus:-top-3.5 peer-focus:text-gray-600 peer-focus:text-sm"
                             >
                                 Email
@@ -174,13 +163,11 @@ function Contact() {
                                 Message
                             </label>
                         </div>
-                        <GoogleReCaptchaProvider reCaptchaKey={key}>
-                            <GoogleReCaptcha onVerify={handleVerify} />
-                        </GoogleReCaptchaProvider>,
                         <div className="relative mb-4">
-                            {captchaIsDone && <ButtonSave type="submit" label="Send" />}
+                            <ButtonSave type="submit" label="Send" />
                         </div>
                     </form>
+
                 </div>
             </div>
         </div>

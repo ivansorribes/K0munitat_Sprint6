@@ -130,12 +130,13 @@ const CommunitiesList = () => {
             </svg>
           </button>
         )}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {filteredCommunities.map((community) => (
             <CommunityCard
               key={community.id}
               community={community}
               option={userCommunities.includes(community.id) || community.private === 0 ? 'enter' : 'send'}
+              user={user}
             />
           ))}
         </div>

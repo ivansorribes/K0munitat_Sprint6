@@ -16,6 +16,7 @@ use App\Models\comments;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
 {

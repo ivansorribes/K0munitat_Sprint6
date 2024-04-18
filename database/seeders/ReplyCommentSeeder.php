@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\commentsPosts;
+use App\Models\ReplyComment;
 
-class commentsPostsSeeder extends Seeder
+class ReplyCommentSeeder extends Seeder
 {
     /**
      * Run the database seeds.
      */
     public function run(): void
     {
-        commentsPosts::factory(20)->create();
+        ReplyComment::factory()->count(50)->create();
     }
 }

@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
-use App\Models\autonomousCommunities;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
@@ -27,5 +26,8 @@ class DatabaseSeeder extends Seeder
         $this->call(likesPostsSeeder::class);
         $this->call(post_admin_blogSeeder::class);
         $this->call(EventSeeder::class);
+        $this->call(CommunityRequestSeeder::class);
+        $this->call(likesCommentsSeeder::class);
+        $this->call(ReplyCommentSeeder::class);
     }
 }
