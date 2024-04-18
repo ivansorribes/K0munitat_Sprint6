@@ -152,6 +152,8 @@ Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActiv
 Route::get('/users/{id}/detail', [UserController::class, 'showDetail'])->name('users.detail');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
 Route::post('/users', [UserController::class, 'store'])->name('storeUser');
+Route::delete('/users/{id}/destroy', [UserController::class, 'destroy'])->name('deleteUser');
+
 Route::get('/createUserForm', function () {
     return view('adminPanel.createUserForm');
 })->name('createUserForm');
