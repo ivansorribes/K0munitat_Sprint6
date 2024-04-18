@@ -73,11 +73,20 @@ class PostsController extends Controller
         }
     }
 
-    public function updatePost(Request $request, posts $post)
+    public function updatePost(Request $request, Posts $post)
     {
-        $post->update($request->only(['title', 'description']));
-        return redirect()->back();
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        // Update the post with validated data
+        $post->update($validatedData);
+
+        // Redirect back with a success message
+        return redirect()->back()->with('success', 'Post updated successfully!');
     }
+
 
     public function toggleActivation(posts $post)
     {
@@ -158,7 +167,7 @@ class PostsController extends Controller
                     $image = $request->file('image');
                     $imageName = time() . '.' . $image->getClientOriginalExtension();
                     $image->move(public_path('/img/post/'), $imageName);
-            
+
                     ImagePost::create([
                         'id_post' => $post->id,
                         'name' => $imageName,
@@ -169,7 +178,7 @@ class PostsController extends Controller
                     return back()->withErrors('Ha ocurrido un error al guardar la imagen. Por favor, intenta de nuevo.')->withInput();
                 }
             }
-            
+
 
 
             return redirect("/communities/{$communityId}");

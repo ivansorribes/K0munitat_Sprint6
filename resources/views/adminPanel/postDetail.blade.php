@@ -12,11 +12,30 @@
     @method('PUT') <!-- Método HTTP para la actualización -->
 
     <div class="container mx-auto px-4 py-8">
-        <h1 class="mt-16 text-2xl">
+        <h1 class="mt-16 text-2xl mb-4">
             Edit Post
         </h1>
+        <!-- Display validation errors -->
+
+
 
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+            @if ($errors->any())
+            <div class="alert bg-red-200">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+
+            <!-- Display success message -->
+            @if (session('success'))
+            <div class="alert bg-green-400">
+                {{ session('success') }}
+            </div>
+            @endif
 
             <div class="flex flex-wrap -mx-2 mt-5">
                 <div class="w-full md:w-1/3 px-2 mb-4">

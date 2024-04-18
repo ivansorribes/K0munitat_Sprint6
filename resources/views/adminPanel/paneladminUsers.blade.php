@@ -23,7 +23,22 @@
                     Create User <span class="ml-2" aria-hidden="true">+</span>
                 </a>
             </div>
+            @if ($errors->any())
+            <div class="alert bg-red-200">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
 
+            <!-- Display success message -->
+            @if (session('success'))
+            <div class="alert bg-green-400 mb-5" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+                {{ session('success') }}
+            </div>
+            @endif
 
             <!-- Cards -->
 
