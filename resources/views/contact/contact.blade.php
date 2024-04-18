@@ -1,7 +1,7 @@
 
 
 @extends('layout.basic')
-@section('title', 'EditPersonalProfile')
+@section('title', 'Contact')
 @section('content')
 <div id="Contact"></div>
 <script>

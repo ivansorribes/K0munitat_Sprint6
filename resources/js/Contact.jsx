@@ -1,7 +1,6 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { ButtonSave } from './components/buttons';
-import emailjs from '@emailjs/browser';
 
 
 
@@ -47,7 +46,7 @@ function Contact() {
         }
 
         try {
-            const response = await fetch('/contact', {
+            const response = await fetch('/sendEmail', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -78,44 +77,13 @@ function Contact() {
         }
     };
 
-    const form = useRef();
-
-    const sendEmail = (e) => {
-        e.preventDefault();
-
-        emailjs
-            .sendForm('service_480gjd6', 'template_4k72k27', form.current, {
-                publicKey: 'n1bE4VIf9Fj8jWYkI',
-            })
-            .then(
-                (result) => {
-                    console.log(result.text)
-                    console.log('SUCCESS!');
-                    setSubmitSuccess(true); // Establecer el estado para mostrar el mensaje de confirmación
-
-                    // Reiniciar el formulario después de 1 segundos
-                    setTimeout(() => {
-                        setSubmitSuccess(false);
-                        setFormData({
-                            name: '',
-                            phone: '',
-                            email: '',
-                            message: ''
-                        });
-                    }, 1000);
-                },
-                (error) => {
-                    console.log('FAILED...', error);
-                },
-            );
-    };
-
     return (
         <div className="min-h-screen flex items-center justify-center bg-white-500 mt-14 mb-4">
             <div className="relative py-3 sm:max-w-xl sm:mx-auto">
                 <div className="absolute inset-0 bg-gradient-to-r from-yellow-300 to-yellow-600 shadow-lg transform -skew-y-6 sm:skew-y-0 sm:-rotate-6 sm:rounded-3xl"></div>
                 <div className="relative px-4 py-10 bg-white shadow-2xl sm:rounded-3xl sm:p-20 w-full max-w-md text-center">
-                    <h1 className="text-2xl font-bold mb-4">Contacto</h1>
+                    <h1 className="text-2xl font-bold mb-4">Contact</h1>
+                    <hr className="border-gray-800 my-0 mb-10" />
                     {submitSuccess && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4" role="alert">
                         <strong className="font-bold">Success!</strong>
                         <span className="block sm:inline"> Form submitted successfully.</span>
@@ -128,7 +96,7 @@ function Contact() {
                         <strong className="font-bold">Error!</strong>
                         <span className="block sm:inline"> Phone number can only contain numbers.</span>
                     </div>} {/* Mostrar mensaje de error en el campo de teléfono */}
-                    <form ref={form} onSubmit={sendEmail}>
+                    <form onSubmit={handleSubmit}>
                         <div className="mb-4 relative">
                             <input
                                 autoComplete="off"
