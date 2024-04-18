@@ -34,7 +34,6 @@ class autonomousCommunitiesSeeder extends Seeder
             ['name' => 'Rioja, La'],
             ['name' => 'Ceuta'],
             ['name' => 'Melilla'],
-            ['name' => 'Ceuta'],
         ]);
     }
 }
