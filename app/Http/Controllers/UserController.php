@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Redirect;
 use App\Models\comments;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -67,19 +68,50 @@ class UserController extends Controller
         return view('adminPanel.userDetails', ['user' => $user]);
     }
 
+    public function destroy($id)
+    {
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return redirect()->route('dashboard')->with('success', 'El usuario ha sido eliminado correctamente.');
+    }
+
     public function toggleIsActive($id)
     {
         $user = User::findOrFail($id);
         $user->isActive = !$user->isActive;
         $user->save();
-        return back();
+        return back()->with('success', 'User state changed successfully.');
     }
 
     public function update(Request $request, $id)
     {
         $user = User::findOrFail($id);
-        $user->update($request->only(['firstname', 'lastname', 'email', 'username', 'telephone', 'city', 'postcode', 'profile_description', 'profile_image', 'role']));
-        return back();
+
+        $request->validate([
+            'firstname' => ['required', 'string', 'max:255'],
+            'lastname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
+            'role' => ['required', 'string', Rule::in(['superAdmin', 'communityAdmin', 'communityMod', 'user'])],
+            'telephone' => ['required', 'integer'],
+            'city' => ['required', 'string', 'max:255'],
+            'postcode' => ['required', 'integer'],
+            'profile_description' => ['nullable', 'string', 'max:255'],
+            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
+        ]);
+
+        // Actualizar el usuario
+        $user->update($request->only(['firstname', 'lastname', 'email', 'username', 'telephone', 'city', 'postcode', 'profile_description', 'role']));
+
+        // Actualizar la imagen de perfil si se proporciona
+        if ($request->hasFile('profile_image')) {
+            $imagePath = $request->file('profile_image')->store('public/posts');
+            $user->profile_image = basename($imagePath);
+            $user->save();
+        }
+
+        return back()->with('success', 'User details updated successfully.');
     }
 
     public function postUser()
@@ -165,9 +197,9 @@ class UserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed', // La regla "confirmed" verifica que "password" y "password_confirmation" coincidan
             'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'city' => 'nullable|string|max:255',
-            'postcode' => 'nullable|string|max:255',
-            'telephone' => 'nullable|string|max:255',
+            'city' => 'required|string|max:255',
+            'postcode' => 'required|integer',
+            'telephone' => 'required|integer',
             'profile_description' => 'nullable|string',
         ]);
 
