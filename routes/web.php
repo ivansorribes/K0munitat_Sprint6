@@ -232,3 +232,4 @@ Route::put('/posts/{id_post}', [PostsController::class, 'update']);
 Route::post('/comments/{commentId}/reply', [ReplyCommentController::class, 'store']);
 Route::post('/replies/{replyId}/likes', [LikeReplyCommentController::class, 'likeReply'])->middleware('auth');
 Route::put('/replies/{replyId}', [ReplyCommentController::class, 'edit']);
+Route::delete('/replies/{replyId}', [ReplyCommentController::class, 'destroy']);

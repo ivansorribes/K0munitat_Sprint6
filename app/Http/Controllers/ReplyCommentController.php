@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ReplyComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ReplyCommentController extends Controller
 {
@@ -80,8 +81,20 @@ class ReplyCommentController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ReplyComment $replyComment)
+    public function destroy($replyId)
     {
-        //
+        // Busca la respuesta usando el modelo de respuestas (ajusta el nombre del modelo si es necesario)
+        $reply = ReplyComment::find($replyId);
+
+        // Verifica si la respuesta existe
+        if (!$reply) {
+            return response()->json(['message' => 'Reply not found'], 404);
+        }
+
+        // Elimina la respuesta
+        $reply->delete();
+
+        // Devuelve una respuesta indicando que la operación fue exitosa
+        return response()->json(['message' => 'Reply deleted'], 200);
     }
 }

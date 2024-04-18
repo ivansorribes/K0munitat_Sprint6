@@ -15,6 +15,10 @@ export default function AdvertisementComments() {
     const id_user = document.getElementById("id_user").value;
     const username = document.getElementById("username").value;
     const [activeReplyBox, setActiveReplyBox] = useState(null);
+    const [replyToDelete, setReplyToDelete] = useState(null);
+    const [isModalReplyOpen, setIsModalReplyOpen] = useState(false);
+    const [editingReplyId, setEditingReplyId] = useState(null);
+    const [editingReplyText, setEditingReplyText] = useState("");
 
     const fetchComments = () => {
         const pathParts = window.location.pathname.split('/');
@@ -220,6 +224,45 @@ export default function AdvertisementComments() {
     };
 
 
+    const handleEditReply = (reply) => {
+        setEditingReplyId(reply.id);
+        setEditingReplyText(reply.reply);  // Asumiendo que 'reply.reply' contiene el texto actual de la respuesta.
+    };
+
+
+    const handleDeleteReply = async () => {
+        if (!replyToDelete) return;
+
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        try {
+            const response = await fetch(`/replies/${replyToDelete}`, {
+                method: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': csrfToken,
+                },
+            });
+
+            if (!response.ok) {
+                throw new Error(`Network response was not ok: ${response.status}`);
+            }
+
+            // Update the state to filter out the deleted reply
+            setComments(prevComments => prevComments.map(comment => {
+                return {
+                    ...comment,
+                    replies: comment.replies.filter(reply => reply.id !== replyToDelete)
+                };
+            }));
+
+            // Reset and close modal after successful deletion
+            setReplyToDelete(null);
+            setIsModalReplyOpen(false);
+        } catch (error) {
+            console.error('Error deleting the reply:', error);
+        }
+    };
+
+
     return (
         <>
             <section className="bg-white py-8 lg:py-16 antialiased">
@@ -250,13 +293,14 @@ export default function AdvertisementComments() {
                                                 <p className="text-sm text-neutral font-extrabold">
                                                     {comment.user.username}
                                                 </p>
+                                                {comment.user.id == id_user && (
+                                                    <div>
+                                                        <button onClick={() => handleEditComment(comment)} className="py-1 px-3 text-xs font-bold text-neutral bg-[#62adde] rounded-lg hover:bg-blue-800">Edit</button>
+                                                        <button onClick={() => handleDeleteClick(comment.id)} className="ml-2 py-1 px-3 text-xs font-bold text-neutral bg-[#E51C1C] rounded-lg hover:bg-red-600">Delete</button>
+                                                    </div>
+                                                )}
                                             </div>
-                                            {comment.user.id == id_user && (
-                                                <div>
-                                                    <button onClick={() => handleEditComment(comment)} className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800">Edit</button>
-                                                    <button onClick={() => handleDeleteClick(comment.id)} className="ml-2 py-1 px-3 text-xs font-bold text-neutral bg-red-500 rounded-lg hover:bg-red-600">Delete</button>
-                                                </div>
-                                            )}
+
                                             <CommentLikeButton
                                                 commentId={comment.id}
                                                 liked={comment.liked || false}
@@ -275,24 +319,62 @@ export default function AdvertisementComments() {
                                             {comment.replies.map((reply) => (
                                                 <div key={reply.id} className="ml-4 mb-2 p-2 bg-gray-100 rounded-lg">
                                                     <div className="flex items-center space-x-3 mb-1">
-                                                        <img
-                                                            src={reply.user.profile_image}
-                                                            alt="Profile Image"
-                                                            className="h-6 w-6 rounded-full"
-                                                        />
+                                                        <img src={reply.user.profile_image} alt="Profile Image" className="h-6 w-6 rounded-full" />
                                                         <p className="text-xs text-neutral font-extrabold">{reply.user.username}</p>
+                                                        {reply.user.id == id_user && (
+                                                            <div>
+                                                                {editingReplyId === reply.id ? (
+                                                                    <>
+                                                                        <textarea
+                                                                            className="w-full p-2 text-xs text-neutral border border-neutral rounded-lg"
+                                                                            value={editingReplyText}
+                                                                            onChange={(e) => setEditingReplyText(e.target.value)}
+                                                                        />
+                                                                        <button
+                                                                            onClick={handleSaveReplyEdit} // Necesitas definir esta función
+                                                                            className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800">Save</button>
+                                                                        <button
+                                                                            onClick={() => setEditingReplyId(null)}
+                                                                            className="py-1 px-3 text-xs font-bold text-neutral bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                                                                    </>
+                                                                ) : (
+                                                                    <>
+                                                                        <button
+                                                                            onClick={() => handleEditReply(reply)}
+                                                                            className="py-1 px-3 text-xs font-bold text-neutral bg-[#62adde] rounded-lg hover:bg-blue-800">Edit</button>
+                                                                        <button
+                                                                            onClick={() => { setReplyToDelete(reply.id); setIsModalReplyOpen(true); }}
+                                                                            className="ml-2 py-1 px-3 text-xs font-bold text-neutral bg-[#E51C1C] rounded-lg hover:bg-red-600">Delete
+                                                                        </button>
+                                                                    </>
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
-                                                    <p className="text-xs text-neutral">{reply.reply}</p>
+                                                    {editingReplyId !== reply.id && <p className="text-xs text-neutral">{reply.reply}</p>}
                                                     <ReplyLikeButton
                                                         replyId={reply.id}
                                                         liked={reply.liked || false}
                                                         likesCount={reply.likes_count}
-                                                        onToggleLikeReply={() => onToggleLikeReply(reply.id, comment.id)} // Pass as a callback
+                                                        onToggleLikeReply={() => onToggleLikeReply(reply.id, comment.id)}
                                                     />
                                                 </div>
                                             ))}
+
+
+                                            {/* Modal: debe estar fuera del bucle map */}
+                                            {isModalReplyOpen && (
+                                                <div className="fixed inset-0 flex justify-center items-center">
+                                                    <div className="bg-white p-4 rounded-lg">
+                                                        <p>Are you sure you want to delete this reply?</p>
+                                                        <button onClick={handleDeleteReply} className="mr-2 py-2 px-4 text-xs font-bold text-white bg-red-500 rounded-lg hover:bg-red-600">Delete</button>
+                                                        <button onClick={() => setIsModalReplyOpen(false)} className="py-2 px-4 text-xs font-bold text-black bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     )}
+
                                     <div className="flex justify-between items-center mt-2">
                                         <button
                                             className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800"
@@ -357,7 +439,7 @@ export default function AdvertisementComments() {
                         />
                         <button
                             type="button"
-                            className="mt-2 py-2 px-4 text-xs font-bold text-neutral bg-secondary rounded-lg hover:bg-accent"
+                            className="mt-2 py-2 px-4 text-xs font-bold text-neutral bg-[#808080] rounded-lg hover:bg-accent"
                             onClick={handlePostComment}
                         >
                             Post comment
@@ -366,7 +448,7 @@ export default function AdvertisementComments() {
                 </div>
             </section>
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+                <div className="fixed inset-0 flex justify-center items-center">
                     <div className="bg-white p-4 rounded-lg">
                         <p>Are you sure you want to delete this comment?</p>
                         <button onClick={handleDeleteComment} className="mr-2 py-2 px-4 text-xs font-bold text-white bg-red-500 rounded-lg hover:bg-red-600">Delete</button>
