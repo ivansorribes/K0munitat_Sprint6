@@ -161,11 +161,18 @@ class CommunitiesController extends Controller
         $communitiesOpen = communities::where('private', 0)->get();
         return $communitiesOpen;
     }
-    public function communitiesList() 
+    public function communitiesList(Request $request) 
     {
         $user = Auth::user();
-        $communitiesList = communities::all();
+        // Obtener el número de página de la solicitud
+        $page = $request->input('page', 1);
+            
+        // Definir la cantidad de elementos por página
+        $perPage = 10; // Por ejemplo, 10 elementos por página
         
+        // Obtener las comunidades paginadas
+        $communitiesList = communities::paginate($perPage, ['*'], 'page', $page);
+         
         return response()->json([
             'communities' => $communitiesList,
             'user' => $user
@@ -184,5 +191,7 @@ class CommunitiesController extends Controller
         $user = Auth::user();
         return $user;
     }
+
+   
 
 }
