@@ -20,6 +20,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\LikeCommentController;
 use App\Http\Controllers\ReplyCommentController;
+use App\Http\Controllers\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -130,10 +132,9 @@ Route::get('/communities/{community}/{id_post}', function () {
 })->name('advertisements-posts.show');
 
 
-Route::get('/dashboard', function () {
-    return view('adminPanel.dashboard');
-})->name('dashboard');
-
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/user-count-by-month', [UserController::class, 'userCountByMonth']);
+Route::get('/post-count-by-category', [PostsController::class, 'postCountByCategory']);
 
 // Rutas protegidas por el middleware CheckRole
 
@@ -152,6 +153,8 @@ Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActiv
 Route::get('/users/{id}/detail', [UserController::class, 'showDetail'])->name('users.detail');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
 Route::post('/users', [UserController::class, 'store'])->name('storeUser');
+Route::delete('/users/{id}/destroy', [UserController::class, 'destroy'])->name('deleteUser');
+
 Route::get('/createUserForm', function () {
     return view('adminPanel.createUserForm');
 })->name('createUserForm');
