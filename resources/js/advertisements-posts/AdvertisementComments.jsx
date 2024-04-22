@@ -3,6 +3,7 @@ import { createRoot } from "react-dom/client";
 import { CommentLikeButton } from "../components/CommentLikeButton";
 import { ReplyBox } from "../components/ReplyBox";
 import { ReplyLikeButton } from "../components/ReplyLikeButton";
+import { fetchComments, postComment, saveEditedComment, deleteComment, toggleLike, toggleLikeReply, deleteReply } from "../helpers/api";
 
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
@@ -12,70 +13,39 @@ export default function AdvertisementComments() {
     const [postId, setPostId] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [commentToDelete, setCommentToDelete] = useState(null);
-    const id_user = document.getElementById("id_user").value;
+    // const userId = document.getElementById("id_user").value;
     const username = document.getElementById("username").value;
     const [activeReplyBox, setActiveReplyBox] = useState(null);
     const [replyToDelete, setReplyToDelete] = useState(null);
     const [isModalReplyOpen, setIsModalReplyOpen] = useState(false);
     const [editingReplyId, setEditingReplyId] = useState(null);
     const [editingReplyText, setEditingReplyText] = useState("");
-
-    const fetchComments = () => {
-        const pathParts = window.location.pathname.split('/');
-        const communityId = pathParts[pathParts.length - 2];
-        const postId = pathParts[pathParts.length - 1];
-        setPostId(postId);
-
-        fetch(`/api/communities/${communityId}/${postId}`)
-            .then(response => response.json())
-            .then(data => {
-                setComments(data.post.comments || []);
-            })
-            .catch(error => console.error('Error fetching post data:', error));
-    };
+    const [communityId, setCommunityId] = useState(null);
+    const [userId, setUserId] = useState(document.getElementById("id_user").value);  // Es mejor manejar esto de otra manera si es posible
+    const [trigger, setTrigger] = useState(0);
 
     useEffect(() => {
-        fetchComments(); // Llama a la función dentro de useEffect
-    }, []);
+        const pathParts = window.location.pathname.split('/');
+        const communityIdLocal = pathParts[pathParts.length - 2];
+        const postIdLocal = pathParts[pathParts.length - 1];
 
-    const handlePostComment = async () => {
-        const formData = new FormData();
-        formData.append('id_post', postId);
-        formData.append('id_user', id_user);
-        formData.append('comment', newComment);
+        setCommunityId(communityIdLocal);
+        setPostId(postIdLocal);
 
-        try {
-            const response = await fetch('/api/comments', {
-                method: 'POST',
-                body: formData,
-            });
-
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-
-            const newCommentData = await response.json();
-
-            const userProfileImageUrl = '';
-
-            const commentWithCompleteUserData = {
-                ...newCommentData,
-                user: {
-                    id: id_user,
-                    username: username,
-                    profile_image: userProfileImageUrl
-                }
+        if (communityIdLocal && postIdLocal) {
+            const loadComments = async () => {
+                const fetchedComments = await fetchComments(communityIdLocal, postIdLocal);
+                setComments(fetchedComments);
             };
 
-            setComments(prevComments => [...prevComments, commentWithCompleteUserData]);
-            fetchComments();
-            setNewComment('');
-        } catch (error) {
-            console.error('Error posting the comment:', error);
+            loadComments();
         }
+    }, [trigger]);
+
+    const handlePostComment = async () => {
+        await postComment(postId, userId, newComment, setComments, setNewComment);
+        setTrigger(oldTrigger => ++oldTrigger);
     };
-
-
 
     const handleEditComment = (comment) => {
         setEditingCommentId(comment.id);
@@ -87,39 +57,8 @@ export default function AdvertisementComments() {
         setEditingCommentText("");
     };
 
-    const handleSaveEdit = async () => {
-        try {
-            const data = JSON.stringify({
-                comment: editingCommentText,
-            });
-
-            const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-            const response = await fetch(`/comments/${editingCommentId}`, {
-                method: 'PUT',
-                body: data,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status}`);
-            }
-
-            const updatedCommentData = await response.json();
-
-            setComments(prevComments =>
-                prevComments.map(comment =>
-                    comment.id === editingCommentId ? { ...comment, comment: updatedCommentData.comment } : comment
-                )
-            );
-
-            handleCancelEdit();
-        } catch (error) {
-            console.error('Error updating the comment:', error);
-        }
+    const handleSaveEditComment = () => {
+        saveEditedComment(editingCommentId, editingCommentText, setComments, handleCancelEdit);
     };
 
     const handleDeleteClick = (commentId) => {
@@ -127,141 +66,26 @@ export default function AdvertisementComments() {
         setIsModalOpen(true);
     };
 
-    const handleDeleteComment = async () => {
-        if (!commentToDelete) return;
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-        try {
-            const response = await fetch(`/comments/${commentToDelete}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status}`);
-            }
-
-            setComments(comments.filter(comment => comment.id !== commentToDelete));
-            setIsModalOpen(false);
-            setCommentToDelete(null);
-        } catch (error) {
-            console.error('Error deleting the comment:', error);
-        }
+    const handleDeleteComment = () => {
+        deleteComment(commentToDelete, setComments, setIsModalOpen, setCommentToDelete);
     };
 
-    const onToggleLike = (commentId) => {
-        fetch(`/comments/${commentId}/likes`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ id_comment: commentId })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Actualiza el estado de los comentarios para reflejar el cambio de like
-                    setComments(prevComments =>
-                        prevComments.map(comment => {
-                            if (comment.id === commentId) {
-                                const updatedLiked = !comment.liked;
-                                return {
-                                    ...comment,
-                                    liked: updatedLiked,
-                                    likes_count: updatedLiked ? comment.likes_count + 1 : comment.likes_count - 1
-                                };
-                            }
-                            return comment;
-                        })
-                    );
-                }
-            })
-            .catch(error => console.error('Error al intentar dar like al comentario:', error));
+    const onToggleLikeComment = (commentId) => {
+        toggleLike(commentId, setComments);
     };
 
     const onToggleLikeReply = (replyId, commentId) => {
-        fetch(`/replies/${replyId}/likes`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-            },
-            body: JSON.stringify({ id_reply: replyId })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    // Update the comments state to reflect the like change
-                    setComments(prevComments =>
-                        prevComments.map(comment => {
-                            if (comment.id === commentId) {
-                                return {
-                                    ...comment,
-                                    replies: comment.replies.map(reply => {
-                                        if (reply.id === replyId) {
-                                            const updatedLiked = !reply.liked;
-                                            return {
-                                                ...reply,
-                                                liked: updatedLiked,
-                                                likes_count: updatedLiked ? reply.likes_count + 1 : reply.likes_count - 1
-                                            };
-                                        }
-                                        return reply;
-                                    })
-                                };
-                            }
-                            return comment;
-                        })
-                    );
-                }
-            })
-            .catch(error => console.error('Error when toggling like on reply:', error));
+        toggleLikeReply(replyId, commentId, setComments);
     };
-
 
     const handleEditReply = (reply) => {
         setEditingReplyId(reply.id);
-        setEditingReplyText(reply.reply);  // Asumiendo que 'reply.reply' contiene el texto actual de la respuesta.
+        setEditingReplyText(reply.reply);
     };
 
-
-    const handleDeleteReply = async () => {
-        if (!replyToDelete) return;
-
-        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-        try {
-            const response = await fetch(`/replies/${replyToDelete}`, {
-                method: 'DELETE',
-                headers: {
-                    'X-CSRF-TOKEN': csrfToken,
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error(`Network response was not ok: ${response.status}`);
-            }
-
-            // Update the state to filter out the deleted reply
-            setComments(prevComments => prevComments.map(comment => {
-                return {
-                    ...comment,
-                    replies: comment.replies.filter(reply => reply.id !== replyToDelete)
-                };
-            }));
-
-            // Reset and close modal after successful deletion
-            setReplyToDelete(null);
-            setIsModalReplyOpen(false);
-        } catch (error) {
-            console.error('Error deleting the reply:', error);
-        }
+    const handleDeleteReply = () => {
+        deleteReply(replyToDelete, setComments, setReplyToDelete, setIsModalReplyOpen);
     };
-
 
     return (
         <>
@@ -277,7 +101,7 @@ export default function AdvertisementComments() {
                                         value={editingCommentText}
                                         onChange={(e) => setEditingCommentText(e.target.value)}
                                     />
-                                    <button onClick={handleSaveEdit} className="mr-2 py-2 px-4 text-xs font-bold text-neutral bg-secondary rounded-lg hover:bg-accent">Save</button>
+                                    <button onClick={handleSaveEditComment} className="mr-2 py-2 px-4 text-xs font-bold text-neutral bg-secondary rounded-lg hover:bg-accent">Save</button>
                                     <button onClick={handleCancelEdit} className="py-2 px-4 text-xs font-bold text-neutral bg-gray-300 rounded-lg hover:bg-gray-400">Cancel</button>
                                 </div>
                             ) : (
@@ -293,7 +117,7 @@ export default function AdvertisementComments() {
                                                 <p className="text-sm text-neutral font-extrabold">
                                                     {comment.user.username}
                                                 </p>
-                                                {comment.user.id == id_user && (
+                                                {comment.user.id == userId && (
                                                     <div>
                                                         <button onClick={() => handleEditComment(comment)} className="py-1 px-3 text-xs font-bold text-neutral bg-[#62adde] rounded-lg hover:bg-blue-800">Edit</button>
                                                         <button onClick={() => handleDeleteClick(comment.id)} className="ml-2 py-1 px-3 text-xs font-bold text-neutral bg-[#E51C1C] rounded-lg hover:bg-red-600">Delete</button>
@@ -303,9 +127,9 @@ export default function AdvertisementComments() {
 
                                             <CommentLikeButton
                                                 commentId={comment.id}
-                                                liked={comment.liked || false}
+                                                liked={comment.liked}
                                                 likesCount={comment.likes_count}
-                                                onToggleLike={onToggleLike}
+                                                onToggleLike={onToggleLikeComment}
                                             />
                                         </div>
 
@@ -321,7 +145,7 @@ export default function AdvertisementComments() {
                                                     <div className="flex items-center space-x-3 mb-1">
                                                         <img src={reply.user.profile_image} alt="Profile Image" className="h-6 w-6 rounded-full" />
                                                         <p className="text-xs text-neutral font-extrabold">{reply.user.username}</p>
-                                                        {reply.user.id == id_user && (
+                                                        {reply.user.id == userId && (
                                                             <div>
                                                                 {editingReplyId === reply.id ? (
                                                                     <>
