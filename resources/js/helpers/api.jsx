@@ -247,3 +247,49 @@ export const sendReply = async (commentId, replyText, setActiveReplyBox, fetchCo
         console.error("Error al enviar la respuesta:", error);
     }
 };
+
+export const saveEditedReply = async (replyId, replyText, setComments, handleCancelEdit) => {
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    const data = JSON.stringify({
+        reply: replyText
+    });
+
+    try {
+        console.log("Sending data to the server:", data);
+        const response = await fetch(`/replies/${replyId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+            body: data,
+        });
+
+        if (!response.ok) {
+            throw new Error(`Network response was not ok: ${response.status}`);
+        }
+
+        let updatedReply;
+        if (response.status !== 204) {  // Asumiendo que el servidor podría no devolver contenido.
+            const textResponse = await response.text();
+            console.log("Response from server:", textResponse);
+            if (textResponse) {
+                updatedReply = JSON.parse(textResponse);
+            }
+        }
+
+        // Asumimos que el servidor no devuelve el nuevo texto de la respuesta, usamos el enviado.
+        setComments(prevComments =>
+            prevComments.map(comment => ({
+                ...comment,
+                replies: comment.replies.map(reply =>
+                    reply.id === replyId ? { ...reply, reply: updatedReply ? updatedReply.reply : replyText } : reply
+                )
+            }))
+        );
+
+        handleCancelEdit();  // Cierra el editor
+    } catch (error) {
+        console.error('Error updating the reply:', error);
+    }
+};

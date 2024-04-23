@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { CommentLikeButton } from "../components/CommentLikeButton";
 import { ReplyBox } from "../components/ReplyBox";
 import { ReplyLikeButton } from "../components/ReplyLikeButton";
-import { fetchComments, postComment, saveEditedComment, deleteComment, toggleLike, toggleLikeReply, deleteReply, sendReply } from "../helpers/api";
+import { fetchComments, postComment, saveEditedComment, deleteComment, toggleLike, toggleLikeReply, deleteReply, sendReply, saveEditedReply } from "../helpers/api";
 
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
@@ -92,6 +92,11 @@ export default function AdvertisementComments() {
         setTrigger(oldTrigger => oldTrigger + 1);
     };
 
+    const handleSaveReplyEdit = () => {
+        saveEditedReply(editingReplyId, editingReplyText, setComments, handleCancelEdit);
+        setTrigger(oldTrigger => oldTrigger + 1);
+    };
+
     return (
         <>
             <section className="bg-white py-8 lg:py-16 antialiased">
@@ -160,7 +165,7 @@ export default function AdvertisementComments() {
                                                                             onChange={(e) => setEditingReplyText(e.target.value)}
                                                                         />
                                                                         <button
-                                                                            onClick={handleSaveReplyEdit} // Necesitas definir esta función
+                                                                            onClick={handleSaveReplyEdit}
                                                                             className="py-1 px-3 text-xs font-bold text-neutral bg-blue-500 rounded-lg hover:bg-blue-800">Save</button>
                                                                         <button
                                                                             onClick={() => setEditingReplyId(null)}

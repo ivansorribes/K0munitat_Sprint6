@@ -73,9 +73,26 @@ class ReplyCommentController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ReplyComment $replyComment)
+    public function update(Request $request, $replyId)
     {
-        //
+        $request->validate([
+            'reply' => 'required|string|max:500',
+        ]);
+
+        $reply = ReplyComment::findOrFail($replyId);
+
+        // Verificar que el usuario tiene permiso para editar esta respuesta
+        if (auth()->id() !== $reply->id_user) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
+        $reply->reply = $request->reply;
+        $reply->save();
+
+        return response()->json([
+            'message' => 'Reply updated successfully',
+            'reply' => $reply
+        ]);
     }
 
     /**
