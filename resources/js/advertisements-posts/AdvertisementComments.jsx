@@ -93,7 +93,8 @@ export default function AdvertisementComments() {
     };
 
     const handleSaveReplyEdit = () => {
-        saveEditedReply(editingReplyId, editingReplyText, setComments, handleCancelEdit);
+        saveEditedReply(editingReplyId, editingReplyText, setComments);
+        setEditingReplyId(null);
         setTrigger(oldTrigger => oldTrigger + 1);
     };
 

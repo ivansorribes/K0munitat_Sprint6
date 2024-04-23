@@ -248,7 +248,7 @@ export const sendReply = async (commentId, replyText, setActiveReplyBox, fetchCo
     }
 };
 
-export const saveEditedReply = async (replyId, replyText, setComments, handleCancelEdit) => {
+export const saveEditedReply = async (replyId, replyText, setComments) => {
     const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     const data = JSON.stringify({
         reply: replyText
@@ -269,16 +269,8 @@ export const saveEditedReply = async (replyId, replyText, setComments, handleCan
             throw new Error(`Network response was not ok: ${response.status}`);
         }
 
-        let updatedReply;
-        if (response.status !== 204) {  // Asumiendo que el servidor podría no devolver contenido.
-            const textResponse = await response.text();
-            console.log("Response from server:", textResponse);
-            if (textResponse) {
-                updatedReply = JSON.parse(textResponse);
-            }
-        }
+        let updatedReply = await response.json();
 
-        // Asumimos que el servidor no devuelve el nuevo texto de la respuesta, usamos el enviado.
         setComments(prevComments =>
             prevComments.map(comment => ({
                 ...comment,
@@ -287,8 +279,6 @@ export const saveEditedReply = async (replyId, replyText, setComments, handleCan
                 )
             }))
         );
-
-        handleCancelEdit();  // Cierra el editor
     } catch (error) {
         console.error('Error updating the reply:', error);
     }

@@ -89,10 +89,7 @@ class ReplyCommentController extends Controller
         $reply->reply = $request->reply;
         $reply->save();
 
-        return response()->json([
-            'message' => 'Reply updated successfully',
-            'reply' => $reply
-        ]);
+        return response()->json($reply, 200);
     }
 
     /**
