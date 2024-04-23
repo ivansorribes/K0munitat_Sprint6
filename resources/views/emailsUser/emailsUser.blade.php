@@ -30,7 +30,7 @@
                             <td class="px-6 py-4 whitespace-nowrap">{{ $email->sender_name }}</td>
                             <td class="px-6 py-4 max-w-sm truncate" onclick="openMessageModal('{{ $email->message }}')">{{ $email->message }}</td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <button onclick="confirmDelete(event, {{ $email->id }})" style="background-color: #E51C1C" class="text-white px-4 py-2 rounded-md mr-2 w-32 h-full">Delete</button>
+                                <button onclick="confirmDelete(event, {{ $email->id }}) style="background-color: #E51C1C" class="text-white px-4 py-2 rounded-md mr-2 w-32 h-full">Delete</button>
                             </td>
                         </tr>
                     @endforeach
