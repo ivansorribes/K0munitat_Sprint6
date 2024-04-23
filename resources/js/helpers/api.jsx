@@ -220,3 +220,30 @@ export const deleteReply = async (replyToDelete, setComments, setReplyToDelete, 
         console.error('Error deleting the reply:', error);
     }
 };
+
+export const sendReply = async (commentId, replyText, setActiveReplyBox, fetchComments) => {
+    const data = JSON.stringify({
+        reply: replyText
+    });
+
+    try {
+        const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+        const response = await fetch(`/comments/${commentId}/reply`, {
+            method: 'POST',
+            body: data,
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': csrfToken,
+            },
+        });
+
+        if (response.ok) {
+            console.log("Respuesta enviada con éxito");
+            setActiveReplyBox(null); // Cierra el cuadro de respuesta después de enviar
+        } else {
+            console.error("Error al enviar la respuesta");
+        }
+    } catch (error) {
+        console.error("Error al enviar la respuesta:", error);
+    }
+};

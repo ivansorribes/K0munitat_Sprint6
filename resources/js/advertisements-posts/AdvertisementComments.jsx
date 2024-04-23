@@ -3,7 +3,7 @@ import { createRoot } from "react-dom/client";
 import { CommentLikeButton } from "../components/CommentLikeButton";
 import { ReplyBox } from "../components/ReplyBox";
 import { ReplyLikeButton } from "../components/ReplyLikeButton";
-import { fetchComments, postComment, saveEditedComment, deleteComment, toggleLike, toggleLikeReply, deleteReply } from "../helpers/api";
+import { fetchComments, postComment, saveEditedComment, deleteComment, toggleLike, toggleLikeReply, deleteReply, sendReply } from "../helpers/api";
 
 export default function AdvertisementComments() {
     const [comments, setComments] = useState([]);
@@ -87,6 +87,11 @@ export default function AdvertisementComments() {
         deleteReply(replyToDelete, setComments, setReplyToDelete, setIsModalReplyOpen);
     };
 
+    const handleReply = (commentId, replyText) => {
+        sendReply(commentId, replyText, setActiveReplyBox, fetchComments);
+        setTrigger(oldTrigger => oldTrigger + 1);
+    };
+
     return (
         <>
             <section className="bg-white py-8 lg:py-16 antialiased">
@@ -107,8 +112,8 @@ export default function AdvertisementComments() {
                             ) : (
                                 <div>
                                     <footer className="mb-2">
-                                        <div className="flex items-center justify-between w-full"> {/* Contenedor para la imagen y el nombre de usuario y el botón de likes */}
-                                            <div className="flex items-center space-x-3"> {/* Contenedor interno solo para la imagen y el nombre de usuario */}
+                                        <div className="flex items-center justify-between w-full">
+                                            <div className="flex items-center space-x-3">
                                                 <img
                                                     src={comment.user.profile_image}
                                                     alt="Profile Image"
@@ -184,8 +189,6 @@ export default function AdvertisementComments() {
                                                     />
                                                 </div>
                                             ))}
-
-
                                             {/* Modal: debe estar fuera del bucle map */}
                                             {isModalReplyOpen && (
                                                 <div className="fixed inset-0 flex justify-center items-center">
@@ -208,47 +211,14 @@ export default function AdvertisementComments() {
                                     </div>
                                     {activeReplyBox === comment.id && (
                                         <ReplyBox
-                                            commentId={comment.id} // Asegúrate de pasar el ID del comentario
-                                            onSendReply={async (replyText) => {
-                                                console.log("Reply text for comment ID", comment.id, ":", replyText);
-
-                                                // Construyendo el objeto de datos
-                                                const data = JSON.stringify({
-                                                    reply: replyText
-                                                });
-
-                                                try {
-                                                    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                                                    const response = await fetch(`/comments/${comment.id}/reply`, {
-                                                        method: 'POST',
-                                                        body: data,
-                                                        headers: {
-                                                            'Content-Type': 'application/json',
-                                                            'X-CSRF-TOKEN': csrfToken, // Asegúrate de tener csrfToken disponible
-                                                        },
-                                                    });
-
-                                                    if (response.ok) {
-                                                        console.log("Respuesta enviada con éxito");
-                                                        // Aquí puedes agregar lógica adicional para actualizar la UI según sea necesario
-                                                    } else {
-                                                        console.error("Error al enviar la respuesta");
-                                                    }
-                                                } catch (error) {
-                                                    console.error("Error al enviar la respuesta:", error);
-                                                }
-
-                                                setActiveReplyBox(null); // Opcional: Cierra el cuadro de respuesta después de enviar
-                                                fetchComments();
-                                            }}
+                                            key={comment.id}
+                                            commentId={comment.id}
+                                            onSendReply={(replyText) => handleReply(comment.id, replyText)}
                                         />
-
                                     )}
                                 </div>
                             )}
                         </article>
-
                     ))}
 
                     <div className="mb-6">
