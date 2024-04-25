@@ -48,7 +48,7 @@ class CommunitiesFactory extends Factory
             'id_region' => $this->faker->randomElement($regionIds),
 
             // Set the community as private
-            'private' => false,
+            'private' => true,
 
             // Set the creation time to the current time
             'created_at' => now(),
