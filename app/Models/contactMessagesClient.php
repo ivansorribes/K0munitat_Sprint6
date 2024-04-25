@@ -9,13 +9,20 @@ class contactMessagesClient extends Model
 {
     use HasFactory;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> main
     protected $table = 'contactMessagesClient';
 
 
     protected $fillable = [
         'sender_name',
+<<<<<<< HEAD
         'sender_email',
+=======
+        'email',
+>>>>>>> main
         'message',
         'read',
         'id_user',

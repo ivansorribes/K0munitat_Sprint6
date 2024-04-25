@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Models\contactMessagesClient;
+<<<<<<< HEAD
 use App\Models\User;
+=======
+
+use App\Models\ContactMessage;
+>>>>>>> main
 use App\Models\contactMessages;
 
 class MessagesController extends Controller
@@ -16,25 +21,44 @@ class MessagesController extends Controller
     public function getEmailView()
     {
         // Marcar todos los mensajes como leídos
-        contactMessages::where('read', false)->update(['read' => true]);
+        DB::table('contactMessages')->where('read', false)->update(['read' => true]);
 
-        // Obtener todos los mensajes
-        $messages = contactMessages::all();
+        // Obtener todos los mensajes activos
+        $activeMessages = DB::table('contactMessages')->where('isActive', 1)->get();
 
-        return view('adminPanel.emails', compact('messages'));
+        // Obtener todos los mensajes eliminados
+        $deletedMessages = DB::table('contactMessages')->where('isActive', 0)->get();
+
+        return view('adminPanel.emails', compact('activeMessages', 'deletedMessages'));
     }
+
 
 
     public function destroy($id)
     {
         try {
-            DB::table('contactMessages')->where('id', $id)->delete();
-            return redirect()->back()->with('success', 'Message deleted successfully');
+            // Actualizar el campo isActive a 0 en lugar de eliminar el mensaje
+            DB::table('contactMessages')->where('id', $id)->update(['isActive' => 0]);
+            return redirect()->back()->with('success', 'Message moved to deleted messages');
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Failed to delete message');
+            return redirect()->back()->with('error', 'Failed to move message to deleted messages');
         }
     }
 
+<<<<<<< HEAD
+=======
+    public function restoreAdmin($id)
+    {
+        try {
+            // Actualizar el campo isActive a 1 para restaurar el mensaje eliminado
+            DB::table('contactMessages')->where('id', $id)->update(['isActive' => 1]);
+            return redirect()->back()->with('success', 'Message restored successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Failed to restore message');
+        }
+    }
+
+>>>>>>> main
     public function replyMessage(Request $request)
     {
         // Validar los datos del formulario
@@ -49,7 +73,11 @@ class MessagesController extends Controller
         $originalMessage = ContactMessages::find($request->input('original_message_id'));
 
         // Crear un nuevo mensaje de respuesta
+<<<<<<< HEAD
         $replyMessage = new contactMessagesClient();
+=======
+        $replyMessage = new ContactMessagesClient();
+>>>>>>> main
         $replyMessage->sender_name = $user->username; // Asignar el nombre de usuario del remitente
         $replyMessage->sender_email = $user->email; // Asignar el correo electrónico del remitente
         $replyMessage->message = $request->input('reply_message'); // Asignar el mensaje de respuesta
@@ -70,6 +98,7 @@ class MessagesController extends Controller
 
     public function emailUserView()
     {
+<<<<<<< HEAD
         // Obtener el ID del usuario autenticado
         $userId = auth()->user()->id;
 
@@ -101,6 +130,14 @@ class MessagesController extends Controller
 
 
 
+=======
+        $userId = auth()->user()->id;
+        $deletedEmails = DB::table('contactMessagesClient')->where('id_user', $userId)->where('isActive', 0)->get();
+        $activeEmails = DB::table('contactMessagesClient')->where('id_user', $userId)->where('isActive', 1)->get();
+        return view('emailsUser.emailsUser', compact('deletedEmails', 'activeEmails'));
+    }
+
+>>>>>>> main
     public function Delete($id)
     {
         // Buscar el mensaje por su ID

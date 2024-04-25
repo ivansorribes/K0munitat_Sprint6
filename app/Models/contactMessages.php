@@ -16,7 +16,6 @@ class contactMessages extends Model
         'sender_name',
         'phone',
         'email',
-        'subject',
         'message',
         'read',
         'id_user',
