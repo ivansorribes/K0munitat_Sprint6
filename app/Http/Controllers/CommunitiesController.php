@@ -148,6 +148,14 @@ class CommunitiesController extends Controller
     {
         $user = Auth::user();
         $communitiesUser = $user->communities;
+
+        if ($communitiesUser->isEmpty()) {
+            // Si el usuario no tiene comunidades asociadas, retornar un mensaje de error
+            return response()->json([
+                'error' => 'El usuario no tiene comunidades asociadas.'
+            ], 404); // 404: Recurso no encontrado
+        }
+        
         return response()->json([
             'communities' => $communitiesUser,
             'user' => $user

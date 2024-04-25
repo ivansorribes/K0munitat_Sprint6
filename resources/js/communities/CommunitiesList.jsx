@@ -21,6 +21,9 @@ const CommunitiesList = () => {
   const { data: responseData, loading: apiLoading } = useApiSwitcher(option);
   const [user, setUser] = useState([]);
 
+
+
+
   const fetchDataAllComunities = () => {    
     console.log("hola")
     return axios.get('/communitiesList')
@@ -29,10 +32,11 @@ const CommunitiesList = () => {
         setUserCommunities(response.data.communities.data);  });
 
   }
+  
   const fetchDataUserComunities = () => {    
     return axios.get('/communitiesUser')
       .then((response) => { 
-        console.log(response.data.communities);
+        console.log( "fetch del user " , response.data.communities);
         setUserCommunities(response.data.communities);  });
 
   }
@@ -42,11 +46,11 @@ const CommunitiesList = () => {
   }, [])
 
 
-  useEffect(() => {
-    if (responseData && responseData.user) {
-      setUser(responseData.user);
-    }
-  }, [responseData]);
+  //useEffect(() => {
+   // if (responseData && responseData.user) {
+     // setUser(responseData.user);
+    //}
+  //}, [responseData]);
  
   useEffect(() => {
     const handleScroll = () => {
@@ -80,18 +84,28 @@ const CommunitiesList = () => {
       setLoading(false); 
     }
   };
-
-  const toggleOption = () => {
+  const toggleOption = async () => {
     setOption(option === 'option1' ? 'option2' : 'option1');
-
-    if(option === 'option1') fetchDataAllComunities();
-    else fetchDataUserComunities();
-    
     setCurrentPage(1);
-  
-    fetchData();
     scrollToTop();
+  
+    try {
+      setLoading(true);
+      if (option === 'option1') {
+        await fetchDataAllComunities();
+        console.log("option 1");
+      }
+      if (option === 'option2') {
+        await fetchDataUserComunities();
+        console.log("option 2");
+      }
+    } catch (error) {
+      console.error('Error fetching communities:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+  
 
   const scrollToTop = () => {
     scroll.scrollToTop({
