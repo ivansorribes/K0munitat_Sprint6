@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function CommentLikeButton({ commentId, liked, likesCount, onToggleLike }) {
     return (
         <div className="flex items-center justify-end gap-2">

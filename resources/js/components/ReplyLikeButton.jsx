@@ -1,3 +1,5 @@
+import React from 'react';
+
 export function ReplyLikeButton({ replyId, liked, likesCount, onToggleLikeReply }) {
     return (
         <div className="flex items-center justify-end gap-2">
