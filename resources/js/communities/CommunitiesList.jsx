@@ -35,9 +35,10 @@ const CommunitiesList = () => {
   }, []);
 
   useEffect(() => {
-    if (responseData && responseData.communities) {
-      setCommunities(prevCommunities => [...prevCommunities, ...responseData.communities]);
-      setPosts((prev) => [...prevCommunities, ...response.data.posts.data]);
+    if (responseData && responseData.communities.data) {
+      console.log("Communities Data:", responseData.communities.data);
+      setCommunities(prevCommunities => [...prevCommunities, ...responseData.communities.data]);
+      //setPosts((prev) => [...prevCommunities, ...response.data.posts.data]);
     }
     setLoading(apiLoading);
   }, [responseData, apiLoading]);
