@@ -4,7 +4,7 @@ import { createRoot } from 'react-dom/client';
 import CommunityCard from './CommunityCard';
 import 'tailwindcss/tailwind.css';
 import '../../css/community.css';
-import useApiSwitcher from '../hooks/useApiSwitcher'; // Importa el hook useApiSwitcher
+import useApiSwitcher from '../hooks/useApiSwitcher';
 import ToggleButton from '../components/buttons/toggle';
 import { animateScroll as scroll } from 'react-scroll';
 import {ButtonCreate} from '../components/buttons';
@@ -16,11 +16,11 @@ const CommunitiesList = () => {
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
   const [userCommunities, setUserCommunities] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
-  const [showScrollButton, setShowScrollButton] = useState(false); // Estado para mostrar el botón de scroll
+  const [searchTerm, setSearchTerm] = useState('');
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const { data: responseData, loading: apiLoading } = useApiSwitcher(option);
   const [user, setUser] = useState([]);
-
+/*
   useEffect(() => {
     const fetchUserCommunities = async () => {
       try {
@@ -35,13 +35,45 @@ const CommunitiesList = () => {
   }, []);
 
   useEffect(() => {
-    if (responseData && responseData.communities.data) {
-      console.log("Communities Data:", responseData.communities.data);
-      setCommunities(prevCommunities => [...prevCommunities, ...responseData.communities.data]);
-      //setPosts((prev) => [...prevCommunities, ...response.data.posts.data]);
+    const fetchUserCommunities2 = async () => {
+    try {
+      const response = await axios.get('/communitiesList');
+      setUserCommunities(prevCommunities => [...prevCommunities, ...response.data.communities.data]);
+      //setUserCommunities(response.data.communities.data)
+      console.log("SA")
+      console.log(response.data.communities.data)
+     // console.log(userCommunities)
+    } catch (error) {
+      console.error('Error fetching user communities:', error);
     }
-    setLoading(apiLoading);
-  }, [responseData, apiLoading]);
+  };
+
+
+    //setLoading(apiLoading);
+    fetchUserCommunities2();
+  });
+*/
+
+  const fetchDataAllComunities = () => {    
+    console.log("hola")
+    return axios.get('/communitiesList')
+      .then((response) => { 
+        console.log(response.data.communities.data);
+        setUserCommunities(response.data.communities.data);  });
+
+  }
+  const fetchDataUserComunities = () => {    
+    return axios.get('/communitiesUser')
+      .then((response) => { 
+        console.log(response.data.communities);
+        setUserCommunities(response.data.communities);  });
+
+  }
+  useEffect(() => {
+    fetchDataUserComunities();
+    fetchDataAllComunities();
+  }, [])
+
 
   useEffect(() => {
     if (responseData && responseData.user) {
@@ -54,7 +86,7 @@ const CommunitiesList = () => {
       if (scrollRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
         setShowScrollButton(scrollTop > clientHeight / 2);
-        if (scrollHeight - scrollTop === clientHeight) {
+        if (scrollTop + clientHeight >= scrollHeight && !loading && currentPage < responseData.communities.last_page) {
           fetchData();
         }
       }
@@ -67,16 +99,29 @@ const CommunitiesList = () => {
         scrollRef.current.removeEventListener('scroll', handleScroll);
       }
     };
-  }, []);
+  }, [loading, currentPage, responseData]);
 
-  const fetchData = () => {
+  const fetchData = async () => {
+    setLoading(true);
     setCurrentPage(prevPage => prevPage + 1);
+    try {
+      const response = await axios.get(`/communitiesList?page=${currentPage + 1}`);
+      setUserCommunities(prevCommunities => [...prevCommunities, ...response.data.communities.data]);
+    } catch (error) {
+      console.error('Error fetching communities:', error);
+    } finally {
+      setLoading(false); // Establecer loading en false después de recibir la respuesta o en caso de error
+    }
   };
 
   const toggleOption = () => {
     setOption(option === 'option1' ? 'option2' : 'option1');
+
+    if(option === 'option1') fetchDataAllComunities();
+    else fetchDataUserComunities();
+    
     setCurrentPage(1);
-    setCommunities([]);
+  
     fetchData();
     scrollToTop();
   };
@@ -89,17 +134,15 @@ const CommunitiesList = () => {
     });
   };
 
-  // Función para manejar el cambio en el cuadro de búsqueda
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filtrar comunidades basadas en el término de búsqueda
-  const filteredCommunities = communities.filter(community =>
+  const filteredCommunities = userCommunities.filter(community =>
     community.name.toLowerCase().includes(searchTerm.toLowerCase())
   );
+  
 
-  // Función para manejar el click en el botón de scroll hacia arriba
   const handleScrollToTop = () => {
     scroll.scrollToTop({
       containerId: 'scroll-container',
@@ -112,7 +155,6 @@ const CommunitiesList = () => {
     <div className="container mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
         <ToggleButton onToggle={toggleOption} checked={option === 'option2'} text={option === 'option1' ? 'My Communities' : 'All Communities'}  />
-        {/* Cuadro de búsqueda */}
         <input
           type="text"
           placeholder="Search Communities"
@@ -133,7 +175,9 @@ const CommunitiesList = () => {
           </button>
         )}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {filteredCommunities.map((community) => (
+         
+       
+          {userCommunities.length > 0 && filteredCommunities.map((community) => (
             <CommunityCard
               key={community.id}
               community={community}
@@ -151,4 +195,3 @@ const CommunitiesList = () => {
 if (document.getElementById('communityList')) {
   createRoot(document.getElementById('communityList')).render(<CommunitiesList />);
 }
-
