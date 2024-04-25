@@ -126,8 +126,7 @@ class AuthController extends Controller
                 // return redirect('/adminPanel');
                 return redirect('/');
             } else {
-                // Si no es "superAdmin", redirigir a la ruta privada
-                return redirect()->intended(route('privada'));
+                return redirect('/');
             }
         } else {
             // Si las credenciales no son correctas, redirigir al login con un mensaje de error

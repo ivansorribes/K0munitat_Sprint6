@@ -14,4 +14,10 @@ class autonomousCommunities extends Model
     protected $fillable = [
         'name',
     ];
+
+    public function regions()
+    {
+        return $this->hasMany(regions::class, 'id_autonomousCommunity');
+    }
+    
 }

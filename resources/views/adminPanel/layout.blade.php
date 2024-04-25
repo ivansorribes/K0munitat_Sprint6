@@ -24,17 +24,19 @@
 
   <div class="flex h-screen bg-gray-50 dark:bg-gray-900" :class="{ 'overflow-hidden': isSideMenuOpen }">
 
-    @include ('adminPanel.sidebar')
+    <!-- Sidebar fijo a la izquierda -->
+    <div class="z-10 fixed left-0 top-0 h-full">
+      @include ('adminPanel.sidebar')
+    </div>
 
-    <div class="flex flex-col flex-1 w-full">
-
+    <!-- Contenido principal con margen izquierdo -->
+    <div class="z-0 flex flex-col flex-1 ml-64 w-full">
       @include ('adminPanel.header')
-
       <main>
         @yield('content')
       </main>
-
     </div>
+
   </div>
 </body>
 

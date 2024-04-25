@@ -20,6 +20,8 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\LikeCommentController;
 use App\Http\Controllers\ReplyCommentController;
+use App\Http\Controllers\DashboardController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -63,7 +65,9 @@ Route::post('/deleteUserImage', [UserController::class, 'deleteUserImage'])->nam
 //Contact
 Route::get('/contact', [ContactController::class, 'contactView'])->name('contact.view')->middleware('auth');
 //Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
-Route::post('/contact', [ContactController::class, 'store'])->name('contact.store');
+Route::post('/sendEmail', [ContactController::class, 'store'])->name('contact.store');
+
+
 
 
 // FORGOT PASSWORD / PASSWORD-RESET
@@ -128,10 +132,9 @@ Route::get('/communities/{community}/{id_post}', function () {
 })->name('advertisements-posts.show');
 
 
-Route::get('/dashboard', function () {
-    return view('adminPanel.dashboard');
-})->name('dashboard');
-
+Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+Route::get('/user-count-by-month', [UserController::class, 'userCountByMonth']);
+Route::get('/post-count-by-category', [PostsController::class, 'postCountByCategory']);
 
 // Rutas protegidas por el middleware CheckRole
 
@@ -150,6 +153,8 @@ Route::post('/users/{id}/toggleIsActive', [UserController::class, 'toggleIsActiv
 Route::get('/users/{id}/detail', [UserController::class, 'showDetail'])->name('users.detail');
 Route::put('/users/{id}', [UserController::class, 'update'])->name('updateUser');
 Route::post('/users', [UserController::class, 'store'])->name('storeUser');
+Route::delete('/users/{id}/destroy', [UserController::class, 'destroy'])->name('deleteUser');
+
 Route::get('/createUserForm', function () {
     return view('adminPanel.createUserForm');
 })->name('createUserForm');
@@ -159,9 +164,15 @@ Route::put('/advertisements/{advertisement}', [PostsController::class, 'updateAd
 
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login');
 
-//Rutes para el email part de admin
+//Rutes para el email part de admin/usuari
 Route::get('/paneladminEmail', [MessagesController::class, 'getEmailView'])->name('getEmailView');
 Route::post('/messages/{id}', [MessagesController::class, 'destroy'])->name('delete.message');
+Route::post('/messagesRestoreAdmin/{id}', [MessagesController::class, 'restoreAdmin'])->name('restoreAdmin.message');
+Route::post('/reply-message', [MessagesController::class, 'replyMessage'])->name('reply.message');
+Route::get('/emailUser', [MessagesController::class, 'emailUserView'])->name('emailUserView');
+Route::post('/messagesDelete/{id}', [MessagesController::class, 'Delete'])->name('eliminate.message');
+Route::post('/messagesRestore/{id}', [MessagesController::class, 'restore'])->name('restore.message');
+
 
 
 

@@ -60,5 +60,10 @@ function data() {
       this.isModalOpen = false
       this.trapCleanup()
     },
+
+
   }
 }
+
+
+
