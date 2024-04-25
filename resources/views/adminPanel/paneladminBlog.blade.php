@@ -9,7 +9,7 @@
     <div class="flex-1">
         
         <div class="mt-10 container mx-auto p-8">
-            <h1 class=" mt-4 text-2xl mb-5">
+        <h1 class=" mt-4 text-2xl mb-5">
                 Blog Posts List
             </h1>
             <div class="flex mb-4 justify-end">
@@ -30,9 +30,7 @@
                         <tr class="border-b dark:border-neutral-500">
                             <td class="whitespace-normal px-6 py-4">{{ $blog->title }}</td>
                             <td class="whitespace-normal px-6 py-4">{{ $blog->description }}</td>
-                            <td class="whitespace-normal px-6 py-4">
-                                <img src="{{ asset('img/fotosblog/' . $blog->post_image) }}" alt="{{ $blog->title }}" class="max-w-xs max-h-16 h-auto">
-                            </td>
+                            <td class="whitespace-normal px-6 py-4">{{ $blog->post_image }}</td>
                             <td class="whitespace-nowrap px-6 py-4">
                                 <form method="GET" action="{{ route('blog.edit', $blog->id) }}">
                                     @csrf

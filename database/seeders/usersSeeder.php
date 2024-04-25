@@ -174,47 +174,5 @@ class usersSeeder extends Seeder
             'role' => 'superAdmin',
             'remember_token' => Str::random(10),
         ]);
-
-        for ($month = 1; $month <= 12; $month++) {
-            // Generar al menos un usuario para cada mes
-            User::create([
-                'email' => Str::random(5) . '@k0munitat.com',
-                'email_verified_at' => now(),
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-                'username' => Str::random(8),
-                'firstname' => Str::random(6),
-                'lastname' => Str::random(6),
-                'city' => 'Amposta',
-                'postcode' => 43870,
-                'telephone' => '123456789', // Cambiar a fake()->phoneNumber() si estás usando Faker
-                'profile_image' => 'DefaultImage.png',
-                'profile_description' => 'Descripción de prueba',
-                'created_at' => now()->year(2024)->month($month)->day(rand(1, 28)), // Aleatorizar el día del mes
-                'role' => 'superAdmin',
-                'remember_token' => Str::random(10),
-            ]);
-        }
-
-        // Generar usuarios adicionales para el año 2024 con fechas de creación aleatorias
-        for ($i = 0; $i < 8; $i++) { // Generar 8 usuarios adicionales para otros meses
-            $month = rand(1, 12); // Elegir un mes aleatorio
-            $day = rand(1, 28); // Elegir un día aleatorio
-            User::create([
-                'email' => Str::random(5) . '@k0munitat.com',
-                'email_verified_at' => now(),
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-                'username' => Str::random(8),
-                'firstname' => Str::random(6),
-                'lastname' => Str::random(6),
-                'city' => 'Amposta',
-                'postcode' => 43870,
-                'telephone' => '123456789', // Cambiar a fake()->phoneNumber() si estás usando Faker
-                'profile_image' => 'DefaultImage.png',
-                'profile_description' => 'Descripción de prueba',
-                'created_at' => now()->year(2024)->month($month)->day($day), // Asignar fecha de creación aleatoria
-                'role' => 'superAdmin',
-                'remember_token' => Str::random(10),
-            ]);
-        }
     }
 }

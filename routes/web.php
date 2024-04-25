@@ -20,7 +20,6 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\LikeCommentController;
 use App\Http\Controllers\ReplyCommentController;
-use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LikeReplyCommentController;
 
 /*
@@ -132,9 +131,10 @@ Route::get('/communities/{community}/{id_post}', function () {
 })->name('advertisements-posts.show');
 
 
-Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-Route::get('/user-count-by-month', [UserController::class, 'userCountByMonth']);
-Route::get('/post-count-by-category', [PostsController::class, 'postCountByCategory']);
+Route::get('/dashboard', function () {
+    return view('adminPanel.dashboard');
+})->name('dashboard');
+
 
 // Rutas protegidas por el middleware CheckRole
 

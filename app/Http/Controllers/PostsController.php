@@ -291,19 +291,6 @@ class PostsController extends Controller
         return response()->json($updatedPost, 200);
     }
 
-    public function postCountByCategory()
-    {
-        $postCounts = Posts::join('categories', 'posts.id_category', '=', 'categories.id')
-            ->select('categories.name')
-            ->where('posts.type', 'post')
-            ->selectRaw('count(*) as count')
-            ->groupBy('categories.name')
-            ->pluck('count', 'categories.name');
-
-        return response()->json($postCounts);
-    }
-
-
 
     /**
      * Show the form for editing the specified resource.

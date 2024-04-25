@@ -18,7 +18,7 @@ class regions extends Model
 
     public function autonomousCommunities(): BelongsTo
     {
-        return $this->belongsTo(autonomousCommunities::class, 'id_autonomousCommunity');
+        return $this->belongsTo(autonomousCommunities::class);
     }
 
 }
