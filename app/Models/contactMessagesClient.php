@@ -5,18 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class contactMessages extends Model
+class contactMessagesClient extends Model
 {
     use HasFactory;
 
-    protected $table = 'contactMessages';
+
+    protected $table = 'contactMessagesClient';
 
 
     protected $fillable = [
         'sender_name',
-        'phone',
-        'email',
-        'subject',
+        'sender_email',
         'message',
         'read',
         'id_user',
