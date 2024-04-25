@@ -20,39 +20,6 @@ const CommunitiesList = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const { data: responseData, loading: apiLoading } = useApiSwitcher(option);
   const [user, setUser] = useState([]);
-/*
-  useEffect(() => {
-    const fetchUserCommunities = async () => {
-      try {
-        const response = await axios.get('/communitiesUserId');
-        setUserCommunities(response.data);
-      } catch (error) {
-        console.error('Error fetching user communities:', error);
-      }
-    };
-
-    fetchUserCommunities();
-  }, []);
-
-  useEffect(() => {
-    const fetchUserCommunities2 = async () => {
-    try {
-      const response = await axios.get('/communitiesList');
-      setUserCommunities(prevCommunities => [...prevCommunities, ...response.data.communities.data]);
-      //setUserCommunities(response.data.communities.data)
-      console.log("SA")
-      console.log(response.data.communities.data)
-     // console.log(userCommunities)
-    } catch (error) {
-      console.error('Error fetching user communities:', error);
-    }
-  };
-
-
-    //setLoading(apiLoading);
-    fetchUserCommunities2();
-  });
-*/
 
   const fetchDataAllComunities = () => {    
     console.log("hola")
@@ -110,7 +77,7 @@ const CommunitiesList = () => {
     } catch (error) {
       console.error('Error fetching communities:', error);
     } finally {
-      setLoading(false); // Establecer loading en false después de recibir la respuesta o en caso de error
+      setLoading(false); 
     }
   };
 
