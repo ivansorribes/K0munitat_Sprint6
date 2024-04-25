@@ -66,8 +66,7 @@ Route::post('/deleteUserImage', [UserController::class, 'deleteUserImage'])->nam
 Route::get('/contact', [ContactController::class, 'contactView'])->name('contact.view')->middleware('auth');
 //Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/sendEmail', [ContactController::class, 'store'])->name('contact.store');
-
-
+Route::get('/getUserInfo',  [ContactController::class, 'getUser'])->name('getUser')->middleware('auth');
 
 
 // FORGOT PASSWORD / PASSWORD-RESET
