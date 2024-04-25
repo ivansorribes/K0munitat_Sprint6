@@ -5,18 +5,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
-use App\Models\contactMessagesClient;
-<<<<<<< HEAD
-use App\Models\User;
-=======
-
-use App\Models\ContactMessage;
->>>>>>> main
 use App\Models\contactMessages;
+use App\Models\contactMessagesClient;
+use App\Models\User;
 
 class MessagesController extends Controller
 {
-
 
     public function getEmailView()
     {
@@ -29,9 +23,19 @@ class MessagesController extends Controller
         // Obtener todos los mensajes eliminados
         $deletedMessages = DB::table('contactMessages')->where('isActive', 0)->get();
 
+        // Recuperar las imágenes de perfil de los usuarios correspondientes
+        foreach ($activeMessages as $message) {
+            $userProfileImage = DB::table('users')->where('id', $message->id_user)->value('profile_image');
+            $message->userProfileImage = asset('profile/images/' . $userProfileImage);
+        }
+
+        foreach ($deletedMessages as $message) {
+            $userProfileImage = DB::table('users')->where('id', $message->id_user)->value('profile_image');
+            $message->userProfileImage = asset('profile/images/' . $userProfileImage);
+        }
+
         return view('adminPanel.emails', compact('activeMessages', 'deletedMessages'));
     }
-
 
 
     public function destroy($id)
@@ -45,8 +49,6 @@ class MessagesController extends Controller
         }
     }
 
-<<<<<<< HEAD
-=======
     public function restoreAdmin($id)
     {
         try {
@@ -58,7 +60,6 @@ class MessagesController extends Controller
         }
     }
 
->>>>>>> main
     public function replyMessage(Request $request)
     {
         // Validar los datos del formulario
@@ -70,14 +71,10 @@ class MessagesController extends Controller
         $user = Auth::user();
 
         // Obtener el mensaje original
-        $originalMessage = ContactMessages::find($request->input('original_message_id'));
+        $originalMessage = contactMessages::find($request->input('original_message_id'));
 
         // Crear un nuevo mensaje de respuesta
-<<<<<<< HEAD
         $replyMessage = new contactMessagesClient();
-=======
-        $replyMessage = new ContactMessagesClient();
->>>>>>> main
         $replyMessage->sender_name = $user->username; // Asignar el nombre de usuario del remitente
         $replyMessage->sender_email = $user->email; // Asignar el correo electrónico del remitente
         $replyMessage->message = $request->input('reply_message'); // Asignar el mensaje de respuesta
@@ -90,15 +87,8 @@ class MessagesController extends Controller
         return redirect()->back()->with('success', 'Reply sent successfully!');
     }
 
-
-
-
-
-
-
     public function emailUserView()
     {
-<<<<<<< HEAD
         // Obtener el ID del usuario autenticado
         $userId = auth()->user()->id;
 
@@ -116,8 +106,9 @@ class MessagesController extends Controller
             $email->userProfileImage = $userProfileImage;
         }
 
+        // Iterar sobre los correos electrónicos eliminados para obtener la imagen de perfil del remitente
         foreach ($deletedEmails as $email) {
-            // Obtener el   correo electrónico
+            // Obtener el sender_name del correo electrónico
             $senderName = $email->sender_name;
             // Obtener la imagen de perfil del remitente
             $userProfileImage = User::where('username', $senderName)->value('profile_image');
@@ -128,17 +119,7 @@ class MessagesController extends Controller
         return view('emailsUser.emailsUser', compact('deletedEmails', 'activeEmails'));
     }
 
-
-
-=======
-        $userId = auth()->user()->id;
-        $deletedEmails = DB::table('contactMessagesClient')->where('id_user', $userId)->where('isActive', 0)->get();
-        $activeEmails = DB::table('contactMessagesClient')->where('id_user', $userId)->where('isActive', 1)->get();
-        return view('emailsUser.emailsUser', compact('deletedEmails', 'activeEmails'));
-    }
-
->>>>>>> main
-    public function Delete($id)
+    public function delete($id)
     {
         // Buscar el mensaje por su ID
         $message = DB::table('contactMessagesClient')->where('id', $id)->first();

@@ -1,11 +1,8 @@
 import React, { useState } from 'react';
-<<<<<<< HEAD
-=======
 import { createRoot } from 'react-dom/client';
 import { ButtonSave } from './components/buttons';
 
 
->>>>>>> main
 
 function Contact() {
     const [formData, setFormData] = useState({
@@ -90,11 +87,7 @@ function Contact() {
                     {phoneError && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4" role="alert">
                         <strong className="font-bold">Error!</strong>
                         <span className="block sm:inline"> Phone number can only contain numbers.</span>
-<<<<<<< HEAD
-                    </div>}
-=======
                     </div>} {/* Mostrar mensaje de error en el campo de teléfono */}
->>>>>>> main
                     <form onSubmit={handleSubmit}>
                         <div className="mb-4 relative">
                             <input
