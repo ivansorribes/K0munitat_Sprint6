@@ -84,53 +84,65 @@ class UserController extends Controller
     }
 
     public function postUser()
-    {
-        $user = Auth::user();
+{
+    $user = Auth::user();
 
-        if ($user) {
-            $userData = [
-                'id' => $user->id,
-                'username' => $user->username,
-                'firstname' => $user->firstname,
-                'lastname' => $user->lastname,
-                'profile_image' => $user->profile_image,
-                'profile_description' => $user->profile_description,
-                'email' => $user->email,
-                'telephone' => $user->telephone,
-                'city' => $user->city,
-                'postcode' => $user->postcode,
-            ];
+    if ($user) {
+        $userData = [
+            'id' => $user->id,
+            'username' => $user->username,
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'profile_image' => $user->profile_image,
+            'profile_description' => $user->profile_description,
+            'email' => $user->email,
+            'telephone' => $user->telephone,
+            'city' => $user->city,
+            'postcode' => $user->postcode,
+        ];
 
-            // Obtener todas las publicaciones del usuario
-            $posts = posts::where('id_user', $user->id)
-                ->where('isActive', 1)
+        // Obtener todas las publicaciones del usuario utilizando DB::select()
+        $posts = DB::table('posts')
+            ->where('id_user', $user->id)
+            ->where('isActive', 1)
+            ->get();
+
+        // Adjuntar la información del usuario a cada publicación
+        foreach ($posts as $post) {
+            // Obtener todos los comentarios asociados con el post actual utilizando DB::select()
+            $postComments = DB::table('commentsPosts')
+                ->where('id_post', $post->id)
+                ->join('users', 'commentsPosts.id_user', '=', 'users.id')
+                ->select('commentsPosts.*', 'users.username as commenter_username')
                 ->get();
 
-            // Adjuntar la información del usuario a cada publicación
-            foreach ($posts as $post) {
-                // Obtener todos los comentarios asociados con el post actual
-                $postComments = commentsPosts::where('id_post', $post->id)
-                    ->with(['comment.user'])
-                    ->get();
+            // Obtener los likes del post utilizando DB::select()
+            $postLikes = DB::table('likesPosts')
+                ->where('id_post', $post->id)
+                ->join('users', 'likesPosts.id_user', '=', 'users.id')
+                ->select('likesPosts.*', 'users.username as liker_username')
+                ->get();
 
-                // Adjuntar los comentarios al post
-                $post->comments = $postComments;
+            // Obtener la imagen del post utilizando DB::select()
+            $postImage = DB::table('imagePost')
+                ->where('id_post', $post->id)
+                ->first();
 
-                // Obtener los likes del post
-                $post->likes = likesPosts::where('id_post', $post->id)->with('user')->get();
+            // Adjuntar los comentarios, likes y la imagen al post
+            $post->comments = $postComments;
+            $post->likes = $postLikes;
+            $post->image = $postImage;
 
-                // Obtener la imagen del post
-                $post->image = imagePost::where('id_post', $post->id)->first();
-
-                // Adjuntar la información del usuario a la publicación
-                $post->user = $userData;
-            }
-
-            return response()->json(['user' => $userData, 'posts' => $posts], 200);
-        } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            // Adjuntar la información del usuario a la publicación
+            $post->user = $userData;
         }
+
+        // Devolver los datos del usuario y sus publicaciones
+        return response()->json(['user' => $userData, 'posts' => $posts], 200);
+    } else {
+        return response()->json(['error' => 'Unauthorized'], 401);
     }
+}
 
 
 
