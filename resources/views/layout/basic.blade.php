@@ -21,6 +21,7 @@
 
         gtag('config', 'G-B54X46SNYZ');
     </script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     @viteReactRefresh
     @vite('resources/js/app.js')
     @vite('resources/css/app.css')
@@ -36,9 +37,9 @@
         @include('components.spinner')
     </div>
     <script>
-        window.onload = function() {
-            document.getElementById('preloader').style.display = 'none';
-        };
+        $(document).ready(function() {
+            $('#preloader').hide();
+        });
     </script>
     @include('footer.footer')
     <script src="{{ asset('js/app.js') }}"></script>
