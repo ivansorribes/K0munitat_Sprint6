@@ -95,7 +95,7 @@ export default function AdvertisementDetails() {
     };
 
     if (!post) {
-        return <div>Loading...</div>;
+        return;
     }
 
     const pathParts = window.location.pathname.split('/');
