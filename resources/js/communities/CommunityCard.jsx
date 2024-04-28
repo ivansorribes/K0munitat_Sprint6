@@ -22,7 +22,11 @@ const CommunityCard = ({ community, option, user }) => {
     }
   };
 
+  
   const handleSendRequest = () => {
+    console.log("hola estoy en el Send Request")
+    console.log(community.id)
+    console.log(user.id)
     axios.defaults.headers.common['X-CSRF-TOKEN'] = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
     axios.post('/communitiesRequest', {
         id_community: community.id,
@@ -35,6 +39,7 @@ const CommunityCard = ({ community, option, user }) => {
       })
       .catch(error => {
         console.error('Error sending community request:', error);
+        
       });
   };
 

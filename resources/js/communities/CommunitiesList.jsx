@@ -20,6 +20,7 @@ const CommunitiesList = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const { data: responseData, loading: apiLoading } = useApiSwitcher(option);
   const [user, setUser] = useState([]);
+  const [filteredCommunities, setFilteredCommunities] = useState([]);
 
 
 
@@ -46,11 +47,17 @@ const CommunitiesList = () => {
   }, [])
 
 
-  //useEffect(() => {
-   // if (responseData && responseData.user) {
-     // setUser(responseData.user);
-    //}
-  //}, [responseData]);
+  useEffect(() => {
+    // Verificar si el usuario tiene comunidades o no
+    if (!apiLoading && responseData) {
+      if (responseData.hasCommunities) {
+        setUserCommunities(responseData.communities);
+      } else {
+        // Mostrar "Hola Mundo" cuando el usuario no tiene comunidades
+        console.log("error el usuario no tiene comunidades");
+      }
+    }
+  }, [apiLoading, responseData]);
  
   useEffect(() => {
     const handleScroll = () => {
@@ -119,9 +126,13 @@ const CommunitiesList = () => {
     setSearchTerm(event.target.value);
   };
 
-  const filteredCommunities = userCommunities.filter(community =>
-    community.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    const filtered = userCommunities.filter(community =>
+      community.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredCommunities(filtered);
+  }, [userCommunities, searchTerm]);
+  
   
 
   const handleScrollToTop = () => {
@@ -158,14 +169,14 @@ const CommunitiesList = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
          
        
-          {userCommunities.length > 0 && filteredCommunities.map((community) => (
-            <CommunityCard
-              key={community.id}
-              community={community}
-              option={userCommunities.includes(community.id) || community.private === 0 ? 'enter' : 'send'}
-              user={user}
-            />
-          ))}
+        {userCommunities.length > 0 && filteredCommunities.map((community) => (
+  <CommunityCard
+    key={community.id}
+    community={community}
+    option={userCommunities.includes(community.id) || community.private === 0 ? 'enter' : 'send'}
+    user={user}
+  />
+))}
         </div>
         {loading && <p>Loading...</p>}
       </div>
