@@ -30,7 +30,7 @@
               Users
             </p>
             <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-              6389
+              {{ $userCount }}
             </p>
           </div>
         </div>
@@ -46,7 +46,7 @@
               Communities
             </p>
             <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-              40
+              {{ $communityCount }}
             </p>
           </div>
         </div>
@@ -59,10 +59,10 @@
           </div>
           <div>
             <p class="mb-2 text-sm font-medium text-gray-600 dark:text-gray-400">
-              Exchanges
+              Advertisements
             </p>
             <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-              376
+              {{ $advertisementCount }}
             </p>
           </div>
         </div>
@@ -78,7 +78,7 @@
               Posts
             </p>
             <p class="text-lg font-semibold text-gray-700 dark:text-gray-200">
-              35
+              {{ $postCount }}
             </p>
           </div>
         </div>
@@ -91,29 +91,44 @@
       <div class="grid gap-6 mb-8 md:grid-cols-2">
         <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
           <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-            Posts by category
+            Posts and advertisements by category
           </h4>
           <canvas id="pie"></canvas>
           <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">
             <!-- Chart legend -->
-            <div class="flex items-center">
-              <span class="inline-block w-3 h-3 mr-1 bg-blue-500 rounded-full"></span>
-              <span>Tools</span>
+            <div class="flex flex-col items-center">
+              <div class="flex items-center">
+                <span class="inline-block w-3 h-3 mr-1 bg-emerald-500 rounded-full"></span>
+                <span>Fruits</span>
+              </div>
+              <div class="flex items-center">
+                <span class="inline-block w-3 h-3 mr-1 bg-teal-600 rounded-full"></span>
+                <span>Vegetables</span>
+              </div>
+              <div class="flex items-center">
+                <span class="inline-block w-3 h-3 mr-1 bg-blue-500 rounded-full"></span>
+                <span>Medicinal Plants</span>
+              </div>
             </div>
-            <div class="flex items-center">
-              <span class="inline-block w-3 h-3 mr-1 bg-teal-600 rounded-full"></span>
-              <span>Vegetables</span>
+            <div class="flex flex-col items-center">
+              <div class="flex items-center">
+                <span class="inline-block w-3 h-3 mr-1 bg-indigo-600 rounded-full"></span>
+                <span>Tools and Machinery</span>
+              </div>
+              <div class="flex items-center">
+                <span class="inline-block w-3 h-3 mr-1 bg-fuchsia-700  rounded-full"></span>
+                <span>Gardening Equipment</span>
+              </div>
+              <div class="flex items-center">
+                <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
+                <span>Others</span>
+              </div>
             </div>
-            <div class="flex items-center">
-              <span class="inline-block w-3 h-3 mr-1 bg-purple-600 rounded-full"></span>
-              <span>Other</span>
-            </div>
-
           </div>
         </div>
         <div class="min-w-0 p-4 bg-white rounded-lg shadow-xs dark:bg-gray-800">
           <h4 class="mb-4 font-semibold text-gray-800 dark:text-gray-300">
-            Users traffic
+            New users last year
           </h4>
           <canvas id="line"></canvas>
           <div class="flex justify-center mt-4 space-x-3 text-sm text-gray-600 dark:text-gray-400">

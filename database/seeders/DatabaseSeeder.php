@@ -29,5 +29,6 @@ class DatabaseSeeder extends Seeder
         $this->call(CommunityRequestSeeder::class);
         $this->call(likesCommentsSeeder::class);
         $this->call(ReplyCommentSeeder::class);
+        $this->call(LikeReplyCommentSeeder::class);
     }
 }

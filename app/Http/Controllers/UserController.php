@@ -16,6 +16,7 @@ use App\Models\comments;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 
 class UserController extends Controller
@@ -380,5 +381,22 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => 'Ha ocurrido un error al eliminar la imagen de perfil'], 500);
         }
+    }
+
+    public function userCountByMonth()
+    {
+        // Consulta para obtener el recuento de usuarios por mes
+        $userCountByMonth = User::select(DB::raw('MONTH(created_at) as month'), DB::raw('COUNT(*) as count'))
+            ->groupBy(DB::raw('MONTH(created_at)'))
+            ->orderBy(DB::raw('MONTH(created_at)'))
+            ->get();
+
+        // Convertir el resultado a un array de recuento de usuarios por mes
+        $userCountData = [];
+        foreach ($userCountByMonth as $item) {
+            $userCountData[] = $item->count;
+        }
+
+        return response()->json($userCountData);
     }
 }
