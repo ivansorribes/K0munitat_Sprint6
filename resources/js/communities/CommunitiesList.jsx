@@ -91,7 +91,9 @@ const CommunitiesList = () => {
       setLoading(false); 
     }
   };
+  
   const toggleOption = async () => {
+    setLoading(true);
     setOption(option === 'option1' ? 'option2' : 'option1');
     setCurrentPage(1);
     scrollToTop();
@@ -167,18 +169,22 @@ const CommunitiesList = () => {
           </button>
         )}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-         
-       
-        {userCommunities.length > 0 && filteredCommunities.map((community) => (
-  <CommunityCard
-    key={community.id}
-    community={community}
-    option={userCommunities.includes(community.id) || community.private === 0 ? 'enter' : 'send'}
-    user={user}
-  />
-))}
+          {filteredCommunities.map((community) => (
+              <CommunityCard
+                key={community.id}
+                community={community}
+                option={userCommunities.includes(community.id) || community.private === 0 ? 'enter' : 'send'}
+                user={user}
+              />
+            ))}
+          {/* Mostrar mensaje si el usuario no está unido a ninguna comunidad */}
+          {userCommunities.length === 0 && (
+            <div className="col-span-4 text-center text-gray-600">
+              <p>No estás unido a ninguna comunidad.</p>
+            </div>
+          )}
         </div>
-        {loading && <p>Loading...</p>}
+
       </div>
     </div>
   );
