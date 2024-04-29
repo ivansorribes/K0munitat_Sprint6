@@ -22,6 +22,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+	    \Illuminate\Support\Facades\URL::forceScheme('https');
         View::composer('adminPanel.layout', function ($view) {
             $unreadEmailsCount = contactMessages::where('read', false)->count(); // Lógica para obtener la cantidad de correos no leídos
             $view->with('unreadEmailsCount', $unreadEmailsCount);
