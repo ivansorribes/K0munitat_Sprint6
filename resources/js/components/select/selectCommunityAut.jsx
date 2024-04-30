@@ -17,7 +17,7 @@ const CommunityRegionSelector = ({ width, onCommunityChange, onRegionChange }) =
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost/comuAut/list');
+        const response = await fetch('/comuAut/list');
         const data = await response.json();
         setCommunitiesData(data.data);
         setLoading(false);
@@ -34,7 +34,7 @@ const CommunityRegionSelector = ({ width, onCommunityChange, onRegionChange }) =
     const fetchRegions = async () => {
       try {
         if (selectedCommunity) {
-          const response = await fetch(`http://localhost/comuAut/regList/${selectedCommunity}`);
+          const response = await fetch(`/comuAut/regList/${selectedCommunity}`);
           const data = await response.json();
           setRegions(data.data);
         } else {
@@ -117,7 +117,7 @@ const CommunityRegionSelector = ({ width, onCommunityChange, onRegionChange }) =
         onInputChange={handleCommunityFilter}
         placeholder="Write to filter..."
       />
-{communityError && <div className="text-red-500">{communityError}</div>}
+      {communityError && <div className="text-red-500">{communityError}</div>}
       {selectedCommunity && (
         <div className="mt-4">
           <label htmlFor="regionSelector" className="block text-sm font-medium text-gray-600">
