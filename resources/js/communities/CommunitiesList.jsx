@@ -16,6 +16,7 @@ const CommunitiesList = () => {
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
   const [userCommunities, setUserCommunities] = useState([]);
+  const [allCommunities, setAllCommunities] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [showScrollButton, setShowScrollButton] = useState(false);
   const { data: responseData, loading: apiLoading } = useApiSwitcher(option);
@@ -30,7 +31,14 @@ const CommunitiesList = () => {
     return axios.get('/communitiesList')
       .then((response) => { 
         console.log(response.data.communities.data);
-        setUserCommunities(response.data.communities.data);  });
+        setAllCommunities(response.data.communities.data); 
+        const filtered = allCommunities.filter(community =>
+          community.name.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+        setFilteredCommunities(filtered);
+      
+      });
+       
 
   }
   
@@ -38,27 +46,18 @@ const CommunitiesList = () => {
     return axios.get('/communitiesUser')
       .then((response) => { 
         console.log( "fetch del user " , response.data.communities);
+        setUserCommunities([]);
         setUserCommunities(response.data.communities);  });
 
   }
   useEffect(() => {
-    fetchDataUserComunities();
+    //fetchDataUserComunities();
     fetchDataAllComunities();
   }, [])
 
 
-  useEffect(() => {
-    // Verificar si el usuario tiene comunidades o no
-    if (!apiLoading && responseData) {
-      if (responseData.hasCommunities) {
-        setUserCommunities(responseData.communities);
-      } else {
-        // Mostrar "Hola Mundo" cuando el usuario no tiene comunidades
-        console.log("error el usuario no tiene comunidades");
-      }
-    }
-  }, [apiLoading, responseData]);
- 
+
+
   useEffect(() => {
     const handleScroll = () => {
       if (scrollRef.current) {
@@ -135,7 +134,7 @@ const CommunitiesList = () => {
     setFilteredCommunities(filtered);
   }, [userCommunities, searchTerm]);
   
-  
+
 
   const handleScrollToTop = () => {
     scroll.scrollToTop({
