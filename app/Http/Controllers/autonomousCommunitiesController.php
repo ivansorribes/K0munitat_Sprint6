@@ -30,7 +30,4 @@ class AutonomousCommunitiesController extends Controller
     
         return response()->json(['data' => $regions]);
     }
-
-
-    
 }

@@ -6,6 +6,7 @@ import "tailwindcss/tailwind.css";
 import "../../css/community.css";
 import { animateScroll as scroll } from "react-scroll";
 import { ButtonCreate } from "../components/buttons";
+import CommunitySelector from "../components/select/communityRegion";
 
 const CommunitiesList = () => {
   const [option, setOption] = useState("option1");
@@ -90,6 +91,7 @@ const CommunitiesList = () => {
           onChange={handleSearchChange}
           className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
+        <CommunitySelector />
         <a href="/communities/create" rel="noopener noreferrer">
           <ButtonCreate label="Create" />
         </a>
