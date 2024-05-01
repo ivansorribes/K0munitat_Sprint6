@@ -8,7 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class CommunityRequest extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'id_community', 
+        'id_user',
+        'status'
+    ];
+
     protected $table = 'community_requests';
 
 }
-

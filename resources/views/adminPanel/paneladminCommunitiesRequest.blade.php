@@ -8,13 +8,13 @@
     <main class="h-full overflow-y-auto">
         <div class="container px-6 mx-auto grid">
             <h1 class="mt-20 text-2xl mb-5">
-                Communities with user admission requests
+                Communities list
             </h1>
 
             <!-- baix del header -->
 
             <!-- Cards -->
-
+--
 
             <!-- New Table -->
             <div class="w-full overflow-hidden rounded-lg shadow-xs overflow-x-auto mb-20">
@@ -24,7 +24,7 @@
                             <tr>
                                 <th scope="col" class="px-6 py-4">Community Admin</th>
                                 <th scope="col" class="px-6 py-4">Name</th>
-                                <th scope="col" class="px-6 py-4">Request Date</th>
+                                <th scope="col" class="px-6 py-4">Creation Date</th>
                                 <th scope="col" class="px-6 py-4">State</th>
                                 <th scope="col" class="px-6 py-4">User List</th>
                                 <th scope="col" class="px-6 py-4">Actions</th>
