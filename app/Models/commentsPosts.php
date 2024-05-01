@@ -47,4 +47,9 @@ class commentsPosts extends Model
     {
         return $this->hasMany(ReplyComment::class, 'id_comment', 'id');
     }
+
+    public function comment()
+    {
+        return $this->belongsTo('App\Models\comments', 'id_comment');
+    }
 }
