@@ -30,4 +30,25 @@ class CommunityRequestController extends Controller
             'data' => $communityRequest
         ], 201);
     }
+
+    public function showUsers($communityId)
+    {
+        // Obtener la comunidad por su ID
+        $community = CommunityRequest::findOrFail($communityId);
+
+        // Obtener la lista de usuarios asociados a esta comunidad
+        $users = $community->communityUsers()->get();
+
+        // Devolver la vista con la lista de usuarios
+        return view('adminPanel.usuarisComunitat', compact('users', 'community'));
+    }
+
+    public function showRequestCommunities()
+    {
+        $communityRequests = CommunityRequest::getPendingRequests();
+
+
+        return view('adminPanel.paneladminCommunitiesRequest', compact('communityRequests'));
+    }
+
 }

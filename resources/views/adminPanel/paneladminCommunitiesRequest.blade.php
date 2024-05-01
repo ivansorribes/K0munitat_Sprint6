@@ -22,55 +22,37 @@
                     <table class="min-w-full text-left text-sm font-light">
                         <thead class="border-b font-medium dark:border-neutral-500">
                             <tr>
+                                <th scope="col" class="px-6 py-4">Community Name</th>
+                                <th scope="col" class="px-6 py-4">Autonomous Community</th>
                                 <th scope="col" class="px-6 py-4">Community Admin</th>
-                                <th scope="col" class="px-6 py-4">Name</th>
-                                <th scope="col" class="px-6 py-4">Creation Date</th>
+                                <th scope="col" class="px-6 py-4">Created Up</th>
                                 <th scope="col" class="px-6 py-4">State</th>
                                 <th scope="col" class="px-6 py-4">User List</th>
                                 <th scope="col" class="px-6 py-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($communities as $community)
+                            @foreach ($communityRequests as $request)
                             <tr class="border-b dark:border-neutral-500">
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    {{ $community->admin->username }}
-                                </td>
+                                    {{ $request->community()->first()->name }}                                </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    {{ $community->name }}
-                                </td>
+                                    {{ $request->community()->first()->admin->username }}                                </td>
+                                
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    {{ $community->created_at }}
-                                </td>
+                                    {{ $request->community()->first()->created_at }}                                </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    @if($community->isActive)
+                                    @if($request->status === 'pending')
                                     <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-700">
-                                        Active &#10004;
+                                        Pending
                                     </span>
                                     @else
                                     <span class="px-2 py-1 font-semibold leading-tight text-red-700 bg-red-100 rounded-full dark:text-red-100 dark:bg-red-700">
-                                        Inactive &#10008;
+                                        {{ $request->status }}
                                     </span>
                                     @endif
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4">
-                                    <form action="{{ route('showUsers', $community->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="btn btn-sm px-2 py-1 text-white bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">
-                                            Users
-                                        </button>
-                                    </form>
-                                </td>
-                                <td class="whitespace-nowrap px-6 py-4">
-                                    <form action="{{ route('stateChange', $community->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <button type="submit" class="{{ $community->isActive ? 'bg-red-500' : 'bg-green-500' }} btn btn-sm px-2 py-1 text-white border border-transparent rounded-md">
-                                            {{ $community->isActive ? 'Deactivate' : 'Activate' }}
-                                        </button>
-                                    </form>
-                                </td>
+                                
                             </tr>
                             @endforeach
                         </tbody>

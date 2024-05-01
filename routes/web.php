@@ -142,8 +142,9 @@ Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComu
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
 Route::match(['put', 'get'], '/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
 Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
-//Route::get('/paneladminCommunitiesRequest', [CommunityRequestController::class, 'adminPanel'])->name('paneladminCommunitiesRequest');
-
+Route::get('/paneladminCommunitiesRequest', [CommunityRequestController::class, 'showRequestCommunities'])->name('paneladminCommunitiesRequest');
+///Route::get('/paneladminCommunitiesRequest/{communityId}', [CommunityRequestController::class, 'showRequestCommunities'])
+   // ->name('paneladminCommunitiesRequest');
 Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');
 Route::put('/posts/{post}/toggle', [PostsController::class, 'toggleActivation'])->name('posts.toggle');
 Route::get('/posts/{post}', [PostsController::class, 'showPostById'])->name('post.show');
