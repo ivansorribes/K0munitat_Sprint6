@@ -172,25 +172,29 @@ class CommunitiesController extends Controller
     }
 
     public function communitiesList(Request $request) 
-    {
-        $user = Auth::user();
-        // Obtener el número de página de la solicitud
-        $page = $request->input('page', 1);
-            
-        // Definir la cantidad de elementos por página
-        $perPage = 10; // Por ejemplo, 10 elementos por página
-        
-        // Obtener las comunidades paginadas
-        $communitiesList = communities::paginate($perPage, ['*'], 'page', $page);
-        $idUser = $user->id; 
-        $isMember = $this->isMember($idUser);
-        return response()->json([
-            'communities' => $communitiesList,
-            'user' => $user, 
-            'isMember' => $isMember,
-           
-        ]);
-    }
+{
+    $user = Auth::user();
+    $page = $request->input('page', 1);
+    $perPage = 10;
+
+    // Obtener los IDs de las comunidades del usuario
+    $communitiesUserIds = $user->communities->pluck('id')->toArray();
+    
+    // Obtener las comunidades paginadas
+    $communitiesList = communities::paginate($perPage, ['*'], 'page', $page);
+
+    // Agregar un campo adicional a cada comunidad para indicar si el usuario es miembro
+    $communitiesList->getCollection()->transform(function ($community) use ($communitiesUserIds) {
+        $community->isMember = in_array($community->id, $communitiesUserIds);
+        return $community;
+    });
+
+    return response()->json([
+        'communities' => $communitiesList,
+        'user' => $user,
+    ]);
+}
+
 
     public function communitiesUserId() 
     {

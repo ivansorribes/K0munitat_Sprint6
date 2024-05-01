@@ -31,13 +31,13 @@ const CommunitiesList = () => {
       ]);
       setTotalPages(response.data.communities.last_page); // Establecer el número total de páginas
       setCurrentPage(page);
+      setUser(response.data.user);
     } catch (error) {
       console.error("Error fetching communities:", error);
     } finally {
       setLoading(false);
     }
   };
-
   useEffect(() => {
     fetchData(1); // Load initial data
   }, []);
@@ -55,7 +55,6 @@ const CommunitiesList = () => {
       }
     }
   };
-
   const scrollToTop = () => {
     scroll.scrollToTop({
       containerId: "scroll-container",
@@ -122,7 +121,7 @@ const CommunitiesList = () => {
               key={community.id}
               community={community}
               option={
-                communities.includes(community.id) || community.private === 0
+                community.isMember == true || community.private === 0
                   ? "enter"
                   : "send"
               }
