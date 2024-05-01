@@ -52,6 +52,7 @@ class CommunitiesController extends Controller
         return view('communities.CommunitiesList');
     }
 
+    //store data in DB
     public function store(Request $request)
     {
         try {
@@ -144,6 +145,7 @@ class CommunitiesController extends Controller
         return $communities;
     }
 
+    //retorne communitats a les que pertany el usuari
     public function communitiesUser() 
     {
         $user = Auth::user();
@@ -159,19 +161,15 @@ class CommunitiesController extends Controller
     }
 
     
-
+    //retorne llista de communitats obertes
     public function communitiesOpen() 
     {
         $communitiesOpen = communities::where('private', 0)->get();
         return $communitiesOpen;
     }
 
-    public function isMember ($idUser) {
-        $isMember = communitiesUsers::where('id_user', $idUser);
-        return $isMember;
-    }
-
-    public function communitiesList(Request $request) 
+  //llistat de communitats + si usuari es membre o no
+   public function communitiesList(Request $request) 
 {
     $user = Auth::user();
     $page = $request->input('page', 1);
@@ -180,8 +178,14 @@ class CommunitiesController extends Controller
     // Obtener los IDs de las comunidades del usuario
     $communitiesUserIds = $user->communities->pluck('id')->toArray();
     
-    // Obtener las comunidades paginadas
-    $communitiesList = communities::paginate($perPage, ['*'], 'page', $page);
+    // Si se proporciona un término de búsqueda, realizar la búsqueda en la base de datos
+    if ($request->has('search')) {
+        $searchTerm = $request->input('search');
+        $communitiesList = communities::where('name', 'like', '%' . $searchTerm . '%')->paginate($perPage, ['*'], 'page', $page);
+    } else {
+        // De lo contrario, obtener todas las comunidades paginadas
+        $communitiesList = communities::paginate($perPage, ['*'], 'page', $page);
+    }
 
     // Agregar un campo adicional a cada comunidad para indicar si el usuario es miembro
     $communitiesList->getCollection()->transform(function ($community) use ($communitiesUserIds) {
@@ -195,7 +199,6 @@ class CommunitiesController extends Controller
     ]);
 }
 
-
     public function communitiesUserId() 
     {
         $user = Auth::user();
@@ -208,7 +211,5 @@ class CommunitiesController extends Controller
         $user = Auth::user();
         return $user;
     }
-
-   
 
 }

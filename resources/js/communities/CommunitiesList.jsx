@@ -4,14 +4,11 @@ import { createRoot } from "react-dom/client";
 import CommunityCard from "./CommunityCard";
 import "tailwindcss/tailwind.css";
 import "../../css/community.css";
-import useApiSwitcher from "../hooks/useApiSwitcher";
-import ToggleButton from "../components/buttons/toggle";
 import { animateScroll as scroll } from "react-scroll";
 import { ButtonCreate } from "../components/buttons";
 
 const CommunitiesList = () => {
   const [option, setOption] = useState("option1");
-  const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
   const [communities, setCommunities] = useState([]);
@@ -19,18 +16,20 @@ const CommunitiesList = () => {
   const [showScrollButton, setShowScrollButton] = useState(false);
   const [user, setUser] = useState([]);
   const [filteredCommunities, setFilteredCommunities] = useState([]);
-  const [totalPages, setTotalPages] = useState(0); // Nuevo estado para almacenar el número total de páginas
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  const fetchData = async (page) => {
+  const fetchData = async (page, search = "") => {
     setLoading(true);
     try {
-      const response = await axios.get(`/communitiesList?page=${page}`);
+      const response = await axios.get(
+        `/communitiesList?page=${page}&search=${search}`
+      );
       setCommunities((prevCommunities) => [
         ...prevCommunities,
         ...response.data.communities.data,
       ]);
-      setTotalPages(response.data.communities.last_page); // Establecer el número total de páginas
-      setCurrentPage(page);
+      setTotalPages(response.data.communities.last_page);
       setUser(response.data.user);
     } catch (error) {
       console.error("Error fetching communities:", error);
@@ -38,9 +37,10 @@ const CommunitiesList = () => {
       setLoading(false);
     }
   };
+
   useEffect(() => {
-    fetchData(1); // Load initial data
-  }, []);
+    fetchData(currentPage, searchTerm);
+  }, [currentPage, searchTerm]);
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -49,12 +49,13 @@ const CommunitiesList = () => {
       if (
         scrollTop + clientHeight >= scrollHeight &&
         !loading &&
-        currentPage < totalPages // Comprueba si currentPage es menor que totalPages
+        currentPage < totalPages
       ) {
-        fetchData(currentPage + 1); // Load next page
+        setCurrentPage((prevPage) => prevPage + 1);
       }
     }
   };
+
   const scrollToTop = () => {
     scroll.scrollToTop({
       containerId: "scroll-container",
@@ -66,6 +67,11 @@ const CommunitiesList = () => {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
+
+  useEffect(() => {
+    setCommunities([]);
+    setCurrentPage(1);
+  }, [searchTerm]);
 
   useEffect(() => {
     const filtered = communities.filter((community) =>
@@ -121,14 +127,11 @@ const CommunitiesList = () => {
               key={community.id}
               community={community}
               option={
-                community.isMember == true || community.private === 0
-                  ? "enter"
-                  : "send"
+                community.isMember || community.private === 0 ? "enter" : "send"
               }
               user={user}
             />
           ))}
-          {/* Mostrar mensaje si el usuario no está unido a ninguna comunidad */}
           {communities.length === 0 && (
             <div className="col-span-4 text-center text-gray-600">
               <p>You are not attached to a community.</p>
