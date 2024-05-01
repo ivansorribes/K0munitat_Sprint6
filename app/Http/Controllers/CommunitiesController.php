@@ -166,6 +166,10 @@ class CommunitiesController extends Controller
         return $communitiesOpen;
     }
 
+    public function isMember ($idUser) {
+        $isMember = communitiesUsers::where('id_user', $idUser);
+        return $isMember;
+    }
 
     public function communitiesList(Request $request) 
     {
@@ -174,14 +178,17 @@ class CommunitiesController extends Controller
         $page = $request->input('page', 1);
             
         // Definir la cantidad de elementos por página
-        $perPage = 5; // Por ejemplo, 10 elementos por página
+        $perPage = 10; // Por ejemplo, 10 elementos por página
         
         // Obtener las comunidades paginadas
         $communitiesList = communities::paginate($perPage, ['*'], 'page', $page);
-         
+        $idUser = $user->id; 
+        $isMember = $this->isMember($idUser);
         return response()->json([
             'communities' => $communitiesList,
-            'user' => $user
+            'user' => $user, 
+            'isMember' => $isMember,
+           
         ]);
     }
 
