@@ -168,8 +168,7 @@ class CommunitiesController extends Controller
         return $communitiesOpen;
     }
 
-  //llistat de communitats + si usuari es membre o no
-   public function communitiesList(Request $request) 
+  public function communitiesList(Request $request) 
 {
     $user = Auth::user();
     $page = $request->input('page', 1);
@@ -181,10 +180,13 @@ class CommunitiesController extends Controller
     // Si se proporciona un término de búsqueda, realizar la búsqueda en la base de datos
     if ($request->has('search')) {
         $searchTerm = $request->input('search');
-        $communitiesList = communities::where('name', 'like', '%' . $searchTerm . '%')->paginate($perPage, ['*'], 'page', $page);
+        $communitiesList = communities::where('isActive', 1)
+            ->where('name', 'like', '%' . $searchTerm . '%')
+            ->paginate($perPage, ['*'], 'page', $page);
     } else {
-        // De lo contrario, obtener todas las comunidades paginadas
-        $communitiesList = communities::paginate($perPage, ['*'], 'page', $page);
+        // De lo contrario, obtener todas las comunidades activas paginadas
+        $communitiesList = communities::where('isActive', 1)
+            ->paginate($perPage, ['*'], 'page', $page);
     }
 
     // Agregar un campo adicional a cada comunidad para indicar si el usuario es miembro
