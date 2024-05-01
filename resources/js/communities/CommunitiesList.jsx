@@ -145,7 +145,7 @@ const CommunitiesList = () => {
   };
 
   return (
-    <div className="container mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
+    <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
         <ToggleButton onToggle={toggleOption} checked={option === 'option2'} text={option === 'option1' ? 'My Communities' : 'All Communities'}  />
         <input
@@ -179,7 +179,7 @@ const CommunitiesList = () => {
           {/* Mostrar mensaje si el usuario no está unido a ninguna comunidad */}
           {userCommunities.length === 0 && (
             <div className="col-span-4 text-center text-gray-600">
-              <p>No estás unido a ninguna comunidad.</p>
+              <p>You are not attached to a community.</p>
             </div>
           )}
         </div>
