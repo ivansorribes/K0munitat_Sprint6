@@ -161,13 +161,14 @@ class CommunitiesController extends Controller
     }
 
     
-    //retorne llista de communitats obertes
+    /////////////////////////////////retorne llista de communitats obertes
     public function communitiesOpen() 
     {
         $communitiesOpen = communities::where('private', 0)->get();
         return $communitiesOpen;
     }
 
+    ////////////////////////////////////////////////////////LLISTA PRINCIPAL DE COMUNITATS
   public function communitiesList(Request $request) 
 {
     $user = Auth::user();
@@ -201,6 +202,7 @@ class CommunitiesController extends Controller
     ]);
 }
 
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////7
     public function communitiesUserId() 
     {
         $user = Auth::user();
@@ -208,6 +210,7 @@ class CommunitiesController extends Controller
         return $communitiesUserIds;
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function userActual() 
     {
         $user = Auth::user();
