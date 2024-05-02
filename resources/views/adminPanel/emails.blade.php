@@ -132,7 +132,7 @@
             <button onclick="closeShowMoreModal()" class="text-gray-600"><i class="fas fa-times"></i></button>
         </div>
         <div class="flex items-center mb-4">
-            <img src="user_image_url_here" alt="User Image" class="w-10 h-10 rounded-full">
+            <img src="{{ $message->userProfileImage }}" alt="User Image" class="w-10 h-10 rounded-full" id="senderProfileImage">
             <div class="ml-4">
                 <h2 class="text-lg font-semibold">Sender: <span id="senderName"></span></h2>
                 <p class="text-gray-600" id="senderEmail"></p>

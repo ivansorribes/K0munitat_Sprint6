@@ -26,6 +26,17 @@ class MessagesController extends Controller
         // Obtener todos los mensajes eliminados
         $deletedMessages = DB::table('contactMessages')->where('isActive', 0)->get();
 
+        // Recuperar las imágenes de perfil de los usuarios correspondientes
+        foreach ($activeMessages as $message) {
+            $userProfileImage = DB::table('users')->where('id', $message->id_user)->value('profile_image');
+            $message->userProfileImage = asset('profile/images/' . $userProfileImage);
+        }
+
+        foreach ($deletedMessages as $message) {
+            $userProfileImage = DB::table('users')->where('id', $message->id_user)->value('profile_image');
+            $message->userProfileImage = asset('profile/images/' . $userProfileImage);
+        }
+
         return view('adminPanel.emails', compact('activeMessages', 'deletedMessages'));
     }
 

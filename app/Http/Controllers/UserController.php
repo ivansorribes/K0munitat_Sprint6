@@ -116,54 +116,59 @@ class UserController extends Controller
         return back()->with('success', 'User details updated successfully.');
     }
 
+
+
     public function postUser()
     {
         $user = Auth::user();
-
-        if ($user) {
-            $userData = [
-                'id' => $user->id,
-                'username' => $user->username,
-                'firstname' => $user->firstname,
-                'lastname' => $user->lastname,
-                'profile_image' => $user->profile_image,
-                'profile_description' => $user->profile_description,
-                'email' => $user->email,
-                'telephone' => $user->telephone,
-                'city' => $user->city,
-                'postcode' => $user->postcode,
-            ];
-
-            // Obtener todas las publicaciones del usuario
-            $posts = posts::where('id_user', $user->id)
-                ->where('isActive', 1)
-                ->get();
-
-            // Adjuntar la información del usuario a cada publicación
-            foreach ($posts as $post) {
-                // Obtener todos los comentarios asociados con el post actual
-                $postComments = commentsPosts::where('id_post', $post->id)
-                    ->with(['comment.user'])
-                    ->get();
-
-                // Adjuntar los comentarios al post
-                $post->comments = $postComments;
-
-                // Obtener los likes del post
-                $post->likes = likesPosts::where('id_post', $post->id)->with('user')->get();
-
-                // Obtener la imagen del post
-                $post->image = imagePost::where('id_post', $post->id)->first();
-
-                // Adjuntar la información del usuario a la publicación
-                $post->user = $userData;
-            }
-
-            return response()->json(['user' => $userData, 'posts' => $posts], 200);
-        } else {
+    
+        if (!$user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
+    
+        $userData = [
+            'id' => $user->id,
+            'username' => $user->username,
+            'firstname' => $user->firstname,
+            'lastname' => $user->lastname,
+            'profile_image' => $user->profile_image,
+            'profile_description' => $user->profile_description,
+            'email' => $user->email,
+            'telephone' => $user->telephone,
+            'city' => $user->city,
+            'postcode' => $user->postcode,
+        ];
+    
+        $posts = DB::table('posts')
+            ->where('id_user', $user->id)
+            ->where('isActive', 1)
+            ->get();
+    
+        // Iterar sobre los posts para agregar los comentarios, likes e imagen
+        foreach ($posts as $post) {
+            $post->comments = DB::table('commentsPosts')
+                ->where('id_post', $post->id)
+                ->join('users', 'commentsPosts.id_user', '=', 'users.id')
+                ->select('commentsPosts.*', 'users.username')
+                ->get();
+    
+            $post->likes = DB::table('likesPosts')
+                ->where('id_post', $post->id)
+                ->join('users', 'likesPosts.id_user', '=', 'users.id')
+                ->select('likesPosts.*', 'users.username')
+                ->get();
+    
+            $post->image = DB::table('imagePost')
+                ->where('id_post', $post->id)
+                ->first();
+    
+            $post->user = $userData;
+        }
+    
+        return response()->json(['user' => $userData, 'posts' => $posts], 200);
     }
+
+
 
 
 
