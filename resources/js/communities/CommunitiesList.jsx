@@ -5,11 +5,10 @@ import CommunityCard from "./CommunityCard";
 import "tailwindcss/tailwind.css";
 import "../../css/community.css";
 import { animateScroll as scroll } from "react-scroll";
-import { ButtonCreate } from "../components/buttons";
+import { ButtonCreate, ButtonDelete } from "../components/buttons";
 import CommunitySelector from "../components/select/communityRegion";
 
 const CommunitiesList = () => {
-  const [option, setOption] = useState("option1");
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
   const [communities, setCommunities] = useState([]);
@@ -21,6 +20,12 @@ const CommunitiesList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCommunity, setSelectedCommunity] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState(null);
+
+  const clearFilters = () => {
+    setSelectedCommunity(null);
+    setSelectedRegion(null);
+    setSearchTerm("");
+  };
 
   const fetchData = async (
     page,
@@ -147,6 +152,7 @@ const CommunitiesList = () => {
   return (
     <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
+        <ButtonDelete onClick={clearFilters} label="Clear Filter" />
         <input
           type="text"
           placeholder="Search Communities"
