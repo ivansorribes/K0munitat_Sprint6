@@ -64,7 +64,7 @@ class postsSeeder extends Seeder
                 'description' => "Step into the future of farming with our premier tool rental services! Our extensive catalog features everything from high-efficiency soil tillers to advanced irrigation systems, all available at competitive rental rates.",
                 'isActive' => 1,
                 'private' => 0,
-                'type' => 'post',
+                'type' => 'advertisement',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
