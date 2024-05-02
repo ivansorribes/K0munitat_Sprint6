@@ -25,14 +25,15 @@ const CommunitiesList = () => {
   const fetchData = async (
     page,
     search = "",
-    communityId = null,
+    communityAutId = null,
     regionId = null
   ) => {
     setLoading(true);
     try {
       let url = `/communitiesList?page=${page}&search=${search}`;
-      if (communityId) {
-        url += `&communityId=${communityId}`;
+      if (communityAutId) {
+        // Corregido a communityAutId
+        url += `&communityAutId=${communityAutId}`; // Corregido a communityAutId
       }
       if (regionId) {
         url += `&regionId=${regionId}`;
@@ -52,8 +53,32 @@ const CommunitiesList = () => {
   };
 
   useEffect(() => {
-    fetchData(currentPage, searchTerm);
-  }, [currentPage, searchTerm]);
+    // Función para cargar datos con los filtros seleccionados
+    const fetchDataWithFilters = async () => {
+      setLoading(true);
+      try {
+        // Llamar a fetchData con los filtros seleccionados
+        await fetchData(
+          1,
+          searchTerm,
+          selectedCommunity?.value,
+          selectedRegion?.value
+        );
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Verificar si hay filtros seleccionados y cargar los datos
+    if (selectedCommunity || selectedRegion) {
+      fetchDataWithFilters();
+    } else {
+      // De lo contrario, cargar los datos sin filtros
+      fetchData(currentPage, searchTerm);
+    }
+  }, [currentPage, searchTerm, selectedCommunity, selectedRegion]);
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -84,7 +109,7 @@ const CommunitiesList = () => {
   useEffect(() => {
     setCommunities([]);
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [selectedCommunity, searchTerm, selectedRegion]);
 
   useEffect(() => {
     const filtered = communities.filter((community) =>
@@ -94,8 +119,9 @@ const CommunitiesList = () => {
   }, [communities, searchTerm]);
 
   const handleCommunityChange = (selectedOption) => {
-    setSelectedCommunity(selectedOption); // Actualiza el estado con la comunidad seleccionada
-    // Llama a fetchData con el ID de la comunidad seleccionada
+    setSelectedCommunity(selectedOption);
+    // Establecer currentPage en 1 cuando se seleccione un filtro
+    setCurrentPage(1);
     fetchData(
       1,
       searchTerm,
@@ -105,8 +131,9 @@ const CommunitiesList = () => {
   };
 
   const handleRegionChange = (selectedOption) => {
-    setSelectedRegion(selectedOption); // Actualiza el estado con la región seleccionada
-    // Llama a fetchData con el ID de la región seleccionada
+    setSelectedRegion(selectedOption);
+    // Establecer currentPage en 1 cuando se seleccione un filtro
+    setCurrentPage(1);
     fetchData(
       1,
       searchTerm,

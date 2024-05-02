@@ -169,7 +169,7 @@ class CommunitiesController extends Controller
     }
 
     ////////////////////////////////////////////////////////LLISTA PRINCIPAL DE COMUNITATS
-  public function communitiesList(Request $request) 
+ public function communitiesList(Request $request) 
 {
     $user = Auth::user();
     $page = $request->input('page', 1);
@@ -178,17 +178,29 @@ class CommunitiesController extends Controller
     // Obtener los IDs de las comunidades del usuario
     $communitiesUserIds = $user->communities->pluck('id')->toArray();
     
-    // Si se proporciona un término de búsqueda, realizar la búsqueda en la base de datos
+    // Inicializar una consulta base para obtener todas las comunidades activas
+    $query = communities::where('isActive', 1);
+
+    // Si se proporciona un término de búsqueda, aplicar el filtro
     if ($request->has('search')) {
         $searchTerm = $request->input('search');
-        $communitiesList = communities::where('isActive', 1)
-            ->where('name', 'like', '%' . $searchTerm . '%')
-            ->paginate($perPage, ['*'], 'page', $page);
-    } else {
-        // De lo contrario, obtener todas las comunidades activas paginadas
-        $communitiesList = communities::where('isActive', 1)
-            ->paginate($perPage, ['*'], 'page', $page);
+        $query->where('name', 'like', '%' . $searchTerm . '%');
     }
+
+    // Si se proporciona un ID de región, aplicar el filtro
+    if ($request->has('regionId')) {
+        $regionId = $request->input('regionId');
+        $query->where('id_region', $regionId);
+    }
+
+    // Si se proporciona un ID de comunidad autónoma, aplicar el filtro
+    if ($request->has('communityAutId')) {
+        $communityAutId = $request->input('communityAutId');
+        $query->where('id_autonomousCommunity', $communityAutId);
+    }
+
+    // Ejecutar la consulta paginada
+    $communitiesList = $query->paginate($perPage, ['*'], 'page', $page);
 
     // Agregar un campo adicional a cada comunidad para indicar si el usuario es miembro
     $communitiesList->getCollection()->transform(function ($community) use ($communitiesUserIds) {
@@ -201,6 +213,7 @@ class CommunitiesController extends Controller
         'user' => $user,
     ]);
 }
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////7
     public function communitiesUserId() 
