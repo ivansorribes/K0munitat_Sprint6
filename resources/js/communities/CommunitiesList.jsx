@@ -122,11 +122,13 @@ const CommunitiesList = () => {
     setSelectedCommunity(selectedOption);
     // Establecer currentPage en 1 cuando se seleccione un filtro
     setCurrentPage(1);
+    // Resetear el filtro de región a null
+    setSelectedRegion(null);
     fetchData(
       1,
       searchTerm,
       selectedOption ? selectedOption.value : null,
-      selectedRegion ? selectedRegion.value : null
+      null // Pasar null como valor de regionId
     );
   };
 
