@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\CommunityRequest;
+use App\Models\communities;
+use App\Models\communitiesUsers;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class CommunityRequestController extends Controller
@@ -31,13 +34,18 @@ class CommunityRequestController extends Controller
         ], 201);
     }
 
-    public function showUsers($communityId)
+    public function showUsersRequest($communityId)
     {
         // Obtener la comunidad por su ID
-        $community = CommunityRequest::findOrFail($communityId);
+        $community = communities::findOrFail($communityId);
 
-        // Obtener la lista de usuarios asociados a esta comunidad
-        $users = $community->communityUsers()->get();
+        // Obtener los IDs de las solicitudes pendientes asociadas a esta comunidad
+        $pendingRequestIds = CommunityRequest::where('id_community', $communityId)
+            ->where('status', 'pending')
+            ->pluck('id_user');
+
+        // Obtener la lista de usuarios asociados a esta comunidad con estado pendiente
+        $users = User::whereIn('id', $pendingRequestIds)->get();
 
         // Devolver la vista con la lista de usuarios
         return view('adminPanel.usuarisComunitat', compact('users', 'community'));
@@ -46,6 +54,12 @@ class CommunityRequestController extends Controller
     public function showRequestCommunities()
     {
         $communityRequests = CommunityRequest::getPendingRequests();
+
+        // Obtener el estado de cada comunidad y agregarlo al conjunto de datos
+        foreach ($communityRequests as $request) {
+            $isActive = $request->community->isActive ? 'Activa' : 'Inactiva';
+            $request->setAttribute('isActive', $isActive);
+        }
 
 
         return view('adminPanel.paneladminCommunitiesRequest', compact('communityRequests'));
