@@ -7,6 +7,7 @@ import "../../css/community.css";
 import { animateScroll as scroll } from "react-scroll";
 import { ButtonCreate, ButtonDelete } from "../components/buttons";
 import CommunitySelector from "../components/select/communityRegion";
+import ToggleButton from "../components/buttons/toggle";
 
 const CommunitiesList = () => {
   const [loading, setLoading] = useState(true);
@@ -49,7 +50,6 @@ const CommunitiesList = () => {
         url += `&showUserCommunities=true`;
       }
       const response = await axios.get(url);
-      // Concatenar las nuevas comunidades a la lista existente
       setCommunities((prevCommunities) => [
         ...prevCommunities,
         ...response.data.communities.data,
@@ -151,12 +151,8 @@ const CommunitiesList = () => {
     );
   };
 
-  const handleShowUserCommunities = () => {
-    setSelectedCommunity(null);
-    setSelectedRegion(null);
-    setSearchTerm("");
-    setCurrentPage(1);
-    setShowUserCommunities(true);
+  const handleToggleUserCommunities = (checked) => {
+    setShowUserCommunities(checked);
   };
 
   return (
@@ -177,9 +173,10 @@ const CommunitiesList = () => {
         <a href="/communities/create" rel="noopener noreferrer">
           <ButtonCreate label="Create" />
         </a>
-        <ButtonDelete
-          onClick={handleShowUserCommunities}
-          label="Show User Communities"
+        <ToggleButton
+          onToggle={handleToggleUserCommunities}
+          checked={showUserCommunities}
+          text="Show User Communities"
         />
       </div>
       <div
