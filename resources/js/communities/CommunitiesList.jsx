@@ -50,10 +50,14 @@ const CommunitiesList = () => {
         url += `&showUserCommunities=true`;
       }
       const response = await axios.get(url);
-      setCommunities((prevCommunities) => [
-        ...prevCommunities,
-        ...response.data.communities.data,
-      ]);
+      if (page === 1) {
+        setCommunities(response.data.communities.data); // Limpiar y establecer la lista en la primera página
+      } else {
+        setCommunities((prevCommunities) => [
+          ...prevCommunities,
+          ...response.data.communities.data,
+        ]); // Concatenar los nuevos resultados a la lista existente en páginas posteriores
+      }
       setTotalPages(response.data.communities.last_page);
       setUser(response.data.user);
     } catch (error) {
@@ -130,8 +134,9 @@ const CommunitiesList = () => {
 
   const handleCommunityChange = (selectedOption) => {
     setSelectedCommunity(selectedOption);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reiniciar la página actual
     setSelectedRegion(null);
+    setCommunities([]); // Limpiar la lista de comunidades
     fetchData(
       1,
       searchTerm,
@@ -142,7 +147,8 @@ const CommunitiesList = () => {
 
   const handleRegionChange = (selectedOption) => {
     setSelectedRegion(selectedOption);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reiniciar la página actual
+    setCommunities([]); // Limpiar la lista de comunidades
     fetchData(
       1,
       searchTerm,
