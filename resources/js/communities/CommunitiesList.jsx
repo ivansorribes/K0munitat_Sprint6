@@ -1,116 +1,254 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { createRoot } from 'react-dom/client';
-import CommunityCard from './CommunityCard';
-import 'tailwindcss/tailwind.css';
-import '../../css/community.css';
-import useApiSwitcher from '../hooks/useApiSwitcher'; // Importa el hook useApiSwitcher
-import ToggleButton from '../components/buttons/toggle';
-import { animateScroll as scroll } from 'react-scroll';
-import {ButtonCreate} from '../components/buttons';
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { createRoot } from "react-dom/client";
+import CommunityCard from "./CommunityCard";
+import "tailwindcss/tailwind.css";
+import "../../css/community.css";
+import { animateScroll as scroll } from "react-scroll";
+import { ButtonCreate, ButtonDelete } from "../components/buttons";
+import CommunitySelector from "../components/select/communityRegion";
+import ToggleButton from "../components/buttons/toggle";
 
 const CommunitiesList = () => {
-  const [option, setOption] = useState('option1');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [communities, setCommunities] = useState([]);
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
-  const [userCommunities, setUserCommunities] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
-  const [showScrollButton, setShowScrollButton] = useState(false); // Estado para mostrar el botón de scroll
-  const { data: apiData, loading: apiLoading } = useApiSwitcher(option);
+  const [communities, setCommunities] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const [user, setUser] = useState([]);
+  const [filteredCommunities, setFilteredCommunities] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCommunity, setSelectedCommunity] = useState(null);
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [showUserCommunities, setShowUserCommunities] = useState(false);
 
   useEffect(() => {
-    const fetchUserCommunities = async () => {
-      try {
-        const response = await axios.get('/communitiesUserId');
-        setUserCommunities(response.data);
-      } catch (error) {
-        console.error('Error fetching user communities:', error);
-      }
-    };
+    // Obtener el valor de regionId del elemento oculto
+    const regionIdElement = document.getElementById("regionId");
+    if (regionIdElement) {
+      const regionId = regionIdElement.value;
+      setSelectedRegion({ value: regionId, label: `Region ${regionId}` });
+    }
 
-    fetchUserCommunities();
+    // Obtener el valor de regionId desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const regionIdFromURL = urlParams.get("regionId");
+    if (regionIdFromURL) {
+      setSelectedRegion({
+        value: regionIdFromURL,
+        label: `Region ${regionIdFromURL}`,
+      });
+    }
   }, []);
 
-  useEffect(() => {
-    if (apiData && apiData.communities) {
-      setCommunities(prevCommunities => [...prevCommunities, ...apiData.communities]);
+  const clearRegionFilter = () => {
+    // Eliminar el parámetro regionId de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.delete("regionId");
+    const newUrl = window.location.pathname + "?" + urlParams.toString();
+    window.history.replaceState({}, "", newUrl);
+
+    // Limpiar el valor del input oculto regionId
+    const regionIdElement = document.getElementById("regionId");
+    if (regionIdElement) {
+      regionIdElement.value = "";
     }
-    setLoading(apiLoading);
-  }, [apiData, apiLoading]);
 
-  useEffect(() => {
-    if (apiData && apiData.user) {
-      setUser(apiData.user);
-    }
-  }, [apiData]);
- 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-        setShowScrollButton(scrollTop > clientHeight / 2);
-        if (scrollHeight - scrollTop === clientHeight) {
-          fetchData();
-        }
-      }
-    };
-
-    scrollRef.current.addEventListener('scroll', handleScroll);
-
-    return () => {
-      if (scrollRef.current) {
-        scrollRef.current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
-  const fetchData = () => {
-    setCurrentPage(prevPage => prevPage + 1);
+    // Limpiar el filtro de regiones en el estado
+    setSelectedRegion(null);
   };
 
-  const toggleOption = () => {
-    setOption(option === 'option1' ? 'option2' : 'option1');
-    setCurrentPage(1);
-    setCommunities([]);
-    fetchData();
-    scrollToTop();
+  const clearFilters = () => {
+    setSelectedCommunity(null);
+    setSelectedRegion(null); // Limpiar el filtro de región
+    setSearchTerm("");
+    setShowUserCommunities(false);
+    // Llamar a la función clearRegionFilter para eliminar el filtro de región
+    clearRegionFilter();
+  };
+  const fetchData = async (
+    page,
+    search = "",
+    communityAutId = null,
+    regionId = null,
+    showUserCommunities = false
+  ) => {
+    setLoading(true);
+    try {
+      let url = `/communitiesList?page=${page}&search=${search}`;
+      if (communityAutId) {
+        url += `&communityAutId=${communityAutId}`;
+      }
+      if (regionId) {
+        url += `&regionId=${regionId}`;
+      }
+      if (showUserCommunities) {
+        url += `&showUserCommunities=true`;
+      }
+      const response = await axios.get(url);
+      if (page === 1) {
+        setCommunities(response.data.communities.data); // Limpiar y establecer la lista en la primera página
+      } else {
+        setCommunities((prevCommunities) => [
+          ...prevCommunities,
+          ...response.data.communities.data,
+        ]); // Concatenar los nuevos resultados a la lista existente en páginas posteriores
+      }
+      setTotalPages(response.data.communities.last_page);
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    const fetchDataWithFilters = async () => {
+      setLoading(true);
+      try {
+        await fetchData(
+          currentPage,
+          searchTerm,
+          selectedCommunity?.value,
+          selectedRegion?.value,
+          showUserCommunities
+        );
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDataWithFilters();
+  }, [
+    currentPage,
+    searchTerm,
+    selectedCommunity,
+    selectedRegion,
+    showUserCommunities,
+  ]);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      setShowScrollButton(scrollTop > clientHeight / 2);
+      if (
+        scrollTop + clientHeight >= scrollHeight &&
+        !loading &&
+        currentPage < totalPages
+      ) {
+        setCurrentPage((prevPage) => prevPage + 1);
+      }
+    }
   };
 
   const scrollToTop = () => {
     scroll.scrollToTop({
-      containerId: 'scroll-container',
+      containerId: "scroll-container",
       duration: 500,
-      smooth: 'easeInOutQuad'
+      smooth: "easeInOutQuad",
     });
   };
 
-  // Función para manejar el cambio en el cuadro de búsqueda
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filtrar comunidades basadas en el término de búsqueda
-  const filteredCommunities = communities.filter(community =>
-    community.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    setCommunities([]);
+    setCurrentPage(1);
+  }, [selectedCommunity, searchTerm, selectedRegion, showUserCommunities]);
 
-  // Función para manejar el click en el botón de scroll hacia arriba
-  const handleScrollToTop = () => {
-    scroll.scrollToTop({
-      containerId: 'scroll-container',
-      duration: 500,
-      smooth: 'easeInOutQuad'
-    });
+  useEffect(() => {
+    const filtered = communities.filter((community) =>
+      community.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredCommunities(filtered);
+  }, [communities, searchTerm]);
+
+  const handleCommunityChange = (selectedOption) => {
+    setSelectedCommunity(selectedOption);
+    setCurrentPage(1); // Reiniciar la página actual
+    setSelectedRegion(null);
+    setCommunities([]); // Limpiar la lista de comunidades
+    fetchData(
+      1,
+      searchTerm,
+      selectedOption ? selectedOption.value : null,
+      null
+    );
+  };
+
+  const handleRegionChange = (selectedOption) => {
+    setSelectedRegion(selectedOption);
+    setCurrentPage(1); // Reiniciar la página actual
+    setCommunities([]); // Limpiar la lista de comunidades
+    fetchData(
+      1,
+      searchTerm,
+      selectedCommunity ? selectedCommunity.value : null,
+      selectedOption ? selectedOption.value : null
+    );
+  };
+
+  const handleToggleUserCommunities = (checked) => {
+    setShowUserCommunities(checked);
+  };
+
+  const handleRegionFilter = () => {
+    const regionIdElement = document.getElementById("regionIdElement");
+    if (regionIdElement) {
+      const regionId = regionIdElement.value;
+      fetchDataWithRegionId(
+        currentPage,
+        searchTerm,
+        selectedCommunity?.value,
+        regionId,
+        showUserCommunities
+      );
+    }
+  };
+
+  const fetchDataWithRegionId = async (
+    page,
+    search = "",
+    communityAutId = null,
+    showUserCommunities = false
+  ) => {
+    setLoading(true);
+    try {
+      const regionIdElement = document.getElementById("regionIdElement"); // Obtener el elemento del DOM que contiene regionId
+      const regionId = regionIdElement.value; // Obtener el valor de regionId del elemento del DOM
+
+      let url = `/communitiesList?page=${page}&search=${search}`;
+      if (communityAutId) {
+        url += `&communityAutId=${communityAutId}`;
+      }
+      if (regionId) {
+        url += `&regionId=${regionId}`;
+      }
+      if (showUserCommunities) {
+        url += `&showUserCommunities=true`;
+      }
+
+      const response = await axios.get(url);
+      setCommunities(response.data.communities.data);
+      setTotalPages(response.data.communities.last_page);
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="container mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
+    <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
-        <ToggleButton onToggle={toggleOption} checked={option === 'option2'} text={option === 'option1' ? 'My Communities' : 'All Communities'}  />
-        {/* Cuadro de búsqueda */}
+        <ButtonDelete onClick={clearFilters} label="Clear Filters" />
         <input
           type="text"
           placeholder="Search Communities"
@@ -118,15 +256,43 @@ const CommunitiesList = () => {
           onChange={handleSearchChange}
           className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
+        <CommunitySelector
+          onCommunityChange={handleCommunityChange}
+          onRegionChange={handleRegionChange}
+        />
         <a href="/communities/create" rel="noopener noreferrer">
           <ButtonCreate label="Create" />
         </a>
+        <ToggleButton
+          onToggle={handleToggleUserCommunities}
+          checked={showUserCommunities}
+          text="Show User Communities"
+        />
       </div>
-      <div id="scroll-container" ref={scrollRef} style={{ overflowY: 'scroll', height: '60vh' }}>
+      <div
+        id="scroll-container"
+        ref={scrollRef}
+        style={{ overflowY: "scroll", height: "60vh" }}
+        onScroll={handleScroll}
+      >
         {showScrollButton && (
-          <button onClick={handleScrollToTop} className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 focus:outline-none">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+          <button
+            onClick={scrollToTop}
+            className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 focus:outline-none"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 10l7-7m0 0l7 7m-7-7v18"
+              ></path>
             </svg>
           </button>
         )}
@@ -135,18 +301,25 @@ const CommunitiesList = () => {
             <CommunityCard
               key={community.id}
               community={community}
-              option={userCommunities.includes(community.id) || community.private === 0 ? 'enter' : 'send'}
+              option={
+                community.isMember || community.private === 0 ? "enter" : "send"
+              }
               user={user}
             />
           ))}
+          {communities.length === 0 && (
+            <div className="col-span-4 text-center text-gray-600">
+              <p>You are not attached to a community.</p>
+            </div>
+          )}
         </div>
-        {loading && <p>Loading...</p>}
       </div>
     </div>
   );
 };
 
-if (document.getElementById('communityList')) {
-  createRoot(document.getElementById('communityList')).render(<CommunitiesList />);
+if (document.getElementById("communityList")) {
+  createRoot(document.getElementById("communityList")).render(
+    <CommunitiesList />
+  );
 }
-
