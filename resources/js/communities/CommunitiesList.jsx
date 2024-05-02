@@ -1,116 +1,88 @@
-import React, { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
-import { createRoot } from 'react-dom/client';
-import CommunityCard from './CommunityCard';
-import 'tailwindcss/tailwind.css';
-import '../../css/community.css';
-import useApiSwitcher from '../hooks/useApiSwitcher'; // Importa el hook useApiSwitcher
-import ToggleButton from '../components/buttons/toggle';
-import { animateScroll as scroll } from 'react-scroll';
-import {ButtonCreate} from '../components/buttons';
+import React, { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import { createRoot } from "react-dom/client";
+import CommunityCard from "./CommunityCard";
+import "tailwindcss/tailwind.css";
+import "../../css/community.css";
+import { animateScroll as scroll } from "react-scroll";
+import { ButtonCreate } from "../components/buttons";
 
 const CommunitiesList = () => {
-  const [option, setOption] = useState('option1');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [communities, setCommunities] = useState([]);
+  const [option, setOption] = useState("option1");
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
-  const [userCommunities, setUserCommunities] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(''); // Estado para almacenar el término de búsqueda
-  const [showScrollButton, setShowScrollButton] = useState(false); // Estado para mostrar el botón de scroll
-  const { data: apiData, loading: apiLoading } = useApiSwitcher(option);
+  const [communities, setCommunities] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [showScrollButton, setShowScrollButton] = useState(false);
   const [user, setUser] = useState([]);
+  const [filteredCommunities, setFilteredCommunities] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    const fetchUserCommunities = async () => {
-      try {
-        const response = await axios.get('/communitiesUserId');
-        setUserCommunities(response.data);
-      } catch (error) {
-        console.error('Error fetching user communities:', error);
-      }
-    };
-
-    fetchUserCommunities();
-  }, []);
-
-  useEffect(() => {
-    if (apiData && apiData.communities) {
-      setCommunities(prevCommunities => [...prevCommunities, ...apiData.communities]);
+  const fetchData = async (page, search = "") => {
+    setLoading(true);
+    try {
+      const response = await axios.get(
+        `/communitiesList?page=${page}&search=${search}`
+      );
+      setCommunities((prevCommunities) => [
+        ...prevCommunities,
+        ...response.data.communities.data,
+      ]);
+      setTotalPages(response.data.communities.last_page);
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    } finally {
+      setLoading(false);
     }
-    setLoading(apiLoading);
-  }, [apiData, apiLoading]);
-
-  useEffect(() => {
-    if (apiData && apiData.user) {
-      setUser(apiData.user);
-    }
-  }, [apiData]);
- 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (scrollRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
-        setShowScrollButton(scrollTop > clientHeight / 2);
-        if (scrollHeight - scrollTop === clientHeight) {
-          fetchData();
-        }
-      }
-    };
-
-    scrollRef.current.addEventListener('scroll', handleScroll);
-
-    return () => {
-      if (scrollRef.current) {
-        scrollRef.current.removeEventListener('scroll', handleScroll);
-      }
-    };
-  }, []);
-
-  const fetchData = () => {
-    setCurrentPage(prevPage => prevPage + 1);
   };
 
-  const toggleOption = () => {
-    setOption(option === 'option1' ? 'option2' : 'option1');
-    setCurrentPage(1);
-    setCommunities([]);
-    fetchData();
-    scrollToTop();
+  useEffect(() => {
+    fetchData(currentPage, searchTerm);
+  }, [currentPage, searchTerm]);
+
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = scrollRef.current;
+      setShowScrollButton(scrollTop > clientHeight / 2);
+      if (
+        scrollTop + clientHeight >= scrollHeight &&
+        !loading &&
+        currentPage < totalPages
+      ) {
+        setCurrentPage((prevPage) => prevPage + 1);
+      }
+    }
   };
 
   const scrollToTop = () => {
     scroll.scrollToTop({
-      containerId: 'scroll-container',
+      containerId: "scroll-container",
       duration: 500,
-      smooth: 'easeInOutQuad'
+      smooth: "easeInOutQuad",
     });
   };
 
-  // Función para manejar el cambio en el cuadro de búsqueda
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
 
-  // Filtrar comunidades basadas en el término de búsqueda
-  const filteredCommunities = communities.filter(community =>
-    community.name.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  useEffect(() => {
+    setCommunities([]);
+    setCurrentPage(1);
+  }, [searchTerm]);
 
-  // Función para manejar el click en el botón de scroll hacia arriba
-  const handleScrollToTop = () => {
-    scroll.scrollToTop({
-      containerId: 'scroll-container',
-      duration: 500,
-      smooth: 'easeInOutQuad'
-    });
-  };
+  useEffect(() => {
+    const filtered = communities.filter((community) =>
+      community.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setFilteredCommunities(filtered);
+  }, [communities, searchTerm]);
 
   return (
-    <div className="container mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
+    <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
-        <ToggleButton onToggle={toggleOption} checked={option === 'option2'} text={option === 'option1' ? 'My Communities' : 'All Communities'}  />
-        {/* Cuadro de búsqueda */}
         <input
           type="text"
           placeholder="Search Communities"
@@ -122,11 +94,30 @@ const CommunitiesList = () => {
           <ButtonCreate label="Create" />
         </a>
       </div>
-      <div id="scroll-container" ref={scrollRef} style={{ overflowY: 'scroll', height: '60vh' }}>
+      <div
+        id="scroll-container"
+        ref={scrollRef}
+        style={{ overflowY: "scroll", height: "60vh" }}
+        onScroll={handleScroll}
+      >
         {showScrollButton && (
-          <button onClick={handleScrollToTop} className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 focus:outline-none">
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+          <button
+            onClick={scrollToTop}
+            className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-full shadow-md hover:bg-blue-600 focus:outline-none"
+          >
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M5 10l7-7m0 0l7 7m-7-7v18"
+              ></path>
             </svg>
           </button>
         )}
@@ -135,18 +126,25 @@ const CommunitiesList = () => {
             <CommunityCard
               key={community.id}
               community={community}
-              option={userCommunities.includes(community.id) || community.private === 0 ? 'enter' : 'send'}
+              option={
+                community.isMember || community.private === 0 ? "enter" : "send"
+              }
               user={user}
             />
           ))}
+          {communities.length === 0 && (
+            <div className="col-span-4 text-center text-gray-600">
+              <p>You are not attached to a community.</p>
+            </div>
+          )}
         </div>
-        {loading && <p>Loading...</p>}
       </div>
     </div>
   );
 };
 
-if (document.getElementById('communityList')) {
-  createRoot(document.getElementById('communityList')).render(<CommunitiesList />);
+if (document.getElementById("communityList")) {
+  createRoot(document.getElementById("communityList")).render(
+    <CommunitiesList />
+  );
 }
-

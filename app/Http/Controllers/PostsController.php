@@ -199,18 +199,22 @@ class PostsController extends Controller
             },
             'comments' => function ($query) {
                 $query->with([
-                    'user' => function ($q) {
-                        $q->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+                    'user' => function ($query) {
+                        $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
                     },
-                    'replies' => function ($q) {
-                        $q->with(['user' => function ($query) {
-                            $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
-                        }])
+                    'replies' => function ($query) {
+                        $query->with([
+                            'user' => function ($subQuery) {
+                                $subQuery->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
+                            }
+                        ])
+                            ->withCount('likes') // Agrega automáticamente un atributo likes_count a cada respuesta
                             ->select('id', 'id_comment', 'id_user', 'reply', 'created_at');
                     }
-                ])->select('id', 'id_post', 'id_user', 'comment', 'created_at');
+                ])
+                    ->select('id', 'id_post', 'id_user', 'comment', 'created_at');
             },
-            'user' => function ($query) { // Carga el usuario que creó el post
+            'user' => function ($query) {
                 $query->selectRaw("id, username, CONCAT('/profile/images/', profile_image) as profile_image");
             },
             'likes'
@@ -218,37 +222,31 @@ class PostsController extends Controller
 
         $post->liked = $post->likes->contains('user_id', Auth::id());
 
-        $community = null;
-        if ($post->community_id) {
-            $community = communities::findOrFail($post->community_id);
-        }
-
         $post->images->each(function ($image) {
             $image->url = URL::to('img/post/' . $image->name);
         });
 
-        // Ajusta la estructura de los comentarios como antes
         $post->comments->each(function ($comment) {
             $comment->likes_count = $comment->likes()->count();
+            $comment->replies->each(function ($reply) {
+                // Aquí ya tienes $reply->likes_count gracias al withCount('likes')
+            });
             if ($comment->user) {
                 $comment->username = $comment->user->username;
                 unset($comment->id_user);
             }
         });
 
-        // Añade el username del creador del post a la respuesta
         $post->creator_username = $post->user ? $post->user->username : null;
-
-        // Calcula el conteo de likes
         $post->likes_count = $post->likes->count();
 
-        // Opcional: Eliminar la colección de likes para no enviarla en la respuesta
-        unset($post->likes);
+        unset($post->likes); // Opcional: eliminar los detalles específicos de los likes si no los necesitas en la respuesta
 
         return response()->json([
             'post' => $post,
         ]);
     }
+
 
     public function update(Request $request, $id_post)
     {

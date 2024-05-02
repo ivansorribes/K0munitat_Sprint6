@@ -52,6 +52,7 @@ class CommunitiesController extends Controller
         return view('communities.CommunitiesList');
     }
 
+    //store data in DB
     public function store(Request $request)
     {
         try {
@@ -144,34 +145,64 @@ class CommunitiesController extends Controller
         return $communities;
     }
 
+    //retorne communitats a les que pertany el usuari
     public function communitiesUser() 
     {
         $user = Auth::user();
         $communitiesUser = $user->communities;
+
+        $hasCommunities = !$communitiesUser->isEmpty();
+        
         return response()->json([
+            'hasCommunities' => $hasCommunities,
             'communities' => $communitiesUser,
             'user' => $user
         ]); 
     }
 
     
-
+    /////////////////////////////////retorne llista de communitats obertes
     public function communitiesOpen() 
     {
         $communitiesOpen = communities::where('private', 0)->get();
         return $communitiesOpen;
     }
-    public function communitiesList() 
-    {
-        $user = Auth::user();
-        $communitiesList = communities::all();
-        
-        return response()->json([
-            'communities' => $communitiesList,
-            'user' => $user
-        ]);
+
+    ////////////////////////////////////////////////////////LLISTA PRINCIPAL DE COMUNITATS
+  public function communitiesList(Request $request) 
+{
+    $user = Auth::user();
+    $page = $request->input('page', 1);
+    $perPage = 10;
+
+    // Obtener los IDs de las comunidades del usuario
+    $communitiesUserIds = $user->communities->pluck('id')->toArray();
+    
+    // Si se proporciona un término de búsqueda, realizar la búsqueda en la base de datos
+    if ($request->has('search')) {
+        $searchTerm = $request->input('search');
+        $communitiesList = communities::where('isActive', 1)
+            ->where('name', 'like', '%' . $searchTerm . '%')
+            ->paginate($perPage, ['*'], 'page', $page);
+    } else {
+        // De lo contrario, obtener todas las comunidades activas paginadas
+        $communitiesList = communities::where('isActive', 1)
+            ->paginate($perPage, ['*'], 'page', $page);
     }
 
+    // Agregar un campo adicional a cada comunidad para indicar si el usuario es miembro
+    $communitiesList->getCollection()->transform(function ($community) use ($communitiesUserIds) {
+        $community->isMember = in_array($community->id, $communitiesUserIds);
+        return $community;
+    });
+
+    return response()->json([
+        'communities' => $communitiesList,
+        'user' => $user,
+    ]);
+}
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////7
     public function communitiesUserId() 
     {
         $user = Auth::user();
@@ -179,6 +210,7 @@ class CommunitiesController extends Controller
         return $communitiesUserIds;
     }
 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////
     public function userActual() 
     {
         $user = Auth::user();

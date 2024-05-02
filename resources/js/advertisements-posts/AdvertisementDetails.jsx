@@ -95,7 +95,7 @@ export default function AdvertisementDetails() {
     };
 
     if (!post) {
-        return <div>Loading...</div>;
+        return;
     }
 
     const pathParts = window.location.pathname.split('/');
@@ -171,7 +171,7 @@ export default function AdvertisementDetails() {
                     {/* Mover la visualización de las imágenes fuera del bloque condicional */}
                     {post.images && post.images.map((image) => (
                         <div key={image.id} className="mt-auto">
-                            <img src={image.url} alt="" className="max-w-md max-h-96 w-auto h-auto object-cover mx-auto" />
+                            <img src={image.url} alt="" class="rounded-xl max-w-md max-h-96 w-auto h-auto object-cover mx-auto" />
                         </div>
                     ))}
                 </div>

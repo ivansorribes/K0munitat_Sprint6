@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 const useApiSwitcher = (value) => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchData = async () => {
@@ -16,6 +16,7 @@ const useApiSwitcher = (value) => {
       }
 
       const response = await axios.get(apiUrl);
+      console.log('Response del hook', response.data);
       setData(response.data);
       setLoading(false);
     } catch (error) {

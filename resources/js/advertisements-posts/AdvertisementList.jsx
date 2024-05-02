@@ -101,7 +101,7 @@ export default function AdvertisementList() {
                             </div>
                             {post.images.map((image) => (
                                 <div key={image.id} className="mt-auto">
-                                    <img src={image.url} alt="" className="w-full h-48 object-cover" />
+                                    <img src={image.url} alt="" className="rounded-md w-full h-48 object-cover" />
                                 </div>
                             ))}
                         </div>

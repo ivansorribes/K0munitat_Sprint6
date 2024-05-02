@@ -21,7 +21,7 @@ use App\Http\Controllers\MessagesController;
 use App\Http\Controllers\LikeCommentController;
 use App\Http\Controllers\ReplyCommentController;
 use App\Http\Controllers\DashboardController;
-
+use App\Http\Controllers\LikeReplyCommentController;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,8 +66,7 @@ Route::post('/deleteUserImage', [UserController::class, 'deleteUserImage'])->nam
 Route::get('/contact', [ContactController::class, 'contactView'])->name('contact.view')->middleware('auth');
 //Route::get('contact', [ContactController::class, 'index'])->name('contact.index');
 Route::post('/sendEmail', [ContactController::class, 'store'])->name('contact.store');
-
-
+Route::get('/getUserInfo',  [ContactController::class, 'getUser'])->name('getUser')->middleware('auth');
 
 
 // FORGOT PASSWORD / PASSWORD-RESET
@@ -129,7 +128,7 @@ Route::post('/communities/{community}/form-create-advertisement-post', [PostsCon
 // Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show'])->name('advertisements-posts.show');
 Route::get('/communities/{community}/{id_post}', function () {
     return view('advertisements-posts.show');
-})->name('advertisements-posts.show');
+})->name('advertisements-posts.show')->middleware('auth');
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -216,17 +215,12 @@ Route::get('/paneladmin', function () {
 })->name('panel-admin');
 
 
-
-
-
-//Header
-//Header
-
-
 Route::post('/posts/{post}/likes', [LikePostController::class, 'like'])->middleware('auth');
-
-Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit']);
-Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy']);
+Route::put('/comments/{editingCommentId}', [commentsPostsController::class, 'edit'])->middleware('auth');
+Route::delete('/comments/{commentId}', [commentsPostsController::class, 'destroy'])->middleware('auth');
 Route::post('/comments/{commentId}/likes', [LikeCommentController::class, 'like'])->middleware('auth');
-Route::put('/posts/{id_post}', [PostsController::class, 'update']);
-Route::post('/comments/{commentId}/reply', [ReplyCommentController::class, 'store']);
+Route::put('/posts/{id_post}', [PostsController::class, 'update'])->middleware('auth');
+Route::post('/comments/{commentId}/reply', [ReplyCommentController::class, 'store'])->middleware('auth');
+Route::post('/replies/{replyId}/likes', [LikeReplyCommentController::class, 'likeReply'])->middleware('auth');
+Route::put('/replies/{replyId}', [ReplyCommentController::class, 'update'])->middleware('auth');
+Route::delete('/replies/{replyId}', [ReplyCommentController::class, 'destroy'])->middleware('auth');

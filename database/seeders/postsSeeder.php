@@ -64,13 +64,13 @@ class postsSeeder extends Seeder
                 'description' => "Step into the future of farming with our premier tool rental services! Our extensive catalog features everything from high-efficiency soil tillers to advanced irrigation systems, all available at competitive rental rates.",
                 'isActive' => 1,
                 'private' => 0,
-                'type' => 'post',
+                'type' => 'advertisement',
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
             ],
             [
                 //id 5
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 2,
                 'id_community' => 2,
                 'title' => "Discover Our New Collection of Organic Vegetables",
@@ -83,7 +83,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 6
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 5,
                 'id_community' => 2,
                 'title' => "Farm-to-Table Dining Experience",
@@ -96,7 +96,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 7
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 3,
                 'id_community' => 3,
                 'title' => "Tools for Home Improvement",
@@ -109,7 +109,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 8
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 3,
                 'id_community' => 3,
                 'title' => "Transform Your Living Space",
@@ -122,7 +122,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 9
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 4,
                 'id_community' => 4,
                 'title' => "Stay Active with Our Fitness Equipment",
@@ -135,7 +135,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 10
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 4,
                 'id_community' => 4,
                 'title' => "Achieve Your Fitness Goals",
@@ -148,7 +148,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 11
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 2,
                 'id_community' => 5,
                 'title' => "Explore the World of Technology",
@@ -161,7 +161,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 12
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 2,
                 'id_community' => 5,
                 'title' => "Upgrade Your Tech Game",
@@ -174,7 +174,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 13
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 3,
                 'id_community' => 6,
                 'title' => "Unleash Your Creative Potential",
@@ -187,7 +187,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 14
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 6,
                 'id_community' => 6,
                 'title' => "Express Yourself Through Art",
@@ -200,7 +200,7 @@ class postsSeeder extends Seeder
             ],
             [
                 //id 15
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 1,
                 'id_community' => 2,
                 'title' => "New Innovations in Farming Technology",
@@ -212,7 +212,7 @@ class postsSeeder extends Seeder
                 'updated_at' => \Carbon\Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 1,
                 'id_community' => 1,
                 'title' => "Farmers on Strike: A Call for Change",
@@ -224,7 +224,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 2,
                 'id_community' => 2,
                 'title' => "Discover Our New Collection of Organic Vegetables",
@@ -236,7 +236,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 3,
                 'id_community' => 3,
                 'title' => "Tools for Home Improvement",
@@ -248,7 +248,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 4,
                 'id_community' => 4,
                 'title' => "Stay Active with Our Fitness Equipment",
@@ -260,7 +260,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 5,
                 'id_community' => 2,
                 'title' => "Farm-to-Table Dining Experience",
@@ -272,7 +272,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 6,
                 'id_community' => 6,
                 'title' => "Express Yourself Through Art",
@@ -284,7 +284,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 1,
                 'id_community' => 3,
                 'title' => "Transform Your Living Space",
@@ -296,7 +296,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 2,
                 'id_community' => 5,
                 'title' => "Upgrade Your Tech Game",
@@ -308,7 +308,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 3,
                 'id_community' => 4,
                 'title' => "Achieve Your Fitness Goals",
@@ -320,7 +320,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 4,
                 'id_community' => 6,
                 'title' => "Unleash Your Creative Potential",
@@ -332,7 +332,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 1,
                 'id_community' => 2,
                 'title' => "New Innovations in Farming Technology",
@@ -344,7 +344,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 2,
                 'id_community' => 5,
                 'title' => "Explore the World of Technology",
@@ -356,7 +356,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 3,
                 'id_community' => 6,
                 'title' => "Premier Tool Rental Services",
@@ -368,7 +368,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 4,
                 'id_community' => 4,
                 'title' => "Transform Your Living Space",
@@ -380,7 +380,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 5,
                 'id_community' => 2,
                 'title' => "Innovation Meets Agriculture",
@@ -392,7 +392,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 6,
                 'id_community' => 6,
                 'title' => "Discover the Joy of Gardening",
@@ -404,7 +404,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 1,
                 'id_community' => 1,
                 'title' => "Rent the Latest in Farming Efficiency",
@@ -416,7 +416,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 2,
                 'id_community' => 5,
                 'title' => "Upgrade Your Tech Game",
@@ -428,7 +428,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 3,
                 'id_community' => 3,
                 'title' => "Tools for Home Improvement",
@@ -440,7 +440,7 @@ class postsSeeder extends Seeder
                 'updated_at' => Carbon::now(),
             ],
             [
-                'id_user' => 1,
+                'id_user' => 2,
                 'id_category' => 4,
                 'id_community' => 4,
                 'title' => "Stay Active with Our Fitness Equipment",
