@@ -5,10 +5,10 @@ import CommunityCard from "./CommunityCard";
 import "tailwindcss/tailwind.css";
 import "../../css/community.css";
 import { animateScroll as scroll } from "react-scroll";
-import { ButtonCreate } from "../components/buttons";
+import { ButtonCreate, ButtonDelete } from "../components/buttons";
+import CommunitySelector from "../components/select/communityRegion";
 
 const CommunitiesList = () => {
-  const [option, setOption] = useState("option1");
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
   const [communities, setCommunities] = useState([]);
@@ -18,13 +18,32 @@ const CommunitiesList = () => {
   const [filteredCommunities, setFilteredCommunities] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCommunity, setSelectedCommunity] = useState(null);
+  const [selectedRegion, setSelectedRegion] = useState(null);
 
-  const fetchData = async (page, search = "") => {
+  const clearFilters = () => {
+    setSelectedCommunity(null);
+    setSelectedRegion(null);
+    setSearchTerm("");
+  };
+
+  const fetchData = async (
+    page,
+    search = "",
+    communityAutId = null,
+    regionId = null
+  ) => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `/communitiesList?page=${page}&search=${search}`
-      );
+      let url = `/communitiesList?page=${page}&search=${search}`;
+      if (communityAutId) {
+        // Corregido a communityAutId
+        url += `&communityAutId=${communityAutId}`; // Corregido a communityAutId
+      }
+      if (regionId) {
+        url += `&regionId=${regionId}`;
+      }
+      const response = await axios.get(url);
       setCommunities((prevCommunities) => [
         ...prevCommunities,
         ...response.data.communities.data,
@@ -39,8 +58,32 @@ const CommunitiesList = () => {
   };
 
   useEffect(() => {
-    fetchData(currentPage, searchTerm);
-  }, [currentPage, searchTerm]);
+    // Función para cargar datos con los filtros seleccionados
+    const fetchDataWithFilters = async () => {
+      setLoading(true);
+      try {
+        // Llamar a fetchData con los filtros seleccionados
+        await fetchData(
+          1,
+          searchTerm,
+          selectedCommunity?.value,
+          selectedRegion?.value
+        );
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    // Verificar si hay filtros seleccionados y cargar los datos
+    if (selectedCommunity || selectedRegion) {
+      fetchDataWithFilters();
+    } else {
+      // De lo contrario, cargar los datos sin filtros
+      fetchData(currentPage, searchTerm);
+    }
+  }, [currentPage, searchTerm, selectedCommunity, selectedRegion]);
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -71,7 +114,7 @@ const CommunitiesList = () => {
   useEffect(() => {
     setCommunities([]);
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [selectedCommunity, searchTerm, selectedRegion]);
 
   useEffect(() => {
     const filtered = communities.filter((community) =>
@@ -80,15 +123,46 @@ const CommunitiesList = () => {
     setFilteredCommunities(filtered);
   }, [communities, searchTerm]);
 
+  const handleCommunityChange = (selectedOption) => {
+    setSelectedCommunity(selectedOption);
+    // Establecer currentPage en 1 cuando se seleccione un filtro
+    setCurrentPage(1);
+    // Resetear el filtro de región a null
+    setSelectedRegion(null);
+    fetchData(
+      1,
+      searchTerm,
+      selectedOption ? selectedOption.value : null,
+      null // Pasar null como valor de regionId
+    );
+  };
+
+  const handleRegionChange = (selectedOption) => {
+    setSelectedRegion(selectedOption);
+    // Establecer currentPage en 1 cuando se seleccione un filtro
+    setCurrentPage(1);
+    fetchData(
+      1,
+      searchTerm,
+      selectedCommunity ? selectedCommunity.value : null,
+      selectedOption ? selectedOption.value : null
+    );
+  };
+
   return (
     <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
+        <ButtonDelete onClick={clearFilters} label="Clear Filter" />
         <input
           type="text"
           placeholder="Search Communities"
           value={searchTerm}
           onChange={handleSearchChange}
           className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+        />
+        <CommunitySelector
+          onCommunityChange={handleCommunityChange}
+          onRegionChange={handleRegionChange}
         />
         <a href="/communities/create" rel="noopener noreferrer">
           <ButtonCreate label="Create" />
