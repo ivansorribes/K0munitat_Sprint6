@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Select from "react-select";
 import axios from "axios";
 
-const CommunitySelector = () => {
+const CommunitySelector = ({ onCommunityChange, onRegionChange }) => {
   const [communities, setCommunities] = useState([]);
   const [selectedCommunity, setSelectedCommunity] = useState(null);
   const [regions, setRegions] = useState([]);
@@ -37,10 +37,17 @@ const CommunitySelector = () => {
     } else {
       setRegions([]);
     }
+    // Llamar a la función de cambio de comunidad si está definida
+    if (onCommunityChange) {
+      onCommunityChange(selectedOption);
+    }
   };
-
   const handleRegionChange = (selectedOption) => {
     setSelectedRegion(selectedOption);
+    // Llamar a la función de cambio de región si está definida
+    if (onRegionChange) {
+      onRegionChange(selectedOption);
+    }
   };
 
   return (

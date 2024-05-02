@@ -19,13 +19,25 @@ const CommunitiesList = () => {
   const [filteredCommunities, setFilteredCommunities] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCommunity, setSelectedCommunity] = useState(null);
+  const [selectedRegion, setSelectedRegion] = useState(null);
 
-  const fetchData = async (page, search = "") => {
+  const fetchData = async (
+    page,
+    search = "",
+    communityId = null,
+    regionId = null
+  ) => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `/communitiesList?page=${page}&search=${search}`
-      );
+      let url = `/communitiesList?page=${page}&search=${search}`;
+      if (communityId) {
+        url += `&communityId=${communityId}`;
+      }
+      if (regionId) {
+        url += `&regionId=${regionId}`;
+      }
+      const response = await axios.get(url);
       setCommunities((prevCommunities) => [
         ...prevCommunities,
         ...response.data.communities.data,
@@ -81,6 +93,28 @@ const CommunitiesList = () => {
     setFilteredCommunities(filtered);
   }, [communities, searchTerm]);
 
+  const handleCommunityChange = (selectedOption) => {
+    setSelectedCommunity(selectedOption); // Actualiza el estado con la comunidad seleccionada
+    // Llama a fetchData con el ID de la comunidad seleccionada
+    fetchData(
+      1,
+      searchTerm,
+      selectedOption ? selectedOption.value : null,
+      selectedRegion ? selectedRegion.value : null
+    );
+  };
+
+  const handleRegionChange = (selectedOption) => {
+    setSelectedRegion(selectedOption); // Actualiza el estado con la región seleccionada
+    // Llama a fetchData con el ID de la región seleccionada
+    fetchData(
+      1,
+      searchTerm,
+      selectedCommunity ? selectedCommunity.value : null,
+      selectedOption ? selectedOption.value : null
+    );
+  };
+
   return (
     <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
@@ -91,7 +125,10 @@ const CommunitiesList = () => {
           onChange={handleSearchChange}
           className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
         />
-        <CommunitySelector />
+        <CommunitySelector
+          onCommunityChange={handleCommunityChange}
+          onRegionChange={handleRegionChange}
+        />
         <a href="/communities/create" rel="noopener noreferrer">
           <ButtonCreate label="Create" />
         </a>
