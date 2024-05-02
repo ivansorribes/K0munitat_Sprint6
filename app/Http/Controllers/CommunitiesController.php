@@ -169,7 +169,7 @@ class CommunitiesController extends Controller
     }
 
     ////////////////////////////////////////////////////////LLISTA PRINCIPAL DE COMUNITATS
- public function communitiesList(Request $request) 
+public function communitiesList(Request $request)
 {
     $user = Auth::user();
     $page = $request->input('page', 1);
@@ -197,6 +197,14 @@ class CommunitiesController extends Controller
     if ($request->has('communityAutId')) {
         $communityAutId = $request->input('communityAutId');
         $query->where('id_autonomousCommunity', $communityAutId);
+    }
+
+    // Si se proporciona un filtro para mostrar solo las comunidades del usuario
+    if ($request->has('showUserCommunities')) {
+        $showUserCommunities = $request->input('showUserCommunities');
+        if ($showUserCommunities) {
+            $query->whereIn('id', $communitiesUserIds);
+        }
     }
 
     // Ejecutar la consulta paginada

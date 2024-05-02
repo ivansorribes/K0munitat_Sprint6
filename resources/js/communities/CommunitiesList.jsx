@@ -7,6 +7,7 @@ import "../../css/community.css";
 import { animateScroll as scroll } from "react-scroll";
 import { ButtonCreate, ButtonDelete } from "../components/buttons";
 import CommunitySelector from "../components/select/communityRegion";
+import ToggleButton from "../components/buttons/toggle";
 
 const CommunitiesList = () => {
   const [loading, setLoading] = useState(true);
@@ -20,28 +21,33 @@ const CommunitiesList = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedCommunity, setSelectedCommunity] = useState(null);
   const [selectedRegion, setSelectedRegion] = useState(null);
+  const [showUserCommunities, setShowUserCommunities] = useState(false);
 
   const clearFilters = () => {
     setSelectedCommunity(null);
     setSelectedRegion(null);
     setSearchTerm("");
+    setShowUserCommunities(false);
   };
 
   const fetchData = async (
     page,
     search = "",
     communityAutId = null,
-    regionId = null
+    regionId = null,
+    showUserCommunities = false
   ) => {
     setLoading(true);
     try {
       let url = `/communitiesList?page=${page}&search=${search}`;
       if (communityAutId) {
-        // Corregido a communityAutId
-        url += `&communityAutId=${communityAutId}`; // Corregido a communityAutId
+        url += `&communityAutId=${communityAutId}`;
       }
       if (regionId) {
         url += `&regionId=${regionId}`;
+      }
+      if (showUserCommunities) {
+        url += `&showUserCommunities=true`;
       }
       const response = await axios.get(url);
       setCommunities((prevCommunities) => [
@@ -58,16 +64,15 @@ const CommunitiesList = () => {
   };
 
   useEffect(() => {
-    // Función para cargar datos con los filtros seleccionados
     const fetchDataWithFilters = async () => {
       setLoading(true);
       try {
-        // Llamar a fetchData con los filtros seleccionados
         await fetchData(
-          1,
+          currentPage,
           searchTerm,
           selectedCommunity?.value,
-          selectedRegion?.value
+          selectedRegion?.value,
+          showUserCommunities
         );
       } catch (error) {
         console.error("Error fetching communities:", error);
@@ -76,14 +81,14 @@ const CommunitiesList = () => {
       }
     };
 
-    // Verificar si hay filtros seleccionados y cargar los datos
-    if (selectedCommunity || selectedRegion) {
-      fetchDataWithFilters();
-    } else {
-      // De lo contrario, cargar los datos sin filtros
-      fetchData(currentPage, searchTerm);
-    }
-  }, [currentPage, searchTerm, selectedCommunity, selectedRegion]);
+    fetchDataWithFilters();
+  }, [
+    currentPage,
+    searchTerm,
+    selectedCommunity,
+    selectedRegion,
+    showUserCommunities,
+  ]);
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -114,7 +119,7 @@ const CommunitiesList = () => {
   useEffect(() => {
     setCommunities([]);
     setCurrentPage(1);
-  }, [selectedCommunity, searchTerm, selectedRegion]);
+  }, [selectedCommunity, searchTerm, selectedRegion, showUserCommunities]);
 
   useEffect(() => {
     const filtered = communities.filter((community) =>
@@ -125,21 +130,18 @@ const CommunitiesList = () => {
 
   const handleCommunityChange = (selectedOption) => {
     setSelectedCommunity(selectedOption);
-    // Establecer currentPage en 1 cuando se seleccione un filtro
     setCurrentPage(1);
-    // Resetear el filtro de región a null
     setSelectedRegion(null);
     fetchData(
       1,
       searchTerm,
       selectedOption ? selectedOption.value : null,
-      null // Pasar null como valor de regionId
+      null
     );
   };
 
   const handleRegionChange = (selectedOption) => {
     setSelectedRegion(selectedOption);
-    // Establecer currentPage en 1 cuando se seleccione un filtro
     setCurrentPage(1);
     fetchData(
       1,
@@ -149,10 +151,14 @@ const CommunitiesList = () => {
     );
   };
 
+  const handleToggleUserCommunities = (checked) => {
+    setShowUserCommunities(checked);
+  };
+
   return (
     <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
       <div className="flex justify-between items-center mb-4">
-        <ButtonDelete onClick={clearFilters} label="Clear Filter" />
+        <ButtonDelete onClick={clearFilters} label="Clear Filters" />
         <input
           type="text"
           placeholder="Search Communities"
@@ -167,6 +173,11 @@ const CommunitiesList = () => {
         <a href="/communities/create" rel="noopener noreferrer">
           <ButtonCreate label="Create" />
         </a>
+        <ToggleButton
+          onToggle={handleToggleUserCommunities}
+          checked={showUserCommunities}
+          text="Show User Communities"
+        />
       </div>
       <div
         id="scroll-container"
