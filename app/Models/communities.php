@@ -38,4 +38,9 @@ class communities extends Model
     {
         return $this->belongsTo(User::class, 'id_admin');
     }
+
+    public function autonomousCommunity()
+    {
+        return $this->belongsTo(autonomousCommunities::class, 'id_autonomousCommunity');
+    }
 }

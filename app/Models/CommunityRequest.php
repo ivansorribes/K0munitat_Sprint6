@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\communities;
-use App\Models\User;
+use App\Models\autonomousCommunities;
 
 class CommunityRequest extends Model
 {
@@ -29,8 +29,16 @@ class CommunityRequest extends Model
         return $this->belongsTo(Communities::class, 'id_community');
     }
 
+    public function autonomousCommunity()
+    {
+        return $this->belongsTo(autonomousCommunities::class, 'id_autonomousCommunity');   
+    }
+
+
     public static function getPendingRequests()
     {
-        return static::with('community')->where('status', 'pending')->get();
+        return static::with(['community', 'autonomousCommunity']) // Cargar la relación autonomousCommunity
+        ->where('status', 'pending')
+        ->get();
     }
 }

@@ -14,7 +14,7 @@
             <!-- baix del header -->
 
             <!-- Cards -->
---
+
 
             <!-- New Table -->
             <div class="w-full overflow-hidden rounded-lg shadow-xs overflow-x-auto mb-20">
@@ -35,12 +35,17 @@
                             @foreach ($communityRequests as $request)
                             <tr class="border-b dark:border-neutral-500">
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    {{ $request->community()->first()->name }}                                </td>
+                                    {{ $request->community()->first()->name }} 
+                                                               </td>
+                                
                                 <td class="whitespace-nowrap px-6 py-4">
+                                    {{ $request->community()->first()->autonomousCommunity()->first()->name }}                               </td>
+                               <td class="whitespace-nowrap px-6 py-4">
                                     {{ $request->community()->first()->admin->username }}                                </td>
                                 
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    {{ $request->community()->first()->created_at }}                                </td>
+                                    {{ $request->community()->first()->created_at }}
+                                </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     @if($request->status === 'pending')
                                     <span class="px-2 py-1 font-semibold leading-tight text-green-700 bg-green-100 rounded-full dark:text-green-100 dark:bg-green-700">
