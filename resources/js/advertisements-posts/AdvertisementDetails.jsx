@@ -9,13 +9,22 @@ export default function AdvertisementDetails() {
     const [editTitle, setEditTitle] = useState("");
     const [editDescription, setEditDescription] = useState("");
     const id_user = document.getElementById("id_user").value;
+    const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+    console.log(csrfToken)
+
 
     useEffect(() => {
         const pathParts = window.location.pathname.split('/');
         const communityId = pathParts[pathParts.length - 2];
         const postId = pathParts[pathParts.length - 1];
 
-        fetch(`/api/communities/${communityId}/${postId}`)
+        fetch(`/api/communities/${communityId}/${postId}`, {
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+                'Authorization': `Bearer 14|Gig7Qm4YoeZy2esGDVyBaMqlNuR4UmYH37VFBBDge33f6199`,
+            },
+        })
             .then(response => response.json())
             .then(data => {
                 setPost(data.post);

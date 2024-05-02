@@ -13,6 +13,7 @@ use Illuminate\Validation\Rule;
 use App\Models\User;
 use Carbon\Carbon;
 use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Log;
 
 
 class AuthController extends Controller
@@ -98,6 +99,42 @@ class AuthController extends Controller
 
     //Funció per fer login
 
+    // function login(Request $request)
+    // {
+    //     // Validar las credenciales del usuario
+    //     $request->validate([
+    //         'email' => 'required|email|exists:users,email',
+    //         'password' => 'required',
+    //     ]);
+
+    //     // Credenciales del usuario
+    //     $credentials = [
+    //         "email" => $request->email,
+    //         "password" => $request->password,
+    //     ];
+
+    //     // Determinar si la casilla de "remember" está marcada
+    //     $remember = $request->has('remember');
+
+    //     // Intentar autenticar al usuario
+    //     if (Auth::attempt($credentials, $remember)) {
+    //         // Regenerar la sesión para evitar el riesgo de sesiones secundarias
+    //         $request->session()->regenerate();
+
+    //         // Verificar si el usuario tiene el rol "superAdmin"
+    //         if (Auth::user()->role === 'superAdmin') {
+    //             // Si es "superAdmin", redirigir al panel de administración
+    //             // return redirect('/adminPanel');
+    //             return redirect('/');
+    //         } else {
+    //             return redirect('/');
+    //         }
+    //     } else {
+    //         // Si las credenciales no son correctas, redirigir al login con un mensaje de error
+    //         return redirect('/login')->with(['fail' => 'Invalid email or password.'])->withInput();
+    //     }
+    // }
+
     function login(Request $request)
     {
         // Validar las credenciales del usuario
@@ -120,20 +157,26 @@ class AuthController extends Controller
             // Regenerar la sesión para evitar el riesgo de sesiones secundarias
             $request->session()->regenerate();
 
-            // Verificar si el usuario tiene el rol "superAdmin"
-            if (Auth::user()->role === 'superAdmin') {
-                // Si es "superAdmin", redirigir al panel de administración
-                // return redirect('/adminPanel');
-                return redirect('/');
-            } else {
-                return redirect('/');
-            }
+            $user = Auth::user();
+            $token = $user->createToken('AAA')->plainTextToken; // Crear token como en la API
+
+            $success = [
+                'token' => $token,
+                'name' => $user->name,
+            ];
+
+            // Aquí puedes decidir cómo quieres manejar el token generado
+            // Por ejemplo, puedes devolver una vista y pasar el token como un parámetro
+            // return redirect('/');
+
+            // O puedes decidir redirigir y almacenar el token en la sesión
+            \Log::info('Token generated: ' . $token);
+            return redirect('/')->with('apiToken', $token);
         } else {
             // Si las credenciales no son correctas, redirigir al login con un mensaje de error
             return redirect('/login')->with(['fail' => 'Invalid email or password.'])->withInput();
         }
     }
-
 
 
     function logout(Request $request)

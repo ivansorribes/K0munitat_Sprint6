@@ -7,6 +7,7 @@ use App\Http\Controllers\EventController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\commentsPostsController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\api\RegisterController;
 
 
 /*
@@ -24,8 +25,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::controller(RegisterController::class)->group(function () {
+    Route::post('register', 'register');
+    Route::post('login', 'login');
+});
 
-Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show']);
+
+Route::get('/communities/{community}/{id_post}', [PostsController::class, 'show'])->middleware('auth:api');
 
 Route::post('/comments', [commentsPostsController::class, 'store']);
 
