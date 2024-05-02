@@ -23,13 +23,50 @@ const CommunitiesList = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [showUserCommunities, setShowUserCommunities] = useState(false);
 
-  const clearFilters = () => {
-    setSelectedCommunity(null);
+  useEffect(() => {
+    // Obtener el valor de regionId del elemento oculto
+    const regionIdElement = document.getElementById("regionId");
+    if (regionIdElement) {
+      const regionId = regionIdElement.value;
+      setSelectedRegion({ value: regionId, label: `Region ${regionId}` });
+    }
+
+    // Obtener el valor de regionId desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const regionIdFromURL = urlParams.get("regionId");
+    if (regionIdFromURL) {
+      setSelectedRegion({
+        value: regionIdFromURL,
+        label: `Region ${regionIdFromURL}`,
+      });
+    }
+  }, []);
+
+  const clearRegionFilter = () => {
+    // Eliminar el parámetro regionId de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.delete("regionId");
+    const newUrl = window.location.pathname + "?" + urlParams.toString();
+    window.history.replaceState({}, "", newUrl);
+
+    // Limpiar el valor del input oculto regionId
+    const regionIdElement = document.getElementById("regionId");
+    if (regionIdElement) {
+      regionIdElement.value = "";
+    }
+
+    // Limpiar el filtro de regiones en el estado
     setSelectedRegion(null);
-    setSearchTerm("");
-    setShowUserCommunities(false);
   };
 
+  const clearFilters = () => {
+    setSelectedCommunity(null);
+    setSelectedRegion(null); // Limpiar el filtro de región
+    setSearchTerm("");
+    setShowUserCommunities(false);
+    // Llamar a la función clearRegionFilter para eliminar el filtro de región
+    clearRegionFilter();
+  };
   const fetchData = async (
     page,
     search = "",
@@ -50,10 +87,14 @@ const CommunitiesList = () => {
         url += `&showUserCommunities=true`;
       }
       const response = await axios.get(url);
-      setCommunities((prevCommunities) => [
-        ...prevCommunities,
-        ...response.data.communities.data,
-      ]);
+      if (page === 1) {
+        setCommunities(response.data.communities.data); // Limpiar y establecer la lista en la primera página
+      } else {
+        setCommunities((prevCommunities) => [
+          ...prevCommunities,
+          ...response.data.communities.data,
+        ]); // Concatenar los nuevos resultados a la lista existente en páginas posteriores
+      }
       setTotalPages(response.data.communities.last_page);
       setUser(response.data.user);
     } catch (error) {
@@ -130,8 +171,9 @@ const CommunitiesList = () => {
 
   const handleCommunityChange = (selectedOption) => {
     setSelectedCommunity(selectedOption);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reiniciar la página actual
     setSelectedRegion(null);
+    setCommunities([]); // Limpiar la lista de comunidades
     fetchData(
       1,
       searchTerm,
@@ -142,7 +184,8 @@ const CommunitiesList = () => {
 
   const handleRegionChange = (selectedOption) => {
     setSelectedRegion(selectedOption);
-    setCurrentPage(1);
+    setCurrentPage(1); // Reiniciar la página actual
+    setCommunities([]); // Limpiar la lista de comunidades
     fetchData(
       1,
       searchTerm,
@@ -153,6 +196,53 @@ const CommunitiesList = () => {
 
   const handleToggleUserCommunities = (checked) => {
     setShowUserCommunities(checked);
+  };
+
+  const handleRegionFilter = () => {
+    const regionIdElement = document.getElementById("regionIdElement");
+    if (regionIdElement) {
+      const regionId = regionIdElement.value;
+      fetchDataWithRegionId(
+        currentPage,
+        searchTerm,
+        selectedCommunity?.value,
+        regionId,
+        showUserCommunities
+      );
+    }
+  };
+
+  const fetchDataWithRegionId = async (
+    page,
+    search = "",
+    communityAutId = null,
+    showUserCommunities = false
+  ) => {
+    setLoading(true);
+    try {
+      const regionIdElement = document.getElementById("regionIdElement"); // Obtener el elemento del DOM que contiene regionId
+      const regionId = regionIdElement.value; // Obtener el valor de regionId del elemento del DOM
+
+      let url = `/communitiesList?page=${page}&search=${search}`;
+      if (communityAutId) {
+        url += `&communityAutId=${communityAutId}`;
+      }
+      if (regionId) {
+        url += `&regionId=${regionId}`;
+      }
+      if (showUserCommunities) {
+        url += `&showUserCommunities=true`;
+      }
+
+      const response = await axios.get(url);
+      setCommunities(response.data.communities.data);
+      setTotalPages(response.data.communities.last_page);
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

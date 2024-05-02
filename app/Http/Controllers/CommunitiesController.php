@@ -47,9 +47,10 @@ class CommunitiesController extends Controller
         return view('communities.createForm');
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('communities.CommunitiesList');
+        $regionId = $request->query('regionId');
+        return view('communities.CommunitiesList', ['regionId' => $regionId]);
     }
 
     //store data in DB
