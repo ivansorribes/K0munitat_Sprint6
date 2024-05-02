@@ -23,6 +23,15 @@ const CommunitiesList = () => {
   const [selectedRegion, setSelectedRegion] = useState(null);
   const [showUserCommunities, setShowUserCommunities] = useState(false);
 
+  useEffect(() => {
+    // Obtener el valor de regionId del elemento oculto
+    const regionIdElement = document.getElementById("regionId");
+    if (regionIdElement) {
+      const regionId = regionIdElement.value;
+      setSelectedRegion({ value: regionId, label: `Region ${regionId}` });
+    }
+  }, []);
+
   const clearFilters = () => {
     setSelectedCommunity(null);
     setSelectedRegion(null);
@@ -159,6 +168,53 @@ const CommunitiesList = () => {
 
   const handleToggleUserCommunities = (checked) => {
     setShowUserCommunities(checked);
+  };
+
+  const handleRegionFilter = () => {
+    const regionIdElement = document.getElementById("regionIdElement");
+    if (regionIdElement) {
+      const regionId = regionIdElement.value;
+      fetchDataWithRegionId(
+        currentPage,
+        searchTerm,
+        selectedCommunity?.value,
+        regionId,
+        showUserCommunities
+      );
+    }
+  };
+
+  const fetchDataWithRegionId = async (
+    page,
+    search = "",
+    communityAutId = null,
+    showUserCommunities = false
+  ) => {
+    setLoading(true);
+    try {
+      const regionIdElement = document.getElementById("regionIdElement"); // Obtener el elemento del DOM que contiene regionId
+      const regionId = regionIdElement.value; // Obtener el valor de regionId del elemento del DOM
+
+      let url = `/communitiesList?page=${page}&search=${search}`;
+      if (communityAutId) {
+        url += `&communityAutId=${communityAutId}`;
+      }
+      if (regionId) {
+        url += `&regionId=${regionId}`;
+      }
+      if (showUserCommunities) {
+        url += `&showUserCommunities=true`;
+      }
+
+      const response = await axios.get(url);
+      setCommunities(response.data.communities.data);
+      setTotalPages(response.data.communities.last_page);
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
