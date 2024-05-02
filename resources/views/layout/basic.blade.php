@@ -10,16 +10,13 @@
     <!--Favicon-->
     <link rel="icon" href="{{ asset('img/k0munitat_imagotip.ico') }}" type="image/x-icon" />
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B54X46SNYZ"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-M52PDMGDQP"></script>
     <script>
-        window.dataLayer = window.dataLayer || [];
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
 
-        function gtag() {
-            dataLayer.push(arguments);
-        }
-        gtag('js', new Date());
-
-        gtag('config', 'G-B54X46SNYZ');
+    gtag('config', 'G-M52PDMGDQP');
     </script>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     @viteReactRefresh
