@@ -30,15 +30,43 @@ const CommunitiesList = () => {
       const regionId = regionIdElement.value;
       setSelectedRegion({ value: regionId, label: `Region ${regionId}` });
     }
+
+    // Obtener el valor de regionId desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const regionIdFromURL = urlParams.get("regionId");
+    if (regionIdFromURL) {
+      setSelectedRegion({
+        value: regionIdFromURL,
+        label: `Region ${regionIdFromURL}`,
+      });
+    }
   }, []);
+
+  const clearRegionFilter = () => {
+    // Eliminar el parámetro regionId de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.delete("regionId");
+    const newUrl = window.location.pathname + "?" + urlParams.toString();
+    window.history.replaceState({}, "", newUrl);
+
+    // Limpiar el valor del input oculto regionId
+    const regionIdElement = document.getElementById("regionId");
+    if (regionIdElement) {
+      regionIdElement.value = "";
+    }
+
+    // Limpiar el filtro de regiones en el estado
+    setSelectedRegion(null);
+  };
 
   const clearFilters = () => {
     setSelectedCommunity(null);
-    setSelectedRegion(null);
+    setSelectedRegion(null); // Limpiar el filtro de región
     setSearchTerm("");
     setShowUserCommunities(false);
+    // Llamar a la función clearRegionFilter para eliminar el filtro de región
+    clearRegionFilter();
   };
-
   const fetchData = async (
     page,
     search = "",
