@@ -8,7 +8,7 @@
     <main class="h-full overflow-y-auto">
         <div class="container px-6 mx-auto grid">
             <h1 class="mt-20 text-2xl mb-5">
-                Communities list
+                Communities Request list
             </h1>
 
             <!-- baix del header -->
