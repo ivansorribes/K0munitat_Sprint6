@@ -248,7 +248,7 @@ const CommunitiesList = () => {
   return (
     <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[8] xl:mt-[12] relative">
       <div className="flex flex-wrap justify-center items-center mb-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 md:items-center">
+        <div className="grid grid-cols-1 md:grid-cols-4 md:gap-4 md:items-center">
           <div className="col-span-1 md:mr-4">
             <a href="/communities/create" rel="noopener noreferrer">
               <ButtonCreate label="Create" className="mr-2 p-3 md:p-2" />
@@ -262,7 +262,6 @@ const CommunitiesList = () => {
             />
           </div>
           <div className="md:flex-grow md:mr-2 col-span-3 md:col-span-1 mb-4 md:mb-0">
-            {" "}
             {/* Agregamos margen inferior solo en dispositivos móviles */}
             <CommunitySelector
               onCommunityChange={handleCommunityChange}
