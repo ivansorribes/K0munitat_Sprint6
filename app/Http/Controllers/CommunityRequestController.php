@@ -38,18 +38,22 @@ class CommunityRequestController extends Controller
     {
         // Obtener la comunidad por su ID
         $community = communities::findOrFail($communityId);
-
-        // Obtener los IDs de las solicitudes pendientes asociadas a esta comunidad
-        $pendingRequestIds = CommunityRequest::where('id_community', $communityId)
+    
+        // Obtener las solicitudes pendientes asociadas a esta comunidad
+        $communityRequests = CommunityRequest::where('id_community', $communityId)
             ->where('status', 'pending')
-            ->pluck('id_user');
-
+            ->get();
+    
         // Obtener la lista de usuarios asociados a esta comunidad con estado pendiente
-        $users = User::whereIn('id', $pendingRequestIds)->get();
-
-        // Devolver la vista con la lista de usuarios
+        $users = [];
+        foreach ($communityRequests as $request) {
+            $users[] = User::find($request->id_user)->setAttribute('request_status', $request->status);
+        }
+    
+        // Devolver la vista con la lista de usuarios y la comunidad
         return view('adminPanel.userCommunityRequest', compact('users', 'community'));
     }
+    
 
     public function showRequestCommunities()
     {
@@ -64,5 +68,31 @@ class CommunityRequestController extends Controller
 
         return view('adminPanel.paneladminCommunitiesRequest', compact('communityRequests'));
     }
+
+    public function acceptRequest($userId)
+    {
+        $communityRequest = CommunityRequest::where('id_user', $userId)->first();
+        if ($communityRequest) {
+            $communityRequest->update(['status' => 'accepted']);
+            // Aquí puedes realizar cualquier otra acción necesaria, como agregar el usuario a la comunidad, etc.
+            return redirect()->back()->with('success', 'Solicitud aceptada exitosamente.');
+        } else {
+            return redirect()->back()->with('error', 'Solicitud no encontrada.');
+        }
+    }
+    
+    public function denyRequest($userId)
+    {
+        $communityRequest = CommunityRequest::where('id_user', $userId)->first();
+        if ($communityRequest) {
+            $communityRequest->update(['status' => 'denied']);
+            // Aquí puedes realizar cualquier otra acción necesaria, como notificar al usuario, etc.
+            return redirect()->back()->with('success', 'Solicitud denegada exitosamente.');
+        } else {
+            return redirect()->back()->with('error', 'Solicitud no encontrada.');
+        }
+    }
+    
+
 
 }

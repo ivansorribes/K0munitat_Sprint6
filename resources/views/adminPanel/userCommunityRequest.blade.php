@@ -33,10 +33,12 @@
                                 <th class="px-4 py-3">Email</th>
                                 <th class="px-4 py-3">Name</th>
                                 <th class="px-4 py-3">Last Name</th>
+                                <th class="px-4 py-3">Status</th>
                                 <th class="px-4 py-3">Actions</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">@foreach($users as $index => $user)
+                        <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
+                            @foreach($users as $index => $user)
                             <tr class="text-gray-700 dark:text-gray-400">
                                 <td class="px-4 py-3">
                                     <div class="flex items-center text-sm">
@@ -58,22 +60,33 @@
                                 <td class="px-4 py-3 text-sm">
                                     {{ $user->lastname }}
                                 </td>
-                    
-
                                 <td class="px-4 py-3">
-                                    <div class="flex items-center space-x-4 text-sm">
-
-                                        <button onclick="sendForm('{{ $index }}')" class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray" aria-label="Delete"> <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
-                                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"></path>
-                                            </svg>
-                                        </button>
-                                    </div>
+                                    @if($user->request_status == 'pending')
+                                        <span class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded-full">Pendiente</span>
+                                    @elseif($user->request_status == 'accepted')
+                                        <span class="bg-green-200 text-green-800 px-2 py-1 rounded-full">Aceptado</span>
+                                    @elseif($user->request_status == 'denied')
+                                        <span class="bg-red-200 text-red-800 px-2 py-1 rounded-full">Denegado</span>
+                                    @endif
                                 </td>
+                                <td class="px-4 py-3">
+                                    <form action="{{ route('acceptRequest', ['userId' => $user->id]) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring focus:ring-green-200 disabled:opacity-25 transition">
+                                            Aceptar
+                                        </button>
+                                    </form>
+                                    <form action="{{ route('denyRequest', ['userId' => $user->id]) }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-600 active:bg-red-700 focus:outline-none focus:border-red-700 focus:ring focus:ring-red-200 disabled:opacity-25 transition ml-2">
+                                            Denegar
+                                        </button>
+                                    </form>
+                                </td>
+                                
+                                
                             </tr>
-                            <form id="form{{ $index }}" action="{{ route('delUserFromCommunity', ['id' => $user->id, 'id_community' => $community->id ]) }}" method="POST"> @csrf
-                                @method('PUT')
-
-                            </form>
+                            
                             @endforeach
 
                         </tbody>
