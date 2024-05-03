@@ -120,8 +120,6 @@ Route::get('/CommentsUser/{id_post}', [UserController::class, 'CommentsUser'])->
 Route::post('/updatePost/{id_post}', [UserController::class, 'EditPost'])->name('EditPost')->middleware('auth');
 Route::post('/deletePost/{id_post}', [UserController::class, 'DeletePost'])->name('deletePost')->middleware('auth');
 
-//Header
-
 // POSTS - ADVERTISEMENTS
 Route::get('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'createPost'])->name('advertisements-posts.form-create-advertisement-post');
 Route::post('/communities/{community}/form-create-advertisement-post', [PostsController::class, 'store'])->name('form-create-advertisement-post-post');
@@ -129,6 +127,9 @@ Route::post('/communities/{community}/form-create-advertisement-post', [PostsCon
 Route::get('/communities/{community}/{id_post}', function () {
     return view('advertisements-posts.show');
 })->name('advertisements-posts.show')->middleware('auth');
+
+//Route::get('/paneladminCommunitiesRequest', [CommunityRequestController::class, 'adminPanel'])->name('paneladminBlog');
+
 
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -141,7 +142,9 @@ Route::get('/paneladminComunitats', [CommunitiesController::class, 'retornarComu
 Route::put('/paneladminComunitats/stateChange/{id}', [CommunitiesController::class, 'stateChange'])->name('stateChange');
 Route::match(['put', 'get'], '/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
 Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
-
+Route::get('/paneladminCommunitiesRequest', [CommunityRequestController::class, 'showRequestCommunities'])->name('paneladminCommunitiesRequest');
+///Route::match(['put', 'get'], '/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
+Route::get('/showUsersRequest/{communityId}', [CommunityRequestController::class, 'showUsersRequest'])->name('showUsersRequest');
 Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');
 Route::put('/posts/{post}/toggle', [PostsController::class, 'toggleActivation'])->name('posts.toggle');
 Route::get('/posts/{post}', [PostsController::class, 'showPostById'])->name('post.show');
