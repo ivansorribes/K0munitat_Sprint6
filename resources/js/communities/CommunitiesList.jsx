@@ -246,28 +246,43 @@ const CommunitiesList = () => {
   };
 
   return (
-    <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
-      <div className="flex justify-between items-center mb-4">
-        <ButtonDelete onClick={clearFilters} label="Clear Filters" />
-        <input
-          type="text"
-          placeholder="Search Communities"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-        />
-        <CommunitySelector
-          onCommunityChange={handleCommunityChange}
-          onRegionChange={handleRegionChange}
-        />
-        <a href="/communities/create" rel="noopener noreferrer">
-          <ButtonCreate label="Create" />
-        </a>
-        <ToggleButton
-          onToggle={handleToggleUserCommunities}
-          checked={showUserCommunities}
-          text="Show User Communities"
-        />
+    <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[8] xl:mt-[12] relative">
+      <div className="flex flex-wrap justify-center items-center mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 md:gap-4 md:items-center">
+          <div className="col-span-1 md:mr-4">
+            <a href="/communities/create" rel="noopener noreferrer">
+              <ButtonCreate label="Create" className="mr-2 p-3 md:p-2" />
+            </a>
+          </div>
+          <div className="col-span-1 md:mr-4">
+            <ToggleButton
+              onToggle={handleToggleUserCommunities}
+              checked={showUserCommunities}
+              text="Show User Communities"
+            />
+          </div>
+          <div className="md:flex-grow md:mr-2 col-span-3 md:col-span-1 mb-4 md:mb-0">
+            {" "}
+            {/* Agregamos margen inferior solo en dispositivos móviles */}
+            <CommunitySelector
+              onCommunityChange={handleCommunityChange}
+              onRegionChange={handleRegionChange}
+              className="w-full"
+            />
+          </div>
+          <div className="md:w-auto md:flex md:items-center col-span-3 md:col-span-1 flex flex-col md:flex-row justify-center md:justify-end">
+            <input
+              type="text"
+              placeholder="Search Communities"
+              value={searchTerm}
+              onChange={handleSearchChange}
+              className="px-4 py-3 md:px-2 md:py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 w-full md:w-auto md:mr-2 mb-2 md:mb-0 mb-input-search"
+            />
+            <div className="flex justify-center md:justify-start">
+              <ButtonDelete onClick={clearFilters} label="Clear Filters" />
+            </div>
+          </div>
+        </div>
       </div>
       <div
         id="scroll-container"
@@ -305,6 +320,7 @@ const CommunitiesList = () => {
                 community.isMember || community.private === 0 ? "enter" : "send"
               }
               user={user}
+              className="p-4"
             />
           ))}
           {communities.length === 0 && (
