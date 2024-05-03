@@ -8,7 +8,7 @@
     <main class="h-full overflow-y-auto">
         <div class="container px-6 mx-auto grid">
             <h1 class="mt-20 text-2xl mb-5">
-                Communities list
+                Communities Request list
             </h1>
 
             <!-- baix del header -->
@@ -70,7 +70,7 @@
                                     @endif
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
-                                    <a href="{{ route('showUsers', ['id' => $request->community->id]) }}" class="btn btn-sm px-2 py-1 text-white bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">                                        Users
+                                    <a href="{{ route('showUsersRequest', ['communityId' => $request->community->id]) }}" class="btn btn-sm px-2 py-1 text-white bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple">                                        Users
                                     </a>
                                 </td>
                                 
