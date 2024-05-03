@@ -14,7 +14,7 @@ const ToggleButton = ({ onToggle, checked, text }) => {
         onChange={handleToggle} // Usa handleToggle en lugar de onToggle directamente
       />
       <div
-        className={`relative w-11 h-6 bg-gray-200 rounded-full peer peer-focus:ring-4 peer-focus:ring-secondary dark:peer-focus:ring-secondary ${
+        className={`relative w-11 h-6 bg-neutral rounded-full peer peer-focus:ring-4 peer-focus:ring-secondary dark:peer-focus:ring-secondary ${
           checked ? "peer-checked:bg-primary" : ""
         }`}
       >
