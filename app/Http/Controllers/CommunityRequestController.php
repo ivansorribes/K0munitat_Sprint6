@@ -48,7 +48,7 @@ class CommunityRequestController extends Controller
         $users = User::whereIn('id', $pendingRequestIds)->get();
 
         // Devolver la vista con la lista de usuarios
-        return view('adminPanel.usuarisComunitat', compact('users', 'community'));
+        return view('adminPanel.userCommunityRequest', compact('users', 'community'));
     }
 
     public function showRequestCommunities()
