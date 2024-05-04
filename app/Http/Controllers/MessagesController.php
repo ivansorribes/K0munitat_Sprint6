@@ -75,7 +75,7 @@ class MessagesController extends Controller
         $user = Auth::user();
 
         // Obtener el mensaje original
-        $originalMessage = ContactMessages::find($request->input('original_message_id'));
+        $originalMessage = DB::table('contactMessages')->find($request->input('original_message_id'));
 
         // Crear un nuevo mensaje de respuesta
         $replyMessage = new ContactMessagesClient();
@@ -83,13 +83,17 @@ class MessagesController extends Controller
         $replyMessage->sender_email = $user->email; // Asignar el correo electrónico del remitente
         $replyMessage->message = $request->input('reply_message'); // Asignar el mensaje de respuesta
         $replyMessage->read = false; // Establecer el mensaje como no leído
-        $replyMessage->id_user = optional($originalMessage)->id_user ?: $user->id; // Asignar la ID del usuario que envió el mensaje original, o la ID del usuario actual si no se encuentra el mensaje original
+
+        // Asignar la ID del usuario al que estás respondiendo como el ID del usuario
+        $replyMessage->id_user = $originalMessage->id_user;
+
         $replyMessage->isActive = true; // Establecer el mensaje como activo
         $replyMessage->save();
 
         // Redireccionar a una página de éxito o a donde desees
         return redirect()->back()->with('success', 'Reply sent successfully!');
     }
+
 
 
 
@@ -173,9 +177,10 @@ class MessagesController extends Controller
         return redirect()->back()->with('success', 'Message restored successfully');
     }
 
-    public function replyMessageClient(Request $request){
-         // Validar los datos del formulario
-         $request->validate([
+    public function replyMessageClient(Request $request)
+    {
+        // Validar los datos del formulario
+        $request->validate([
             'reply_message' => 'required|string',
         ]);
 
