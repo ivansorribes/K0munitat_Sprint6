@@ -44,12 +44,12 @@
 @media screen and (max-width: 767px) {
   .button-card,
   .button-create {
-      width: 100%; /* Ocupa el 100% del ancho disponible */
-      margin-bottom: 10px; /* Añade espacio entre los botones */
+    width: 100%; /* Ocupa el 100% del ancho disponible */
+    margin-bottom: 10px; /* Añade espacio entre los botones */
   }
 
   .view-button {
-      margin-right: 0; /* Elimina el margen derecho en pantallas más pequeñas */
+    margin-right: 0; /* Elimina el margen derecho en pantallas más pequeñas */
   }
 }
 
