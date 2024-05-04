@@ -26,6 +26,11 @@
             <!-- New Table -->
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
                 <div class="w-full overflow-x-auto">
+                    @if(session('success'))
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
                     <table class="w-full whitespace-no-wrap">
                         <thead>
                             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
@@ -70,18 +75,16 @@
                                     @endif
                                 </td>
                                 <td class="px-4 py-3">
-                                    <form action="{{ route('acceptRequest', ['userId' => $user->id]) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-green-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-green-600 active:bg-green-700 focus:outline-none focus:border-green-700 focus:ring focus:ring-green-200 disabled:opacity-25 transition">
-                                            Aceptar
-                                        </button>
-                                    </form>
-                                    <form action="{{ route('denyRequest', ['userId' => $user->id]) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" class="inline-flex items-center px-4 py-2 bg-red-500 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-red-600 active:bg-red-700 focus:outline-none focus:border-red-700 focus:ring focus:ring-red-200 disabled:opacity-25 transition ml-2">
-                                            Denegar
-                                        </button>
-                                    </form>
+                                    @if($user->request_status == 'pending')
+                                        <form action="{{ route('acceptRequest', ['userId' => $user->id, 'communityId' => $community->id]) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Aceptar</button>
+                                        </form>
+                                        <form action="{{ route('denyRequest', $user->id) }}" method="POST">
+                                            @csrf
+                                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Denegar</button>
+                                        </form>
+                                    @endif
                                 </td>
                                 
                                 

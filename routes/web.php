@@ -144,8 +144,8 @@ Route::match(['put', 'get'], '/paneladminComunitats/showUsers/{id}', [Communitie
 Route::put('/user/{id}/community/{id_community}', [UserController::class, 'delUserFromCommunity'])->name('delUserFromCommunity');
 Route::get('/paneladminCommunitiesRequest', [CommunityRequestController::class, 'showRequestCommunities'])->name('paneladminCommunitiesRequest');
 ///Route::match(['put', 'get'], '/paneladminComunitats/showUsers/{id}', [CommunitiesController::class, 'showUsers'])->name('showUsers');
-Route::post('/acceptRequest/{userId}', [CommunityRequestController::class, 'acceptRequest'])->name('acceptRequest');
-Route::post('/denyRequest/{userId}', [CommunityRequestController::class, 'denyRequest'])->name('denyRequest');
+Route::post('request/{userId}/{communityId}', [CommunityRequestController::class, 'acceptRequest'])->name('acceptRequest');
+Route::post('request/{requestId}/deny', [CommunityRequestController::class, 'denyRequest'])->name('denyRequest');
 
 Route::get('/showUsersRequest/{communityId}', [CommunityRequestController::class, 'showUsersRequest'])->name('showUsersRequest');
 Route::get('/paneladminPosts', [PostsController::class, 'getPosts'])->name('paneladminPosts');

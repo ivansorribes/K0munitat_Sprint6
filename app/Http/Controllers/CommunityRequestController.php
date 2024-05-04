@@ -69,29 +69,39 @@ class CommunityRequestController extends Controller
         return view('adminPanel.paneladminCommunitiesRequest', compact('communityRequests'));
     }
 
-    public function acceptRequest($userId)
+    public function acceptRequest($userId, $communityId)
     {
-        $communityRequest = CommunityRequest::where('id_user', $userId)->first();
-        if ($communityRequest) {
-            $communityRequest->update(['status' => 'accepted']);
-            // Aquí puedes realizar cualquier otra acción necesaria, como agregar el usuario a la comunidad, etc.
+        try {
+            // Buscar la solicitud pendiente del usuario para la comunidad específica
+            $request = CommunityRequest::where('id_user', $userId)
+                ->where('id_community', $communityId)
+                ->where('status', 'pending')
+                ->firstOrFail();
+    
+            // Actualizar el estado de la solicitud a "accepted"
+            $request->status = 'accepted';
+            $request->save();
+    
             return redirect()->back()->with('success', 'Solicitud aceptada exitosamente.');
-        } else {
-            return redirect()->back()->with('error', 'Solicitud no encontrada.');
+        } catch (\Exception $e) {
+            // Manejar la excepción
+            return redirect()->back()->with('error', 'Hubo un problema al procesar la solicitud. Por favor, inténtalo de nuevo.');
         }
     }
     
-    public function denyRequest($userId)
-    {
-        $communityRequest = CommunityRequest::where('id_user', $userId)->first();
-        if ($communityRequest) {
-            $communityRequest->update(['status' => 'denied']);
-            // Aquí puedes realizar cualquier otra acción necesaria, como notificar al usuario, etc.
-            return redirect()->back()->with('success', 'Solicitud denegada exitosamente.');
-        } else {
-            return redirect()->back()->with('error', 'Solicitud no encontrada.');
-        }
-    }
+
+public function denyRequest($requestId)
+{
+    // Buscar la solicitud por su ID
+    $request = CommunityRequest::findOrFail($requestId);
+
+    // Actualizar el estado de la solicitud a "denied"
+    $request->status = 'denied';
+    $request->save();
+
+    return redirect()->back()->with('success', 'Solicitud denegada exitosamente.');
+}
+
     
 
 
