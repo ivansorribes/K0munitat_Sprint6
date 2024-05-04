@@ -5,10 +5,11 @@ import CommunityCard from "./CommunityCard";
 import "tailwindcss/tailwind.css";
 import "../../css/community.css";
 import { animateScroll as scroll } from "react-scroll";
-import { ButtonCreate } from "../components/buttons";
+import { ButtonCreate, ButtonDelete } from "../components/buttons";
+import CommunitySelector from "../components/select/communityRegion";
+import ToggleButton from "../components/buttons/toggle";
 
 const CommunitiesList = () => {
-  const [option, setOption] = useState("option1");
   const [loading, setLoading] = useState(true);
   const scrollRef = useRef();
   const [communities, setCommunities] = useState([]);
@@ -18,17 +19,82 @@ const CommunitiesList = () => {
   const [filteredCommunities, setFilteredCommunities] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [selectedCommunity, setSelectedCommunity] = useState(null);
+  const [selectedRegion, setSelectedRegion] = useState(null);
+  const [showUserCommunities, setShowUserCommunities] = useState(false);
 
-  const fetchData = async (page, search = "") => {
+  useEffect(() => {
+    // Obtener el valor de regionId del elemento oculto
+    const regionIdElement = document.getElementById("regionId");
+    if (regionIdElement) {
+      const regionId = regionIdElement.value;
+      setSelectedRegion({ value: regionId, label: `Region ${regionId}` });
+    }
+
+    // Obtener el valor de regionId desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const regionIdFromURL = urlParams.get("regionId");
+    if (regionIdFromURL) {
+      setSelectedRegion({
+        value: regionIdFromURL,
+        label: `Region ${regionIdFromURL}`,
+      });
+    }
+  }, []);
+
+  const clearRegionFilter = () => {
+    // Eliminar el parámetro regionId de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    urlParams.delete("regionId");
+    const newUrl = window.location.pathname + "?" + urlParams.toString();
+    window.history.replaceState({}, "", newUrl);
+
+    // Limpiar el valor del input oculto regionId
+    const regionIdElement = document.getElementById("regionId");
+    if (regionIdElement) {
+      regionIdElement.value = "";
+    }
+
+    // Limpiar el filtro de regiones en el estado
+    setSelectedRegion(null);
+  };
+
+  const clearFilters = () => {
+    setSelectedCommunity(null);
+    setSelectedRegion(null); // Limpiar el filtro de región
+    setSearchTerm("");
+    setShowUserCommunities(false);
+    // Llamar a la función clearRegionFilter para eliminar el filtro de región
+    clearRegionFilter();
+  };
+  const fetchData = async (
+    page,
+    search = "",
+    communityAutId = null,
+    regionId = null,
+    showUserCommunities = false
+  ) => {
     setLoading(true);
     try {
-      const response = await axios.get(
-        `/communitiesList?page=${page}&search=${search}`
-      );
-      setCommunities((prevCommunities) => [
-        ...prevCommunities,
-        ...response.data.communities.data,
-      ]);
+      let url = `/communitiesList?page=${page}&search=${search}`;
+      if (communityAutId) {
+        url += `&communityAutId=${communityAutId}`;
+      }
+      if (regionId) {
+        url += `&regionId=${regionId}`;
+      }
+      if (showUserCommunities) {
+        url += `&showUserCommunities=true`;
+      }
+      const response = await axios.get(url);
+      if (page === 1) {
+        setCommunities(response.data.communities.data); // Limpiar y establecer la lista en la primera página
+      } else {
+        setCommunities((prevCommunities) => [
+          ...prevCommunities,
+          ...response.data.communities.data,
+        ]); // Concatenar los nuevos resultados a la lista existente en páginas posteriores
+      }
       setTotalPages(response.data.communities.last_page);
       setUser(response.data.user);
     } catch (error) {
@@ -39,8 +105,31 @@ const CommunitiesList = () => {
   };
 
   useEffect(() => {
-    fetchData(currentPage, searchTerm);
-  }, [currentPage, searchTerm]);
+    const fetchDataWithFilters = async () => {
+      setLoading(true);
+      try {
+        await fetchData(
+          currentPage,
+          searchTerm,
+          selectedCommunity?.value,
+          selectedRegion?.value,
+          showUserCommunities
+        );
+      } catch (error) {
+        console.error("Error fetching communities:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDataWithFilters();
+  }, [
+    currentPage,
+    searchTerm,
+    selectedCommunity,
+    selectedRegion,
+    showUserCommunities,
+  ]);
 
   const handleScroll = () => {
     if (scrollRef.current) {
@@ -71,7 +160,7 @@ const CommunitiesList = () => {
   useEffect(() => {
     setCommunities([]);
     setCurrentPage(1);
-  }, [searchTerm]);
+  }, [selectedCommunity, searchTerm, selectedRegion, showUserCommunities]);
 
   useEffect(() => {
     const filtered = communities.filter((community) =>
@@ -80,20 +169,119 @@ const CommunitiesList = () => {
     setFilteredCommunities(filtered);
   }, [communities, searchTerm]);
 
+  const handleCommunityChange = (selectedOption) => {
+    setSelectedCommunity(selectedOption);
+    setCurrentPage(1); // Reiniciar la página actual
+    setSelectedRegion(null);
+    setCommunities([]); // Limpiar la lista de comunidades
+    fetchData(
+      1,
+      searchTerm,
+      selectedOption ? selectedOption.value : null,
+      null
+    );
+  };
+
+  const handleRegionChange = (selectedOption) => {
+    setSelectedRegion(selectedOption);
+    setCurrentPage(1); // Reiniciar la página actual
+    setCommunities([]); // Limpiar la lista de comunidades
+    fetchData(
+      1,
+      searchTerm,
+      selectedCommunity ? selectedCommunity.value : null,
+      selectedOption ? selectedOption.value : null
+    );
+  };
+
+  const handleToggleUserCommunities = (checked) => {
+    setShowUserCommunities(checked);
+  };
+
+  const handleRegionFilter = () => {
+    const regionIdElement = document.getElementById("regionIdElement");
+    if (regionIdElement) {
+      const regionId = regionIdElement.value;
+      fetchDataWithRegionId(
+        currentPage,
+        searchTerm,
+        selectedCommunity?.value,
+        regionId,
+        showUserCommunities
+      );
+    }
+  };
+
+  const fetchDataWithRegionId = async (
+    page,
+    search = "",
+    communityAutId = null,
+    showUserCommunities = false
+  ) => {
+    setLoading(true);
+    try {
+      const regionIdElement = document.getElementById("regionIdElement"); // Obtener el elemento del DOM que contiene regionId
+      const regionId = regionIdElement.value; // Obtener el valor de regionId del elemento del DOM
+
+      let url = `/communitiesList?page=${page}&search=${search}`;
+      if (communityAutId) {
+        url += `&communityAutId=${communityAutId}`;
+      }
+      if (regionId) {
+        url += `&regionId=${regionId}`;
+      }
+      if (showUserCommunities) {
+        url += `&showUserCommunities=true`;
+      }
+
+      const response = await axios.get(url);
+      setCommunities(response.data.communities.data);
+      setTotalPages(response.data.communities.last_page);
+      setUser(response.data.user);
+    } catch (error) {
+      console.error("Error fetching communities:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[10] xl:mt-[12] relative">
-      <div className="flex justify-between items-center mb-4">
-        <input
-          type="text"
-          placeholder="Search Communities"
-          value={searchTerm}
-          onChange={handleSearchChange}
-          className="px-2 py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
-        />
-        <a href="/communities/create" rel="noopener noreferrer">
-          <ButtonCreate label="Create" />
-        </a>
+    <div className="container py-10 mx-auto mt-[6vw] md:mt-[8] lg:mt-[8] xl:mt-[12] relative">
+      <div className="flex flex-wrap md:justify-between items-center mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-6 md:gap-2 items-center md:px-12 mx-auto md:max-w-full p-3">
+          <div className="md:mr-4">
+            <a href="/communities/create" rel="noopener noreferrer">
+              <ButtonCreate label="Create" />
+            </a>
+          </div>
+          <div className="md:mr-4 mt-2">
+            <ToggleButton
+              onToggle={handleToggleUserCommunities}
+              checked={showUserCommunities}
+              text="Show User Communities"
+            />
+          </div>
+          <div className="md:flex-grow md:col-span-2 md:mr-4">
+            <div className="mb-3 md:ml-0">
+              <CommunitySelector
+                onCommunityChange={handleCommunityChange}
+                onRegionChange={handleRegionChange}
+              />
+            </div>
+          </div>
+          <input
+            type="text"
+            placeholder="Search Communities"
+            value={searchTerm}
+            onChange={handleSearchChange}
+            className="px-4 py-3 md:px-10 md:py-1 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 w-full md:w-auto md:mr-4 mb-2 md:mb-0 mb-input-search"
+          />
+          <div className="flex justify-center md:justify-start md:ml-4">
+            <ButtonDelete onClick={clearFilters} label="Clear Filters" />
+          </div>
+        </div>
       </div>
+
       <div
         id="scroll-container"
         ref={scrollRef}
@@ -130,6 +318,7 @@ const CommunitiesList = () => {
                 community.isMember || community.private === 0 ? "enter" : "send"
               }
               user={user}
+              className="p-4"
             />
           ))}
           {communities.length === 0 && (
