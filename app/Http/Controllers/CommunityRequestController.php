@@ -111,11 +111,9 @@ class CommunityRequestController extends Controller
         $communityRequest->save();
 
         // Retorna una respuesta adecuada
-        return response()->json([
-            'message' => 'Status updated successfully.',
-            'data' => $communityRequest
-        ]);
+        return redirect()->back()->with('success', 'Solicitud exitosamente.');
     }
+
 
     
     

@@ -30,7 +30,7 @@
                     <div class="alert alert-success">
                         {{ session('success') }}
                     </div>
-                @endif
+                    @endif
                     <table class="w-full whitespace-no-wrap">
                         <thead>
                             <tr class="text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800">
@@ -39,7 +39,6 @@
                                 <th class="px-4 py-3">Name</th>
                                 <th class="px-4 py-3">Last Name</th>
                                 <th class="px-4 py-3">Status</th>
-                                <th class="px-4 py-3">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y dark:divide-gray-700 dark:bg-gray-800">
@@ -74,21 +73,7 @@
                                         <span class="bg-red-200 text-red-800 px-2 py-1 rounded-full">Denegado</span>
                                     @endif
                                 </td>
-                                <td class="px-4 py-3">
-                                    @if($user->request_status == 'pending')
-                                        <span class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded-full">Pendiente</span>
-                                        <form action="{{ route('updateStatus', ['requestId' => $user->id]) }}" method="POST" style="display: inline;">
-                                            @csrf
-                                            @method('PUT')
-                                            <button type="submit" name="status" value="accepted" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded">Aceptar</button>
-                                            <button type="submit" name="status" value="denied" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded">Denegar</button>
-                                        </form>
-                                    @elseif($user->request_status == 'accepted')
-                                        <span class="bg-green-200 text-green-800 px-2 py-1 rounded-full">Aceptado</span>
-                                    @elseif($user->request_status == 'denied')
-                                        <span class="bg-red-200 text-red-800 px-2 py-1 rounded-full">Denegado</span>
-                                    @endif
-                                </td>
+                                
                                 
                                 
                             </tr>
