@@ -76,14 +76,17 @@
                                 </td>
                                 <td class="px-4 py-3">
                                     @if($user->request_status == 'pending')
-                                        <form action="{{ route('acceptRequest', ['userId' => $user->id, 'communityId' => $community->id]) }}" method="POST">
+                                        <span class="bg-yellow-200 text-yellow-800 px-2 py-1 rounded-full">Pendiente</span>
+                                        <form action="{{ route('updateStatus', ['requestId' => $user->id]) }}" method="POST" style="display: inline;">
                                             @csrf
-                                            <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Aceptar</button>
+                                            @method('PUT')
+                                            <button type="submit" name="status" value="accepted" class="bg-green-500 hover:bg-green-600 text-white font-semibold px-4 py-2 rounded">Aceptar</button>
+                                            <button type="submit" name="status" value="denied" class="bg-red-500 hover:bg-red-600 text-white font-semibold px-4 py-2 rounded">Denegar</button>
                                         </form>
-                                        <form action="{{ route('denyRequest', ['userId' => $user->id, 'communityId' => $community->id]) }}" method="POST">
-                                            @csrf
-                                            <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Denegar</button>
-                                        </form>
+                                    @elseif($user->request_status == 'accepted')
+                                        <span class="bg-green-200 text-green-800 px-2 py-1 rounded-full">Aceptado</span>
+                                    @elseif($user->request_status == 'denied')
+                                        <span class="bg-red-200 text-red-800 px-2 py-1 rounded-full">Denegado</span>
                                     @endif
                                 </td>
                                 

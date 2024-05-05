@@ -80,46 +80,44 @@ class CommunityRequestController extends Controller
         return view('adminPanel.paneladminCommunitiesRequest', compact('communityRequests'));
     }
 
-    public function acceptRequest($userId, $communityId)
+    public function updateStatus(Request $request, $requestId)
     {
-        try {
-            // Buscar la solicitud pendiente del usuario para la comunidad específica
-            $request = CommunityRequest::where('id_user', $userId)
-                ->where('id_community', $communityId)
+        // Valida los datos de entrada
+        $request->validate([
+            'status' => 'required|in:accepted,denied'
+        ]);
+
+        // Busca la solicitud de comunidad por su ID
+        $communityRequest = CommunityRequest::findOrFail($requestId);
+
+
+        // Verifica si se está aceptando la solicitud
+        if ($request->status == 'accepted') {
+            // Obtiene todas las solicitudes pendientes del usuario asociado con la comunidad
+            $pendingRequests = CommunityRequest::where('id_user', $communityRequest->id_user)
+                ->where('id_community', $communityRequest->id_community)
                 ->where('status', 'pending')
-                ->firstOrFail();
-    
-            // Actualizar el estado de la solicitud a "accepted"
-            $request->status = 'accepted';
-            $request->save();
-    
-            return redirect()->back()->with('success', 'Solicitud aceptada exitosamente.');
-        } catch (\Exception $e) {
-            // Manejar la excepción
-            return redirect()->back()->with('error', 'Hubo un problema al procesar la solicitud. Por favor, inténtalo de nuevo.');
+                ->get();
+
+            // Actualiza el estado de todas las solicitudes pendientes a "accepted"
+            foreach ($pendingRequests as $pendingRequest) {
+                $pendingRequest->status = 'accepted';
+                $pendingRequest->save();
+            }
         }
+
+        // Actualiza el estado de la solicitud según lo proporcionado por el usuario
+        $communityRequest->status = $request->status;
+        $communityRequest->save();
+
+        // Retorna una respuesta adecuada
+        return response()->json([
+            'message' => 'Status updated successfully.',
+            'data' => $communityRequest
+        ]);
     }
+
     
-
-    public function denyRequest($userId, $communityId)
-    {    try {
-        // Buscar la solicitud por su ID
-        $request = CommunityRequest::where('id_user', $userId)
-                ->where('id_community', $communityId)
-                ->where('status', 'pending')
-                ->firstOrFail();
-    
-
-        // Actualizar el estado de la solicitud a "denied"
-        $request->status = 'denied';
-        $request->save();
-
-        return redirect()->back()->with('success', 'Solicitud denegada exitosamente.');
-    } catch (\Exception $e) {
-        // Manejar la excepción
-        return redirect()->back()->with('error', 'Hubo un problema al procesar la solicitud. Por favor, inténtalo de nuevo.');
-    }
-    }
     
 
 
