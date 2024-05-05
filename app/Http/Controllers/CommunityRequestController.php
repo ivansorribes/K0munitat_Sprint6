@@ -27,6 +27,17 @@ class CommunityRequestController extends Controller
 
         $communityRequest->save();
 
+    
+
+         // Guarda los datos en la tabla users_communities
+        $userCommunity = communitiesUsers::create([
+            'id_community' => $request->id_community,
+            'id_user' => $request->id_user,
+            // Puedes agregar otros campos si es necesario
+        ]);
+
+        $userCommunity->save();
+
         // Retorna una respuesta adecuada
         return response()->json([
             'message' => 'Successfully created community application.',
@@ -38,18 +49,22 @@ class CommunityRequestController extends Controller
     {
         // Obtener la comunidad por su ID
         $community = communities::findOrFail($communityId);
-
-        // Obtener los IDs de las solicitudes pendientes asociadas a esta comunidad
-        $pendingRequestIds = CommunityRequest::where('id_community', $communityId)
+    
+        // Obtener las solicitudes pendientes asociadas a esta comunidad
+        $communityRequests = CommunityRequest::where('id_community', $communityId)
             ->where('status', 'pending')
-            ->pluck('id_user');
-
+            ->get();
+    
         // Obtener la lista de usuarios asociados a esta comunidad con estado pendiente
-        $users = User::whereIn('id', $pendingRequestIds)->get();
-
-        // Devolver la vista con la lista de usuarios
+        $users = [];
+        foreach ($communityRequests as $request) {
+            $users[] = User::find($request->id_user)->setAttribute('request_status', $request->status);
+        }
+    
+        // Devolver la vista con la lista de usuarios y la comunidad
         return view('adminPanel.userCommunityRequest', compact('users', 'community'));
     }
+    
 
     public function showRequestCommunities()
     {
@@ -64,5 +79,44 @@ class CommunityRequestController extends Controller
 
         return view('adminPanel.paneladminCommunitiesRequest', compact('communityRequests'));
     }
+
+    public function updateStatus(Request $request, $requestId)
+    {
+        // Valida los datos de entrada
+        $request->validate([
+            'status' => 'required|in:accepted,denied'
+        ]);
+
+        // Busca la solicitud de comunidad por su ID
+        $communityRequest = CommunityRequest::findOrFail($requestId);
+
+
+        // Verifica si se está aceptando la solicitud
+        if ($request->status == 'accepted') {
+            // Obtiene todas las solicitudes pendientes del usuario asociado con la comunidad
+            $pendingRequests = CommunityRequest::where('id_user', $communityRequest->id_user)
+                ->where('id_community', $communityRequest->id_community)
+                ->where('status', 'pending')
+                ->get();
+
+            // Actualiza el estado de todas las solicitudes pendientes a "accepted"
+            foreach ($pendingRequests as $pendingRequest) {
+                $pendingRequest->status = 'accepted';
+                $pendingRequest->save();
+            }
+        }
+
+        // Actualiza el estado de la solicitud según lo proporcionado por el usuario
+        $communityRequest->status = $request->status;
+        $communityRequest->save();
+
+        // Retorna una respuesta adecuada
+        return redirect()->back()->with('success', 'Solicitud exitosamente.');
+    }
+
+
+    
+    
+
 
 }

@@ -29,7 +29,6 @@
                                 <th scope="col" class="px-6 py-4">State Request</th>
                                 <th scope="col" class="px-6 py-4">State Community</th>
                                 <th scope="col" class="px-6 py-4">User List</th>
-                                <th scope="col" class="px-6 py-4">Actions</th>
                             </tr>
                         </thead>
                         <tbody>

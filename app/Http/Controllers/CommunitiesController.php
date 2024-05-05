@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Validation\ValidationException;
 use App\Models\communities;
 use App\Models\communitiesUsers;
+use App\Models\CommunityRequest;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -210,6 +212,39 @@ public function communitiesList(Request $request)
 
     // Ejecutar la consulta paginada
     $communitiesList = $query->paginate($perPage, ['*'], 'page', $page);
+
+    // Verificar si el usuario tiene una solicitud de comunidad aceptada
+    $acceptedRequests = CommunityRequest::where('id_user', $user->id)
+                                       ->where('status', 'accepted')
+                                       ->pluck('id_community')
+                                       ->toArray();
+
+    // Si el usuario tiene una solicitud aceptada y la comunidad correspondiente no está en la lista
+    foreach ($acceptedRequests as $acceptedCommunityId) {
+        if (!in_array($acceptedCommunityId, $communitiesUserIds)) {
+             // Agregar la comunidad a la lista
+            $newCommunity = communities::findOrFail($acceptedCommunityId);
+            $communitiesList->push($newCommunity);
+
+            // Verificar si el usuario está asociado con esta comunidad
+            $communityUser = communitiesUsers::where('id_community', $acceptedCommunityId)
+            ->where('id_user', $user->id)
+            ->first();
+
+             // Si el usuario no está asociado, agregarlo
+            if (!$communityUser) {
+                DB::table('communitiesUsers')->insert([
+                    'id_user' => $user->id,   
+                    'id_community' => $acceptedCommunityId,
+                    'created_at' => now(), // Establece la fecha y hora actual
+                    'updated_at' => now(), // Establece la fecha y hora actual
+                ]);
+                
+            }
+        }
+    }
+
+    $communitiesList->setCollection($communitiesList->sortBy('id')->forPage($page, $perPage));
 
     // Agregar un campo adicional a cada comunidad para indicar si el usuario es miembro
     $communitiesList->getCollection()->transform(function ($community) use ($communitiesUserIds) {

@@ -238,6 +238,7 @@ const CommunitiesList = () => {
       setCommunities(response.data.communities.data);
       setTotalPages(response.data.communities.last_page);
       setUser(response.data.user);
+
     } catch (error) {
       console.error("Error fetching communities:", error);
     } finally {
