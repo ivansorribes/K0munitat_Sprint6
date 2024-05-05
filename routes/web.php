@@ -174,7 +174,7 @@ Route::post('/reply-message', [MessagesController::class, 'replyMessage'])->name
 Route::get('/emailUser', [MessagesController::class, 'emailUserView'])->name('emailUserView');
 Route::post('/messagesDelete/{id}', [MessagesController::class, 'Delete'])->name('eliminate.message');
 Route::post('/messagesRestore/{id}', [MessagesController::class, 'restore'])->name('restore.message');
-Route::post('/reply-message-2', [MessagesController::class, 'replyMessageClient'])->name('reply.message2');
+Route::post('/reply-message-2', [MessagesController::class, 'replyMessageClient'])->name('reply.message-2');
 
 
 
