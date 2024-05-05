@@ -27,6 +27,17 @@ class CommunityRequestController extends Controller
 
         $communityRequest->save();
 
+    
+
+         // Guarda los datos en la tabla users_communities
+        $userCommunity = communitiesUsers::create([
+            'id_community' => $request->id_community,
+            'id_user' => $request->id_user,
+            // Puedes agregar otros campos si es necesario
+        ]);
+
+        $userCommunity->save();
+
         // Retorna una respuesta adecuada
         return response()->json([
             'message' => 'Successfully created community application.',
@@ -90,18 +101,25 @@ class CommunityRequestController extends Controller
     }
     
 
-public function denyRequest($requestId)
-{
-    // Buscar la solicitud por su ID
-    $request = CommunityRequest::findOrFail($requestId);
+    public function denyRequest($userId, $communityId)
+    {    try {
+        // Buscar la solicitud por su ID
+        $request = CommunityRequest::where('id_user', $userId)
+                ->where('id_community', $communityId)
+                ->where('status', 'pending')
+                ->firstOrFail();
+    
 
-    // Actualizar el estado de la solicitud a "denied"
-    $request->status = 'denied';
-    $request->save();
+        // Actualizar el estado de la solicitud a "denied"
+        $request->status = 'denied';
+        $request->save();
 
-    return redirect()->back()->with('success', 'Solicitud denegada exitosamente.');
-}
-
+        return redirect()->back()->with('success', 'Solicitud denegada exitosamente.');
+    } catch (\Exception $e) {
+        // Manejar la excepción
+        return redirect()->back()->with('error', 'Hubo un problema al procesar la solicitud. Por favor, inténtalo de nuevo.');
+    }
+    }
     
 
 

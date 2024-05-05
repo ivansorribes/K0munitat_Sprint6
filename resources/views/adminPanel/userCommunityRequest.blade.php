@@ -80,7 +80,7 @@
                                             @csrf
                                             <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Aceptar</button>
                                         </form>
-                                        <form action="{{ route('denyRequest', $user->id) }}" method="POST">
+                                        <form action="{{ route('denyRequest', ['userId' => $user->id, 'communityId' => $community->id]) }}" method="POST">
                                             @csrf
                                             <button type="submit" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Denegar</button>
                                         </form>
