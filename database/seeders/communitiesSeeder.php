@@ -13,7 +13,16 @@ class CommunitiesSeeder extends Seeder
      */
     public function run(): void
     {
-        communities::factory(100)->create();
-         
+        communities::factory()->create([
+            'id_admin' => 1,
+            'name' => 'Example community',
+            'description' => 'This is an example community.',
+            'id_autonomousCommunity' => 1,
+            'id_region' => 1,
+            'private' => false,
+            'isActive' => true
+        ]);
+
+        communities::factory(10)->create();
     }
 }

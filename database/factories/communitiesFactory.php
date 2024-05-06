@@ -32,28 +32,20 @@ class CommunitiesFactory extends Factory
         $regionIds = $associatedRegions->pluck('id')->toArray();
 
         return [
-            // Assign a random user ID as the admin
             'id_admin' => $this->faker->randomElement(User::all()->pluck('id')->toArray()),
 
-            // Assign a random name
             'name' => $this->faker->name(),
 
-            // Assign a random description
             'description' => $this->faker->text(),
 
-            // Assign the randomly selected autonomous community ID
             'id_autonomousCommunity' => $randomAutonomousCommunityId,
 
-            // Assign a random region ID from the associated regions
             'id_region' => $this->faker->randomElement($regionIds),
 
-            // Set the community as private
-            'private' => false,
+            'private' => true,
 
-            // Set the creation time to the current time
             'created_at' => now(),
 
-            // Set the community as active
             'isActive' => true,
         ];
     }
