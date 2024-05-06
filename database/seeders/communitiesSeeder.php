@@ -23,6 +23,6 @@ class CommunitiesSeeder extends Seeder
             'isActive' => true
         ]);
 
-        communities::factory(10)->create();
+        communities::factory(50)->create();
     }
 }
