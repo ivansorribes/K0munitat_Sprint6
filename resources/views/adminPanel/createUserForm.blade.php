@@ -14,7 +14,22 @@
         <form action="{{ route('storeUser') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                @if ($errors->any())
+                <div class="alert bg-red-200">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+                @endif
 
+                <!-- Display success message -->
+                @if (session('success'))
+                <div class="alert bg-green-400" x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 5000)">
+                    {{ session('success') }}
+                </div>
+                @endif
                 <div class="flex flex-wrap -mx-2">
                     <div class="w-full md:w-1/3 px-2 mb-4">
                         <label class="block text-gray-700 text-sm font-bold mb-2" for="firstname">Name</label>

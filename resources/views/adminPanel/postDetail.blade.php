@@ -73,7 +73,7 @@
             </div>
 
             <div class="flex items-center justify-between">
-                <button class="btn btn-sm px-2 py-1 text-white bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" type="submit">
+                <button class="btn btn-sm px-4 py-1 text-white bg-purple-600 border border-transparent rounded-md active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple" type="submit">
                     Save
                 </button>
             </div>

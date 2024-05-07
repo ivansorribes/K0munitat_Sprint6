@@ -3,6 +3,7 @@
 @section('title', $blog->title)
 
 @section('content')
+
 <body class="bg-gray-100 mt-16">
     <div class="container mx-auto px-4 py-8">
         <div class="max-w-full bg-white rounded-lg shadow-md overflow-hidden"> <!-- Cambiamos max-w-4xl a max-w-full -->

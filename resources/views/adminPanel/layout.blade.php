@@ -1,4 +1,4 @@
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" :class="{ 'theme-dark': dark }" x-data="data()">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
   <meta charset="UTF-8">
@@ -30,7 +30,7 @@
     </div>
 
     <!-- Contenido principal con margen izquierdo -->
-    <div class="z-0 flex flex-col flex-1 ml-64 w-full">
+    <div class="z-0 flex flex-col flex-1 ml-64 w-full h-screen overflow-x-hidden">
       @include ('adminPanel.header')
       <main>
         @yield('content')

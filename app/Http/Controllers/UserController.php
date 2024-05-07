@@ -96,11 +96,10 @@ class UserController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user->id)],
             'role' => ['required', 'string', Rule::in(['superAdmin', 'communityAdmin', 'communityMod', 'user'])],
-            'telephone' => ['required', 'integer'],
+            'telephone' => ['required', 'string', 'max:255'],
             'city' => ['required', 'string', 'max:255'],
             'postcode' => ['required', 'integer'],
             'profile_description' => ['nullable', 'string', 'max:255'],
-            'profile_image' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif', 'max:2048'],
         ]);
 
         // Actualizar el usuario
@@ -108,7 +107,7 @@ class UserController extends Controller
 
         // Actualizar la imagen de perfil si se proporciona
         if ($request->hasFile('profile_image')) {
-            $imagePath = $request->file('profile_image')->store('public/posts');
+            $imagePath = $request->file('profile_image')->store('public/profile_images');
             $user->profile_image = basename($imagePath);
             $user->save();
         }
@@ -198,10 +197,9 @@ class UserController extends Controller
             'role' => 'required|string|in:superAdmin,communityAdmin,communityMod,user',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed', // La regla "confirmed" verifica que "password" y "password_confirmation" coincidan
-            'profile_image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'city' => 'required|string|max:255',
             'postcode' => 'required|integer',
-            'telephone' => 'required|integer',
+            'telephone' => 'required|string|max:255',
             'profile_description' => 'nullable|string',
         ]);
 

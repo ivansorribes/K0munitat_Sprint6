@@ -17,13 +17,16 @@
             <!-- baix del header -->
             <div class="flex-1">
                 <div class="container mx-auto p-8">
-                    <h1 class="text-2xl font-bold mb-4">Listado de Usuarios de la Comunidad {{ $community->name }} </h1>
+                    <h1 class="text-2xl font-bold mb-4">List of users in {{ $community->name }} </h1>
                 </div>
             </div>
             <!-- Cards -->
 
 
             <!-- New Table -->
+            @if($users->isEmpty())
+            <p>There is no users in this community.</p>
+            @else
             <div class="w-full overflow-hidden rounded-lg shadow-xs">
                 <div class="w-full overflow-x-auto">
                     <table class="w-full whitespace-no-wrap">
@@ -89,7 +92,7 @@
                     </table>
                 </div>
             </div>
-
+            @endif
 
         </div>
 
